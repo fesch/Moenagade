@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bloxs xmlns:nsd="http://moenagade.fisch.lu/" version="alpha">
+    <element class="OnCreate" title="when created" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="73" y="53" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;protected void onCreate()&#10;{&#10;$$&#10;}&#10;&#10;" color="bb4a61">
+        <body>
+            <element class="LoadImage" title="load image &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="89" y="84" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="loadImage(&quot;$0&quot;);" color="0480c8">
+                <parameters>
+                    <element class="List" title="berry.png" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="172" y="91" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                        <body>
+                            <element class="Item" title="beere.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="168" y="110" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="besch.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="172" y="135" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="entity.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="172" y="157" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="entityRet.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="172" y="179" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="idle-icon.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="172" y="201" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+            </element>
+        </body>
+    </element>
+    <element class="OnTouchedEntity" title="when touched by &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="76" y="171" top="0" body="1" bottom="0" transformation="" paramTransformations="stringify" after="" inside="" code="@Override&#10;public void onTouched(Entity other)&#10;{&#10;    if(other.getClass().getSimpleName().equals(&quot;$0&quot;))&#10;    {&#10;$$$&#10;    }&#10;}&#10;&#10;" color="bb4a61">
+        <parameters>
+            <element class="List" title="Raccoon" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="194" y="178" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                <body>
+                    <element class="Item" title="Berry" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="194" y="200" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="Raccoon" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="239" y="234" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                </body>
+            </element>
+        </parameters>
+        <body>
+            <element class="DeleteEntity" title="delete entity" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="92" y="207" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="delete();" color="4abb61">
+            </element>
+        </body>
+    </element>
+</bloxs>

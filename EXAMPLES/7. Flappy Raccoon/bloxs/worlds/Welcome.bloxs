@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bloxs xmlns:nsd="http://moenagade.fisch.lu/" version="alpha">
+    <element class="OnCreate" title="when created" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="10" y="10" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;protected void onCreate()&#10;{&#10;$$&#10;}&#10;&#10;" color="bb4a61">
+        <body>
+            <element class="LoadImage" title="load image &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="26" y="41" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="loadImage(&quot;$0&quot;);" color="0480c8">
+                <parameters>
+                    <element class="List" title="flappy_welcome.png" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="109" y="48" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                        <body>
+                            <element class="Item" title="background.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="124" y="100" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="flappy_background.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="124" y="122" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="flappy_raccoon_left.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="124" y="144" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="flappy_raccoon_right.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="124" y="166" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="flappy_welcome.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="162" y="185" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="pipe.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="124" y="210" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="pipe_bottom.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="124" y="232" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="pipe_top.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="124" y="254" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+            </element>
+        </body>
+    </element>
+    <element class="OnMousePressed" title="when a mouse button has been pressed" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="10" y="110" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;protected void formMousePressed(java.awt.event.MouseEvent evt)&#10;{&#10;    super.formMousePressed(evt);&#10;$$&#10;}&#10;&#10;" color="bb4a61">
+        <body>
+            <element class="SetWorld" title="set world &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="26" y="141" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="getMain().setWorld(new $0());" color="6c4a96">
+                <parameters>
+                    <element class="List" title="FlappyWorld" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="102" y="148" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                        <body>
+                            <element class="Item" title="FlappyWorld" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="128" y="215" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="Welcome" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="120" y="246" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+            </element>
+        </body>
+    </element>
+</bloxs>

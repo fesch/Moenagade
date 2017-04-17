@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bloxs xmlns:nsd="http://moenagade.fisch.lu/" version="alpha">
+    <element class="OnCreate" title="when created" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="8" y="7" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;protected void onCreate()&#10;{&#10;$$&#10;}&#10;&#10;" color="bb4a61">
+    </element>
+    <element class="OnKeyPressed" title="when a key has been pressed" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="159" y="312" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;public void keyPressed(KeyEvent keyEvent)&#10;{&#10;$$&#10;}&#10;&#10;" color="bb4a61">
+        <body>
+            <element class="PlaySound" title="play sound &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="175" y="343" top="1" body="0" bottom="1" transformation="" paramTransformations="stringify" after="" inside="" code="getWorld().playSound(&quot;$0&quot;);" color="e0006a">
+                <parameters>
+                    <element class="List" title="" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="258" y="350" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                        <body>
+                            <element class="Item" title="pups.wav" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="256" y="363" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+            </element>
+        </body>
+    </element>
+    <element class="KeyCodeLeft" title="arrow left" paramTypes="" return="integer" type="EXPRESSION" needsParent="OnKeyPressed,OnKeyReleased" position="-1" x="623" y="121" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="37" color="32835a">
+    </element>
+    <element class="StartTimer" title="repeat each $ milli seconds" paramTypes="int" return="" type="INSTRUCTION" needsParent="" position="-1" x="170" y="70" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="" inside="" code="new Timer($0, new ActionListener() {&#10;    @Override public void actionPerformed(ActionEvent ae)&#10;    {&#10;$$$&#10;        if(getWorld()!=null) getWorld().repaint();&#10;    }&#10;}).start();&#10;" color="5c5c5c">
+        <parameters>
+            <element class="ExpressionHolder" title="" paramTypes="" return="int" type="EXPRESSION" needsParent="" position="0" x="260" y="77" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+            </element>
+        </parameters>
+        <body>
+            <element class="If" title="if &#163;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="186" y="106" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="" inside="" code="if ($0)&#10;{&#10;$$&#10;}" color="c88c37">
+                <parameters>
+                    <element class="ConditionHolder" title="" paramTypes="" return="Boolean" type="CONDITION" needsParent="" position="0" x="213" y="113" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="748c51">
+                    </element>
+                </parameters>
+                <body>
+                    <element class="If" title="if &#163;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="202" y="142" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="" inside="" code="if ($0)&#10;{&#10;$$&#10;}" color="c88c37">
+                        <parameters>
+                            <element class="ConditionHolder" title="" paramTypes="" return="Boolean" type="CONDITION" needsParent="" position="0" x="229" y="149" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="748c51">
+                            </element>
+                        </parameters>
+                        <body>
+                            <element class="StopTimer" title="stop timer" paramTypes="" return="" type="INSTRUCTION" needsParent="StartTimer" position="-1" x="218" y="178" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="((Timer)ae.getSource()).stop();" color="5c5c5c">
+                            </element>
+                        </body>
+                    </element>
+                </body>
+            </element>
+        </body>
+    </element>
+</bloxs>

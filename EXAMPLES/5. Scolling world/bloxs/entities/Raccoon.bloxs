@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bloxs xmlns:nsd="http://moenagade.fisch.lu/" version="alpha">
+    <element class="OnCreate" title="when created" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="12" y="20" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;protected void onCreate()&#10;{&#10;$$&#10;}&#10;&#10;" color="bb4a61">
+        <body>
+            <element class="EntityLoadImage" title="load image &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="28" y="51" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="loadImage(&quot;$0&quot;);" color="0480c8">
+                <parameters>
+                    <element class="List" title="entity.png" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="111" y="58" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                        <body>
+                            <element class="Item" title="besch.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="127" y="111" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="entity.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="138" y="116" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="entityRet.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="127" y="155" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="idle-icon.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="127" y="177" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+            </element>
+        </body>
+    </element>
+    <element class="OnKeyPressed" title="when a key has been pressed" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="12" y="119" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;public void keyPressed(KeyEvent keyEvent)&#10;{&#10;$$&#10;}&#10;&#10;" color="bb4a61">
+        <body>
+            <element class="If" title="if &#163;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="28" y="150" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="" inside="" code="if ($0)&#10;{&#10;$$&#10;}" color="c88c37">
+                <parameters>
+                    <element class="ConditionHolder" title="" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="0" x="55" y="157" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="748c51">
+                        <body>
+                            <element class="Compare" title="$ &#8364; $" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="-1" x="55" y="157" top="0" body="0" bottom="0" transformation="compare" paramTransformations=",," after="" inside="" code="$0 $1 $2" color="4e640f">
+                                <parameters>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="68" y="159" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCode" title="key code" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="68" y="159" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="keyEvent.getKeyCode()" color="32835a">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="List" title="==" paramTypes="" return="null" type="LIST" needsParent="" position="1" x="150" y="159" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                                        <body>
+                                            <element class="Item" title="==" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="!=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="2" x="212" y="159" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCodeLeft" title="arrow left" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="212" y="159" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="37" color="32835a">
+                                            </element>
+                                        </body>
+                                    </element>
+                                </parameters>
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+                <body>
+                    <element class="MoveLeft" title="move left by $ pixels" paramTypes="int" return="" type="INSTRUCTION" needsParent="" position="-1" x="44" y="191" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="moveLeft($0);" color="4a6c96">
+                        <parameters>
+                            <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="141" y="198" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                <body>
+                                    <element class="UserInteger" title="integer &#167;" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="141" y="198" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="$0" color="32835a">
+                                        <parameters>
+                                            <element class="Value" title="5" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="203" y="200" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </parameters>
+                                    </element>
+                                </body>
+                            </element>
+                        </parameters>
+                    </element>
+                </body>
+            </element>
+            <element class="If" title="if &#163;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="28" y="248" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="" inside="" code="if ($0)&#10;{&#10;$$&#10;}" color="c88c37">
+                <parameters>
+                    <element class="ConditionHolder" title="" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="0" x="55" y="255" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="748c51">
+                        <body>
+                            <element class="Compare" title="$ &#8364; $" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="-1" x="55" y="255" top="0" body="0" bottom="0" transformation="compare" paramTransformations=",," after="" inside="" code="$0 $1 $2" color="4e640f">
+                                <parameters>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="68" y="257" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCode" title="key code" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="68" y="257" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="keyEvent.getKeyCode()" color="32835a">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="List" title="==" paramTypes="" return="null" type="LIST" needsParent="" position="1" x="150" y="257" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                                        <body>
+                                            <element class="Item" title="==" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="!=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="2" x="212" y="257" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCodeRight" title="arrow right" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="212" y="257" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="39" color="32835a">
+                                            </element>
+                                        </body>
+                                    </element>
+                                </parameters>
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+                <body>
+                    <element class="MoveRight" title="move right by $ pixels" paramTypes="int" return="" type="INSTRUCTION" needsParent="" position="-1" x="44" y="289" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="moveRight($0);" color="4a6c96">
+                        <parameters>
+                            <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="148" y="296" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                <body>
+                                    <element class="UserInteger" title="integer &#167;" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="148" y="296" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="$0" color="32835a">
+                                        <parameters>
+                                            <element class="Value" title="5" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="210" y="298" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </parameters>
+                                    </element>
+                                </body>
+                            </element>
+                        </parameters>
+                    </element>
+                </body>
+            </element>
+        </body>
+    </element>
+    <element class="OnOutOfWorld" title="when entity reaches world boundary" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="13" y="379" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;public void onOutOfWorld()&#10;{&#10;$$&#10;}&#10;&#10;" color="bb4a61">
+        <body>
+            <element class="DeleteEntity" title="delete entity" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="29" y="410" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="delete();" color="4abb61">
+            </element>
+        </body>
+    </element>
+</bloxs>

@@ -1,0 +1,43 @@
+Todo
+- possibility to display text
+- add recent opened files 
+
+
+Current version: 0.01-07
+- 01: initial version
+- 02: implemented undo/redo
+- 02: project images can be visualized 
+- 02: added console output support
+- 02: made world (background) movable
+- 02: application window is no longer resizeable
+- 02: added OnOutOfWorld event for entity
+- 02: added possible to stop a timer
+- 03: added field "needsParent" allowing element to limit 
+      docking if the parent chain contains a given element
+- 03: implemented delete entity, world & image
+- 03: do not allow to dock if dock does not satisfy all
+      needs of the docking block
+- 04: open lists are drawn on top of all other elements
+- 04: rename entity, world & image
+- 04: do not allow "World" as name for a world
+- 04: do not allow "Entity" as name for an entity
+- 04: added some checks before project can be run
+- 04: added contextual pop-up menu to project tree
+- 04: modified timer to stop as soon as the window is disposed
+- 05: open dialogs remember last opened path within session
+- 05: added modulo operator
+- 05: added sound resource
+- 05: added instruction to play a sound
+- 05: added increment/decrement instruction for variable & attributes
+- 05: added comment instruction
+- 05: minor bug fixes
+- 05: elementary elements snap to 10x10 pixel grid
+- 06: made automatic list filling dynamic (Variable, Attribute,
+      Entity, World, Sound & Image)
+- 06: type handling enhancements
+- 07: added backup save of src & bloxs folders
+- 07: build JAR file
+- 07: added FOR loop
+- 07: solved a problem when moving certain elements out of scope
+- 07: solved a problem when changing the type of a variable or attribute
+- 07: fixed an element drawing issue

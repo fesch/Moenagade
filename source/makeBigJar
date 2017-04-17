@@ -1,0 +1,97 @@
+#!/bin/sh
+set -e
+################################################################################
+#
+#      Author:		Bob Fisch
+#
+#      Description:	
+#
+################################################################################
+#
+#      Revision List
+#
+#      Author						Date		Description
+#      ------						----		-----------
+#      Bob Fisch					2008.10.15  First Issue
+#      Bob Fisch					2009.07.05  Unimozer Edition
+#	   Bob Fisch & Philipp Hübner	2009.07.08  Scripting ameliorations
+#	   Bob Fisch					2010.01.25	Update for new libraries and signature removing
+#
+################################################################################
+
+# delete the old archive (if present)
+[ -f unimozer.jar ] && rm unimozer.jar
+
+# make directory
+[ -d jar ] && rm -R -f jar
+mkdir jar
+
+# copy libs
+cp lib/* jar
+
+# move into jar directory
+cd jar
+
+# decompress jar's
+#echo "Decompressing antlr"
+#jar xf antlr.jar
+echo "Decompressing beansbinding-1.2.1"
+jar xf beansbinding-1.2.1.jar
+echo "Decompressing bsh-2.0b4"
+jar xf bsh-2.0b4.jar
+echo "Decompressing freehep-graphics2d-2.1.1"
+jar xf freehep-graphics2d-2.1.1.jar
+echo "Decompressing freehep-graphicsio-2.1.1"
+jar xf freehep-graphicsio-2.1.1.jar
+echo "Decompressing freehep-graphicsio-svg-2.1.1"
+jar xf freehep-graphicsio-svg-2.1.1.jar
+echo "Decompressing freehep-io-2.0.2"
+jar xf freehep-io-2.0.2.jar
+echo "Decompressing freehep-swing-2.0.3"
+jar xf freehep-swing-2.0.3.jar
+echo "Decompressing freehep-util-2.0.2"
+jar xf freehep-util-2.0.2.jar
+echo "Decompressing freehep-xml-2.1.1"
+jar xf freehep-xml-2.1.1.jar
+echo "Decompressing freehep"
+jar xf freehep.jar
+echo "Decompressing janino"
+jar xf janino.jar
+echo "Decompressing Structorizer"
+jar xf Structorizer.jar
+echo "Decompressing swing-layout-1.0.3"
+jar xf swing-layout-1.0.3.jar
+
+echo "deleting signatures"
+rm -f META-INF/*.SF
+rm -f META-INF/*.DSA
+
+# remove jar files
+echo "Removing JAR files ..."
+rm *.jar
+
+# go back
+cd ..
+
+# copy other files
+cp -R bin/* jar/
+
+# create an new archive
+echo "Creating new archive ..."
+jar cmf unimozer.big.manifest unimozer.jar -C jar/ .
+
+# remove the jar-directory
+echo "Cleaning up ..."
+rm -R -f jar/
+
+# execute the archive
+echo "Launching ..."
+java -jar unimozer.jar
+
+#echo ""
+#echo ""
+#echo ""
+#echo "THIS FILE DOES NOT WORK FOR UNIMOZER"
+#echo ""
+#echo " => SORRY"
+#rm unimozer.jar

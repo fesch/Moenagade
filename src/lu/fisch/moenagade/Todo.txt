@@ -1,0 +1,12 @@
+- how to call a method of an object
+
+- input of / * - + should be updated with it the parents return type if dropped onto some object.
+
+? list of types (variable and attribute) should be dynamic and also include names of Entities and Worlds
+
+OK do not allow to have twice the same event for a given class
+
+OK- Checks    
+    OK- do not allow two attributes with the same name in the same class
+    OK- update variable usage if declaration is moved away (maybe out of block!!)
+    OK- do not allow two variables with the same name in the same block

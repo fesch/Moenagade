@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bloxs xmlns:nsd="http://moenagade.fisch.lu/" version="alpha">
+    <element class="AttributeDefinition" title="define attribute &#167; of type &#8364; with value &#167;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="9" y="11" top="0" body="0" bottom="0" transformation="attribute" paramTransformations=",," after="" inside="" code="public $1 $0 = $2;" color="8cc837">
+        <parameters>
+            <element class="Value" title="vDir" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="134" y="18" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+            </element>
+            <element class="List" title="int" paramTypes="" return="null" type="LIST" needsParent="" position="1" x="244" y="18" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                <body>
+                    <element class="Item" title="int" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="double" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="boolean" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="String" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="long" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="float" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                </body>
+            </element>
+            <element class="Value" title="0" paramTypes="" return="null" type="VALUE" needsParent="" position="2" x="390" y="18" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+            </element>
+        </parameters>
+    </element>
+    <element class="AttributeDefinition" title="define attribute &#167; of type &#8364; with value &#167;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="6" y="62" top="0" body="0" bottom="0" transformation="attribute" paramTransformations=",," after="" inside="" code="public $1 $0 = $2;" color="8cc837">
+        <parameters>
+            <element class="Value" title="hDir" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="131" y="69" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+            </element>
+            <element class="List" title="int" paramTypes="" return="null" type="LIST" needsParent="" position="1" x="241" y="69" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                <body>
+                    <element class="Item" title="int" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="double" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="boolean" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="String" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="long" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                    <element class="Item" title="float" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                    </element>
+                </body>
+            </element>
+            <element class="Value" title="0" paramTypes="" return="null" type="VALUE" needsParent="" position="2" x="387" y="69" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+            </element>
+        </parameters>
+    </element>
+    <element class="OnCreate" title="when created" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="8" y="111" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="@Override&#10;protected void onCreate()&#10;{&#10;$$&#10;}" color="bb4a61">
+        <body>
+            <element class="EntityLoadImage" title="load image &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="24" y="142" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="loadImage(&quot;$0&quot;);" color="0480c8">
+                <parameters>
+                    <element class="List" title="entity.png" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="107" y="149" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                        <body>
+                            <element class="Item" title="besch.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="125" y="99" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="entity.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="128" y="118" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                            <element class="Item" title="entityRet.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="125" y="153" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+            </element>
+            <element class="SetY" title="set Y position $" paramTypes="int" return="" type="INSTRUCTION" needsParent="" position="-1" x="24" y="178" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="setY($0);" color="4a6c96">
+                <parameters>
+                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="135" y="185" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                        <body>
+                            <element class="UserInteger" title="integer &#167;" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="135" y="185" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="$0" color="32835a">
+                                <parameters>
+                                    <element class="Value" title="320" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="197" y="187" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                    </element>
+                                </parameters>
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+            </element>
+        </body>
+    </element>
+    <element class="OnKeypressed" title="when a key has been pressed" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="11" y="260" top="0" body="1" bottom="0" transformation="" paramTransformations="" after="" inside="" code="public void keyPressed(KeyEvent keyEvent)&#10;{&#10;$$&#10;}" color="bb4a61">
+        <body>
+            <element class="If" title="if &#163;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="27" y="291" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="" inside="" code="if ($0)&#10;{&#10;$$&#10;}" color="c88c37">
+                <parameters>
+                    <element class="ConditionHolder" title="" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="0" x="54" y="298" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="748c51">
+                        <body>
+                            <element class="Compare" title="$ &#8364; $" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="-1" x="54" y="298" top="0" body="0" bottom="0" transformation="compare" paramTransformations=",," after="" inside="" code="$0 $1 $2" color="748c51">
+                                <parameters>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="67" y="300" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCode" title="key code" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="67" y="300" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="keyEvent.getKeyCode()" color="748c51">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="List" title="==" paramTypes="" return="null" type="LIST" needsParent="" position="1" x="149" y="300" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                                        <body>
+                                            <element class="Item" title="==" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="145" y="327" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="!=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="145" y="354" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="145" y="381" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="145" y="408" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="145" y="435" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="145" y="462" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="2" x="211" y="300" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCodeLeft" title="arrow left" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="211" y="300" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="37" color="748c51">
+                                            </element>
+                                        </body>
+                                    </element>
+                                </parameters>
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+                <body>
+                    <element class="EntityLoadImage" title="load image &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="43" y="332" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="loadImage(&quot;$0&quot;);" color="0480c8">
+                        <parameters>
+                            <element class="List" title="entityRet.png" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="126" y="339" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                                <body>
+                                    <element class="Item" title="besch.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="382" y="144" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                    </element>
+                                    <element class="Item" title="entity.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="382" y="171" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                    </element>
+                                    <element class="Item" title="entityRet.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="381" y="188" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                    </element>
+                                </body>
+                            </element>
+                        </parameters>
+                    </element>
+                    <element class="MoveLeft" title="move left by $ pixels" paramTypes="int" return="" type="INSTRUCTION" needsParent="" position="-1" x="43" y="368" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="moveLeft($0);" color="4a6c96">
+                        <parameters>
+                            <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="140" y="375" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                <body>
+                                    <element class="UserInteger" title="integer &#167;" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="140" y="375" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="$0" color="748c51">
+                                        <parameters>
+                                            <element class="Value" title="10" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="202" y="377" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </parameters>
+                                    </element>
+                                </body>
+                            </element>
+                        </parameters>
+                    </element>
+                </body>
+            </element>
+            <element class="ElseIf" title="else if &#163;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="27" y="425" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="If,ElseIf" inside="NULL" code="else if ($0)&#10;{&#10;$$&#10;}" color="c88c37">
+                <parameters>
+                    <element class="ConditionHolder" title="" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="0" x="89" y="432" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="748c51">
+                        <body>
+                            <element class="Compare" title="$ &#8364; $" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="-1" x="89" y="432" top="0" body="0" bottom="0" transformation="compare" paramTransformations=",," after="" inside="" code="$0 $1 $2" color="748c51">
+                                <parameters>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="102" y="434" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCode" title="key code" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="102" y="434" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="keyEvent.getKeyCode()" color="748c51">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="List" title="==" paramTypes="" return="null" type="LIST" needsParent="" position="1" x="184" y="434" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                                        <body>
+                                            <element class="Item" title="==" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="!=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="2" x="246" y="434" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCodeRight" title="arrow right" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="246" y="434" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="39" color="748c51">
+                                            </element>
+                                        </body>
+                                    </element>
+                                </parameters>
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+                <body>
+                    <element class="EntityLoadImage" title="load image &#8364;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="43" y="466" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="loadImage(&quot;$0&quot;);" color="0480c8">
+                        <parameters>
+                            <element class="List" title="entity.png" paramTypes="" return="null" type="LIST" needsParent="" position="0" x="126" y="473" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                                <body>
+                                    <element class="Item" title="besch.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="382" y="401" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                    </element>
+                                    <element class="Item" title="entity.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="344" y="424" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                    </element>
+                                    <element class="Item" title="entityRet.png" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="382" y="455" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                    </element>
+                                </body>
+                            </element>
+                        </parameters>
+                    </element>
+                    <element class="MoveRight" title="move right by $ pixels" paramTypes="int" return="" type="INSTRUCTION" needsParent="" position="-1" x="43" y="502" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="moveRight($0);" color="4a6c96">
+                        <parameters>
+                            <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="147" y="509" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                <body>
+                                    <element class="UserInteger" title="integer &#167;" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="147" y="509" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="$0" color="748c51">
+                                        <parameters>
+                                            <element class="Value" title="10" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="209" y="511" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </parameters>
+                                    </element>
+                                </body>
+                            </element>
+                        </parameters>
+                    </element>
+                </body>
+            </element>
+            <element class="ElseIf" title="else if &#163;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="27" y="559" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="If,ElseIf" inside="NULL" code="else if ($0)&#10;{&#10;$$&#10;}" color="c88c37">
+                <parameters>
+                    <element class="ConditionHolder" title="" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="0" x="89" y="566" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="748c51">
+                        <body>
+                            <element class="Compare" title="$ &#8364; $" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="-1" x="89" y="566" top="0" body="0" bottom="0" transformation="compare" paramTransformations=",," after="" inside="" code="$0 $1 $2" color="748c51">
+                                <parameters>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="102" y="568" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCode" title="key code" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="102" y="568" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="keyEvent.getKeyCode()" color="748c51">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="List" title="==" paramTypes="" return="null" type="LIST" needsParent="" position="1" x="184" y="568" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                                        <body>
+                                            <element class="Item" title="==" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="!=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="2" x="246" y="568" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCodeUp" title="arrow up" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="246" y="568" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="38" color="748c51">
+                                            </element>
+                                        </body>
+                                    </element>
+                                </parameters>
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+                <body>
+                    <element class="MoveUp" title="move up by $ pixels" paramTypes="int" return="" type="INSTRUCTION" needsParent="" position="-1" x="43" y="600" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="moveUp($0);" color="4a6c96">
+                        <parameters>
+                            <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="126" y="607" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                <body>
+                                    <element class="UserInteger" title="integer &#167;" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="126" y="607" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="$0" color="748c51">
+                                        <parameters>
+                                            <element class="Value" title="10" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="188" y="609" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </parameters>
+                                    </element>
+                                </body>
+                            </element>
+                        </parameters>
+                    </element>
+                </body>
+            </element>
+            <element class="ElseIf" title="else if &#163;" paramTypes="" return="" type="INSTRUCTION" needsParent="" position="-1" x="27" y="657" top="1" body="1" bottom="1" transformation="" paramTransformations="" after="If,ElseIf" inside="NULL" code="else if ($0)&#10;{&#10;$$&#10;}" color="c88c37">
+                <parameters>
+                    <element class="ConditionHolder" title="" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="0" x="89" y="664" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="748c51">
+                        <body>
+                            <element class="Compare" title="$ &#8364; $" paramTypes="" return="boolean" type="CONDITION" needsParent="" position="-1" x="89" y="664" top="0" body="0" bottom="0" transformation="compare" paramTransformations=",," after="" inside="" code="$0 $1 $2" color="748c51">
+                                <parameters>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="102" y="666" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCode" title="key code" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="102" y="666" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="keyEvent.getKeyCode()" color="748c51">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="List" title="==" paramTypes="" return="null" type="LIST" needsParent="" position="1" x="184" y="666" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="d77040">
+                                        <body>
+                                            <element class="Item" title="==" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="!=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&lt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                            <element class="Item" title="&gt;=" paramTypes="" return="null" type="ITEM" needsParent="" position="-1" x="0" y="0" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </body>
+                                    </element>
+                                    <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="2" x="246" y="666" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                        <body>
+                                            <element class="KeyCodeDown" title="arrow down" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="246" y="666" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="40" color="748c51">
+                                            </element>
+                                        </body>
+                                    </element>
+                                </parameters>
+                            </element>
+                        </body>
+                    </element>
+                </parameters>
+                <body>
+                    <element class="MoveDown" title="move down by $ pixels" paramTypes="int" return="" type="INSTRUCTION" needsParent="" position="-1" x="43" y="698" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="moveDown($0);" color="4a6c96">
+                        <parameters>
+                            <element class="ExpressionHolder" title="" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="0" x="140" y="705" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="0480c8">
+                                <body>
+                                    <element class="UserInteger" title="integer &#167;" paramTypes="" return="integer" type="EXPRESSION" needsParent="" position="-1" x="140" y="705" top="0" body="0" bottom="0" transformation="" paramTransformations="" after="" inside="" code="$0" color="748c51">
+                                        <parameters>
+                                            <element class="Value" title="10" paramTypes="" return="null" type="VALUE" needsParent="" position="0" x="202" y="707" top="1" body="0" bottom="1" transformation="" paramTransformations="" after="" inside="" code="" color="ffffff">
+                                            </element>
+                                        </parameters>
+                                    </element>
+                                </body>
+                            </element>
+                        </parameters>
+                    </element>
+                </body>
+            </element>
+        </body>
+    </element>
+</bloxs>
