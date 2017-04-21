@@ -29,12 +29,14 @@ package lu.fisch.moenagade.model;
 import lu.fisch.moenagade.*;
 import lu.fisch.moenagade.gui.dialogs.OpenProject;
 import java.awt.Frame;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -1374,6 +1376,28 @@ public class Project {
         // copy files
         File file;
         
+        InputStream in = getClass().getResourceAsStream("/lu/fisch/moenagade/base/MainFrame.txt"); 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        try {
+            String content = IOUtils.toString(reader);
+            String filename = directoryName+
+                    System.getProperty("file.separator")+"src"+
+                    System.getProperty("file.separator")+"moenagade"+
+                    System.getProperty("file.separator")+"base"+
+                    System.getProperty("file.separator")+"MainFrame.java";
+            FileOutputStream fos = new FileOutputStream(filename);
+            Writer out = new OutputStreamWriter(fos, "UTF-8");
+            out.write(content);
+            out.close();   
+        }
+        catch (IOException ex) 
+        {
+            JOptionPane.showMessageDialog(frame, "Error while saving mainframe (base) source!\n"+
+                ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+            ex.printStackTrace();
+        }
+        
+        /*
         file = new File(this.getClass().getResource("/lu/fisch/moenagade/base/MainFrame.txt").getFile());
         try(FileInputStream inputStream = new FileInputStream(file)) {     
             String content = IOUtils.toString(inputStream);
@@ -1393,10 +1417,16 @@ public class Project {
                 ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
             ex.printStackTrace();
         }
+        */
         
+        /*
         file = new File(this.getClass().getResource("/lu/fisch/moenagade/base/Entity.txt").getFile());
         try(FileInputStream inputStream = new FileInputStream(file)) {     
-            String content = IOUtils.toString(inputStream);
+            String content = IOUtils.toString(inputStream);*/
+        in = getClass().getResourceAsStream("/lu/fisch/moenagade/base/Entity.txt"); 
+        reader = new BufferedReader(new InputStreamReader(in));
+        try {
+            String content = IOUtils.toString(reader);
             String filename = directoryName+
                     System.getProperty("file.separator")+"src"+
                     System.getProperty("file.separator")+"moenagade"+
@@ -1414,9 +1444,13 @@ public class Project {
             ex.printStackTrace();
         }
         
-        file = new File(this.getClass().getResource("/lu/fisch/moenagade/base/World.txt").getFile());
+        /*file = new File(this.getClass().getResource("/lu/fisch/moenagade/base/World.txt").getFile());
         try(FileInputStream inputStream = new FileInputStream(file)) {     
-            String content = IOUtils.toString(inputStream);
+            String content = IOUtils.toString(inputStream);*/
+        in = getClass().getResourceAsStream("/lu/fisch/moenagade/base/World.txt"); 
+        reader = new BufferedReader(new InputStreamReader(in));
+        try {
+            String content = IOUtils.toString(reader);
             String filename = directoryName+
                     System.getProperty("file.separator")+"src"+
                     System.getProperty("file.separator")+"moenagade"+

@@ -95,8 +95,6 @@ public class Library implements MouseMotionListener, MouseListener{
         this.project = project;
     }
     
-    
-    
     public void register(Element element, String tab)
     {
         register(element,tab,-1);

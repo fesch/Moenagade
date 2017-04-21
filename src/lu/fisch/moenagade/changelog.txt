@@ -1,6 +1,8 @@
 Todo
 - possibility to display text
 - add recent opened files 
+- event based on position of entity
+    (to delete the tube when they have left the screen ...)
 
 
 Current version: 0.01-07

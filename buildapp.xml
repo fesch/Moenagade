@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Unimozer" default="default" basedir=".">
-    <description>Build Unimozer.app</description>
+<project name="Moenagade" default="default" basedir=".">
+    <description>Build Moenagade.app</description>
 
-	<target name="Unimozer">
+	<target name="Moenagade">
 	  <taskdef name="bundleapp" 
 	    classpath="lib/appbundler-1.0ea.jar"
 	    classname="com.oracle.appbundler.AppBundlerTask"/>
@@ -11,17 +11,17 @@
 	    your classpath entries from another target. -->
 	  <bundleapp 
 	  		outputdirectory="./"
-	        name="Unimozer"
-	        displayname="Unimozer"
-	        identifier="lu.fisch.Unimozer"
-	        shortversion="0.27-13"
-	        version="0.27-13"
-	        icon="icon/turtle.icns"
-	        mainclassname="lu.fisch.unimozer.Main"
+	        name="Moenagade"
+	        displayname="Moenagade"
+	        identifier="lu.fisch.Moenagade"
+	        shortversion="0.01"
+	        version="0.01"
+	        icon="icon/moenagade.icns"
+	        mainclassname="lu.fisch.moenagade.Main"
 	        copyright="Bob Fisch"
 	        applicationCategory="public.app-category.education">
 	        
-          <classpath file="dist/Unimozer.jar" />
+          <classpath file="dist/Moenagade.jar" />
           <classpath file="dist/lib/*" />
 	
 	      <!--<runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_15.jdk/Contents/Home"/>-->
@@ -31,9 +31,9 @@
 	      <arch name="i386"/>
 	
 	      <!-- Register the application as an editor for PNG and JPG files -->
-	      <bundledocument extensions="unimozer.pck"
-	        icon="turtle.icns"
-	        name="Unimozer Package"
+	      <bundledocument extensions="moenagade.pro"
+	        icon="moenagade.icns"
+	        name="Moenagade Package"
 	        role="editor">
 	      </bundledocument>
 	
@@ -48,16 +48,16 @@
 	      </bundledocument>-->
 	
 	      <!-- Workaround since the icon parameter for bundleapp doesn't work -->
-	      <option value="-Xdock:icon=Contents/Resources/turtle.icns"/>
+	      <option value="-Xdock:icon=Contents/Resources/moenagade.icns"/>
 	
 	      <!-- OSX specific options, optional -->
 	      <option value="-Dapple.laf.useScreenMenuBar=true"/>
 	      <option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
 	      <option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
-	      <option value="-Dcom.apple.mrj.application.apple.menu.about.name=Unimozer"/>
+	      <option value="-Dcom.apple.mrj.application.apple.menu.about.name=Moenagade"/>
 	      <option value="-Dcom.apple.smallTabs=true"/>
 	      
-	      <option value="-Xdock:name=Unimozer"/>
+	      <option value="-Xdock:name=Moenagade"/>
 	
 	      <option value="-Xmx1024M"/>
 	  </bundleapp>

@@ -80,7 +80,7 @@ public abstract class Entity implements KeyListener {
 
     public void draw(Graphics g)
     {
-        if(image!=null)
+        if(image!=null && location.x+getWidth()>0 && location.y+getHeight()>0)
         {
             g.drawImage(image, location.x, location.y, null);
         }
