@@ -281,24 +281,35 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     
     public void checkCollisions() {
         if(entities!=null) {
-            for (int i = 0; i < entities.size(); i++) {
+            //for (int i = 0; i < entities.size(); i++) {
+            for (int i = entities.size()-1; i>=0; i--) {
                 Entity check = entities.get(i);
                 
-                if(check.getX()<0 || check.getX()+check.getWidth()>getWidth() ||
-                   check.getY()<0 || check.getY()+check.getHeight()>getHeight())
-                {
-                    check.onOutOfWorld();
-                }
-                
-                for (int j = i+1; j < entities.size(); j++) {
-                    Entity other = entities.get(j);
-                    
-                    if(check.isTouching(other))
+                if(entities.contains(check))
+                    if(check.getX()<0 || check.getX()+check.getWidth()>getWidth() ||
+                       check.getY()<0 || check.getY()+check.getHeight()>getHeight())
                     {
-                        check.onTouched(other);
-                        other.onTouched(check);
+                        check.onTouchBoundary();
                     }
-                }
+                
+                if(entities.contains(check))
+                    if(check.getX()+check.getWidth()<0  || check.getX()>getWidth() ||
+                       check.getY()+check.getHeight()<0 || check.getY()>getHeight())
+                    {
+                        check.onOutOfWorld();
+                    }
+                
+                if(entities.contains(check))
+                    //for (int j = i+1; j < entities.size(); j++) {
+                    for (int j = i-1; j >= 0; j--) {
+                        Entity other = entities.get(j);
+
+                        if(check.isTouching(other))
+                        {
+                            check.onTouched(other);
+                            other.onTouched(check);
+                        }
+                    }
             }
         }
     }

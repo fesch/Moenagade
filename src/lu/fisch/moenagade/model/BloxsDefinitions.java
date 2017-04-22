@@ -125,11 +125,14 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Events", "OnTouched", "when touched by someone else", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouched(Entity other)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnTouchedEntity", "when touched by €", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouched(Entity other)\n{\n    if(other.getClass().getSimpleName().equals(\"$0\"))\n    {\n$$$\n    }\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnTouchedEntity", "when touched by €", "Entity", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouched(Entity other)\n{\n    if(other.getClass().getSimpleName().equals(\"$0\"))\n    {\n$$$\n    }\n}\n\n","entity");
         bd.setTransformation(0,"stringify");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnOutOfWorld", "when entity reaches world boundary", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onOutOfWorld()\n{\n$$\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnOutOfWorld", "when entity is outside the world", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onOutOfWorld()\n{\n$$\n}\n\n","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Events", "onTouchBoundary", "when entity reaches world boundary", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouchBoundary()\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
         
@@ -257,7 +260,7 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "addEntity(new $0($this));","world");
         definitions.add(bd);
        
-        bd = new BloxsDefinition("Entity", "AddEntity", "add entity € at positoin x=$ y=$", "Entity,int,int", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "addEntity(new $0($this)).setX($1).setY($2);","world");
+        bd = new BloxsDefinition("Entity", "AddEntity", "add entity € at position x=$ y=$", "Entity,int,int", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "addEntity(new $0($this)).setX($1).setY($2);","world");
         definitions.add(bd);
        
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.EXPRESSION, "", false, false, false, "addEntity(new $0($this))","world");

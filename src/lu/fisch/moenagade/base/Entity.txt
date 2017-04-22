@@ -214,4 +214,8 @@ public abstract class Entity implements KeyListener {
     public void onOutOfWorld()
     {        
     }
+
+    public void onTouchBoundary()
+    {        
+    }
 }

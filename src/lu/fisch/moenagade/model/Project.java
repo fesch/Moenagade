@@ -934,23 +934,27 @@ public class Project {
         int returnVal = fc.showDialog(frame, "Add image"); 
         if(returnVal == JFileChooser.APPROVE_OPTION)
         {
-            File source = fc.getSelectedFile();
-            lastOpenedImage=source.getAbsolutePath();
-            File dest = new File(getImageDirectory()+source.getName());
-            //System.out.println(source);
-            //System.out.println(dest);
-            try 
-            {
-                FileUtils.copyFile(source, dest);
-            } 
-            catch (IOException ex) 
-            {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(frame, "A terrible error occured!\n"+
-                        ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
-            }
+            loadImage(fc.getSelectedFile());
         }
         
+    }
+    
+    public void loadImage(File source)
+    {
+        lastOpenedImage=source.getAbsolutePath();
+        File dest = new File(getImageDirectory()+source.getName());
+        //System.out.println(source);
+        //System.out.println(dest);
+        try 
+        {
+            FileUtils.copyFile(source, dest);
+        } 
+        catch (IOException ex) 
+        {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "A terrible error occured!\n"+
+                    ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+        }
     }
     
     public void openSound(Frame frame)
@@ -989,23 +993,27 @@ public class Project {
         int returnVal = fc.showDialog(frame, "Add sound"); 
         if(returnVal == JFileChooser.APPROVE_OPTION)
         {
-            File source = fc.getSelectedFile();
-            lastOpenedSound=source.getAbsolutePath();
-            File dest = new File(getSoundDirectory()+source.getName());
-            //System.out.println(source);
-            //System.out.println(dest);
-            try 
-            {
-                FileUtils.copyFile(source, dest);
-            } 
-            catch (IOException ex) 
-            {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(frame, "A terrible error occured!\n"+
-                        ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
-            }
+            loadSound(fc.getSelectedFile());
         }
         
+    }
+    
+    public void loadSound(File source)
+    {
+        lastOpenedSound=source.getAbsolutePath();
+        File dest = new File(getSoundDirectory()+source.getName());
+        //System.out.println(source);
+        //System.out.println(dest);
+        try 
+        {
+            FileUtils.copyFile(source, dest);
+        } 
+        catch (IOException ex) 
+        {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "A terrible error occured!\n"+
+                    ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+        }
     }
     
     // http://www.rgagnon.com/javadetails/java-0483.html

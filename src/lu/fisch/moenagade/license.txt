@@ -39,13 +39,17 @@ Used third party components licenses
     Components
     °°°°°°°°°°
 
+    * Apache Commons IO
+        Apache License, Version 2.0
+        http://www.apache.org/licenses/LICENSE-2.0
+
     * RSyntaxTextArea
         LGPL
         http://fifesoft.com/rsyntaxtextarea/RSyntaxTextArea.License.txt
 
-    * Apache Commons IO
-        Apache License, Version 2.0
-        http://www.apache.org/licenses/LICENSE-2.0
+    * FileDroppper
+        Public Domain
+        http://iharder.sourceforge.net/current/java/filedrop/
 
 
 

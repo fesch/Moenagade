@@ -55,10 +55,12 @@ import lu.fisch.moenagade.gui.SoundFile;
 import lu.fisch.moenagade.gui.TreeRenderer;
 import lu.fisch.moenagade.model.BloxsClass;
 import lu.fisch.moenagade.model.BloxsColors;
+import lu.fisch.moenagade.model.BloxsEditor;
 import lu.fisch.moenagade.model.Entity;
 import lu.fisch.moenagade.model.Library;
 import lu.fisch.moenagade.model.Project;
 import lu.fisch.moenagade.model.World;
+import net.iharder.dnd.FileDrop;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -171,7 +173,7 @@ public class MainFrame extends javax.swing.JFrame {
         speNewActionPerformed(null);
         
         // connect the console
-        Console.disconnectAll();
+        //Console.disconnectAll();
     }
 
     public void loadLibrary(String destination)
@@ -265,6 +267,42 @@ public class MainFrame extends javax.swing.JFrame {
         mainNode.add(soundsNode);
         tree.expandPath(new TreePath(mainNode.getPath()));
         //System.out.println(tree.getModel().getClass().getSimpleName());
+        
+        // set the filedropper for the tree
+        FileDrop fileDrop = new FileDrop(tree, new FileDrop.Listener()
+        {
+
+            @Override
+            public void filesDropped(java.io.File[] files)
+            {
+                if(!project.isSaved())
+                {
+                    JOptionPane.showMessageDialog(MainFrame.this, "The project needs to be saved before you drop any files.\n\nAction aborted!","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+                    return;
+                }
+            
+                boolean found = false;
+                for (int i = 0; i < files.length; i++)
+                {
+                    String filename = files[i].toString();
+                    File f = new File(filename);
+                    
+                    if (Project.getExtension(f).toLowerCase().equals("jpg") ||
+                        Project.getExtension(f).toLowerCase().equals("png") ||
+                        Project.getExtension(f).toLowerCase().equals("jpeg"))
+                    {
+                        project.loadImage(f);
+                        updateProjectTree();
+                    }
+                    else if (Project.getExtension(f).toLowerCase().equals("wav"))
+                    {
+                        project.loadSound(f);
+                        updateProjectTree();
+                    }
+                }
+            }
+
+        });
     }
     
     private void updateProjectTree()
