@@ -126,9 +126,19 @@ public abstract class MainFrame extends javax.swing.JFrame implements KeyEventDi
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {                                   
+        System.gc();
+    } 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

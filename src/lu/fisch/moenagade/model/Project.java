@@ -1213,9 +1213,14 @@ public class Project {
                             } 
                             catch (IOException ex) 
                             {
-                                JOptionPane.showMessageDialog(frame, "Error while copying sound '"+file.getName()+"'!\n"+
+                                // windows may still block the original ressource, so this can be ignored!
+                                // the media player seams not to always free well the ressources
+                                
+                                /*JOptionPane.showMessageDialog(frame, "Error while copying sound '"+file.getName()+"'!\n"+
                                     ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+                                /**/
                                 ex.printStackTrace();
+                                
                             }
                         }
                     }

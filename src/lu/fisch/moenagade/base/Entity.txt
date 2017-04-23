@@ -58,6 +58,13 @@ public abstract class Entity implements KeyListener {
         onCreate();
     }
     
+    public Entity(World world, int x, int y) {
+        setWorld(world);
+        location.x=x;
+        location.y=y;
+        onCreate();
+    }
+    
     protected void onCreate() 
     {
     }
@@ -82,7 +89,7 @@ public abstract class Entity implements KeyListener {
     {
         if(image!=null && location.x+getWidth()>0 && location.y+getHeight()>0)
         {
-            g.drawImage(image, location.x, location.y, null);
+            g.drawImage(image, location.x, location.y, width, height, null);
         }
     }
 
@@ -104,6 +111,7 @@ public abstract class Entity implements KeyListener {
     public void moveLeft(int pixels)
     {
         location.x-=pixels;
+        onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
     }
@@ -111,6 +119,7 @@ public abstract class Entity implements KeyListener {
     public void moveRight(int pixels)
     {
         location.x+=pixels;
+        onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
     }
@@ -118,6 +127,7 @@ public abstract class Entity implements KeyListener {
     public void moveUp(int pixels)
     {
         location.y-=pixels;
+        onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
     }
@@ -125,6 +135,7 @@ public abstract class Entity implements KeyListener {
     public void moveDown(int pixels)
     {
         location.y+=pixels;
+        onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
     }
@@ -132,6 +143,7 @@ public abstract class Entity implements KeyListener {
     public Entity setX(int x)
     {
         location.x=x;
+        onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
         return this;
@@ -140,6 +152,7 @@ public abstract class Entity implements KeyListener {
     public Entity setY(int y)
     {
         location.y=y;
+        onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
         return this;
@@ -153,6 +166,10 @@ public abstract class Entity implements KeyListener {
     public int getY()
     {
         return location.y;
+    }
+
+    public Point getLocation() {
+        return location;
     }
 
     public void setWorld(World world) {
@@ -171,6 +188,23 @@ public abstract class Entity implements KeyListener {
         return height;
     }
     
+    public void setWidth(int width) {
+        this.width=width;
+        getWorld().repaint();
+    }
+
+    public void setHeight(int height) {
+        this.height=height;
+        getWorld().repaint();
+    }
+
+    public void setDimension(int width, int height)
+    {
+        this.width=width;
+        this.height=height;
+        getWorld().repaint();
+    }
+
     public int getMouseX()
     {
         return world.getMouseX();
@@ -216,6 +250,10 @@ public abstract class Entity implements KeyListener {
     }
 
     public void onTouchBoundary()
+    {        
+    }
+    
+    public void onPositionChanged()
     {        
     }
 }

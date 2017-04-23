@@ -5,7 +5,7 @@ Todo
     (to delete the tube when they have left the screen ...)
 
 
-Current version: 0.01-09
+Current version: 0.01-10
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -45,3 +45,8 @@ Current version: 0.01-09
 - 07: fixed an element drawing issue
 - 08: minor bug fixes
 - 09: resources can be added via drag & drop
+- 10: added different event when entity is completely outside the world
+- 10: new event when the position of the entity got changed
+- 10: set entity & world dimensions
+- 10: minor code optimizations
+- 10: fixed some graphical issues

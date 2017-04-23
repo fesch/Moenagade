@@ -135,6 +135,9 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Events", "onTouchBoundary", "when entity reaches world boundary", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouchBoundary()\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("Events", "onPositionChanged", "when the position has changed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onPositionChanged()\n{\n$$\n}\n\n","entity");
+        definitions.add(bd);
+        
         
         bd = new BloxsDefinition("Input", "UserInteger", "integer §", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "$0","");
         definitions.add(bd);
@@ -257,10 +260,19 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Entity", "GetHeight", "height of entity", "", BloxsColors.$ENTITY, Type.EXPRESSION, "int", false, false, false, "getHeight()","entity");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("Entity", "SetWidth", "set width of entity $", "int", BloxsColors.$ENTITY, Type.INSTRUCTION, "int", true, false, true, "setWidth($0);","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetHeight", "set height of entity $", "int", BloxsColors.$ENTITY, Type.INSTRUCTION, "int", true, false, true, "setHeight($0);","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetDimension", "set dimension of entity width= $ height= $", "int,int", BloxsColors.$ENTITY, Type.INSTRUCTION, "int", true, false, true, "setDimension($0,$1);","entity");
+        definitions.add(bd);
+        
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "addEntity(new $0($this));","world");
         definitions.add(bd);
        
-        bd = new BloxsDefinition("Entity", "AddEntity", "add entity € at position x=$ y=$", "Entity,int,int", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "addEntity(new $0($this)).setX($1).setY($2);","world");
+        bd = new BloxsDefinition("Entity", "AddEntity", "add entity € at position x=$ y=$", "Entity,int,int", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "addEntity(new $0($this,$1,$2));","world");
         definitions.add(bd);
        
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.EXPRESSION, "", false, false, false, "addEntity(new $0($this))","world");
@@ -305,10 +317,13 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("World", "GetHeight", "height of world", "", BloxsColors.$WORLD, Type.EXPRESSION, "int", false, false, false, "getHeight()","world");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("World", "SetWidth", "set width of world $", "", BloxsColors.$WORLD, Type.INSTRUCTION, "int", true, false, true, "setWidth($0);","world");
+        bd = new BloxsDefinition("World", "SetWidth", "set width of world $", "int", BloxsColors.$WORLD, Type.INSTRUCTION, "int", true, false, true, "setWidth($0);","world");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("World", "SetHeight", "set height of world $", "", BloxsColors.$WORLD, Type.INSTRUCTION, "int", true, false, true, "setHeight($0);","world");
+        bd = new BloxsDefinition("World", "SetHeight", "set height of world $", "int", BloxsColors.$WORLD, Type.INSTRUCTION, "int", true, false, true, "setHeight($0);","world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("World", "SetDimension", "set dimension of world width= $ height= $", "int,int", BloxsColors.$WORLD, Type.INSTRUCTION, "int", true, false, true, "setDimension($0,$1);","world");
         definitions.add(bd);
         
         bd = new BloxsDefinition("World", "MoveLeft", "move left by $ pixels", "int", BloxsColors.$WORLD, Type.INSTRUCTION, "", true, false, true, "moveLeft($0);","world");
