@@ -57,6 +57,7 @@ public class World extends BloxsClass {
         String code = "";
         code+="package moenagade.worlds;\n";
         code+="\n";
+        code+="import java.awt.*;\n";
         code+="import java.awt.event.KeyEvent;\n";
         code+="import javax.swing.Timer;\n";
         code+="import java.awt.event.ActionListener;\n";
@@ -64,10 +65,17 @@ public class World extends BloxsClass {
         code+="import moenagade.*;\n";
         code+="import moenagade.base.*;\n";
         code+="import moenagade.worlds.*;\n";
-        code+="import moenagade.entities.*;\n";
+        if(getProject().getEntities().size()>0)
+            code+="import moenagade.entities.*;\n";
         code+="\n";
         code+="public class "+getName()+" extends "+this.getClass().getSimpleName()+"\n";
         code+="{\n";
+        code+="    public "+getName()+"()\n";
+        code+="    {\n";
+        code+="        super();\n";
+        code+="        onCreate();\n";
+        code+="    }\n";
+        code+="\n";
         code+=getEditor().getJavaCode(1)+"\n";
         code+="}";
         return code;

@@ -125,7 +125,10 @@ public class Project {
         return main;
     }
     
-    
+    public Entity getEntity(String name)
+    {
+        return entities.get(name);
+    }
     
     public boolean isChanged() {
         return changed;
@@ -1540,11 +1543,11 @@ public class Project {
             JOptionPane.showMessageDialog(frame, "Sorry, but you need to define at least one world ...","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
             return false;
         }
-        else if(entities.size()==0)
+        /*else if(entities.size()==0)
         {
             JOptionPane.showMessageDialog(frame, "Sorry, but you need to define at least one entity ...","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
             return false;
-        }
+        }/**/
         
         Element check = check();
         if(check!=null)

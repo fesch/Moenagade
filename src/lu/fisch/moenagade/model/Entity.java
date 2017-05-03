@@ -57,6 +57,7 @@ public class Entity extends BloxsClass {
         String code = "";
         code+="package moenagade.entities;\n";
         code+="\n";
+        code+="import java.awt.*;\n";
         code+="import java.awt.event.KeyEvent;\n";
         code+="import javax.swing.Timer;\n";
         code+="import java.awt.event.ActionListener;\n";

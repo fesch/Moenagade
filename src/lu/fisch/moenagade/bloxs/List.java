@@ -234,7 +234,22 @@ public class List extends Element {
         
         //System.out.println("Toggle IN for: "+getClassname()+" with return type: "+getReturnType());
         
-        if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Variable"))
+        if(open && getParent()!=null && (
+                getParent().getClassname().equals("VariableDefinition") ||
+                getParent().getClassname().equals("AttributeDefinition")
+                ))
+        {
+            ArrayList<String> entries = new ArrayList<>();
+            entries.add("int");
+            entries.add("double");
+            entries.add("boolean");
+            entries.add("String");
+            entries.add("long");
+            entries.add("float");
+            entries.addAll(Library.getInstance().getProject().getEntityNames());
+            update(entries);
+        }
+        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Variable"))
                 /*(
                 getParent().getClassname().equals("Variable") ||
                 getParent().getClassname().equals("SetVariable") ||
@@ -292,6 +307,10 @@ public class List extends Element {
                 ))*/
         {
             update(getAttributes());
+        }
+        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("EntityList"))
+        {
+            update(getEntities());
         }
         
         //System.out.println("Toggle OUT for: "+getClassname()+" with return type: "+getReturnType());

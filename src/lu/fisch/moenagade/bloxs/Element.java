@@ -45,6 +45,7 @@ import static lu.fisch.moenagade.bloxs.Element.Type.INSTRUCTION;
 import lu.fisch.moenagade.model.BloxsEditor;
 import lu.fisch.moenagade.gui.Change;
 import lu.fisch.moenagade.model.BloxsDefinition;
+import lu.fisch.moenagade.model.Entity;
 import lu.fisch.moenagade.model.Library;
 import lu.fisch.moenagade.model.Project;
 
@@ -789,13 +790,12 @@ public class Element {
             int x = offset.x+PADDING_LR;
             if(titlePieces.size()>0)
             {
-                g.setColor(TEXT_COLOR);
-                g.setFont(new Font("Monospaced", Font.BOLD, fontsize));
-                
                 if(parameters.isEmpty())
                 {
                     int th = g.getFontMetrics().getAscent();
                     int tw = g.getFontMetrics().stringWidth(title);
+                    g.setColor(TEXT_COLOR);
+                    g.setFont(new Font("Monospaced", Font.BOLD, fontsize));    
                     g.drawString(title, offset.x+(headDim.width-tw)/2, offset.y+th+(headDim.height-th)/2); 
                 }
                 else
@@ -806,6 +806,8 @@ public class Element {
                         if(!piece.trim().isEmpty())
                         {
                             int th = g.getFontMetrics().getAscent();
+                            g.setColor(TEXT_COLOR);
+                            g.setFont(new Font("Monospaced", Font.BOLD, fontsize));    
                             g.drawString(piece.trim(), x, offset.y+th+(headDim.height-th)/2);
                             x+=g.getFontMetrics().stringWidth(piece.trim()+" ");
                         }
@@ -879,13 +881,12 @@ public class Element {
             // text
             if(titlePieces.size()>0)
             {
-                g.setColor(TEXT_COLOR);
-                g.setFont(new Font("Monospaced", Font.BOLD, fontsize));
-                
                 if(parameters.isEmpty())
                 {
                     int th = g.getFontMetrics().getAscent();
                     int tw = g.getFontMetrics().stringWidth(title);
+                    g.setColor(TEXT_COLOR);
+                    g.setFont(new Font("Monospaced", Font.BOLD, fontsize)); 
                     g.drawString(title, offset.x+(headDim.width-tw)/2, offset.y+th+(headDim.height-th)/2); 
                 }
                 else
@@ -896,6 +897,8 @@ public class Element {
                         if(!piece.trim().isEmpty())
                         {
                             int th = g.getFontMetrics().getAscent();
+                            g.setColor(TEXT_COLOR);
+                            g.setFont(new Font("Monospaced", Font.BOLD, fontsize)); 
                             g.drawString(piece.trim(), x, offset.y+th+(headDim.height-th)/2);
                             x+=g.getFontMetrics().stringWidth(piece.trim()+" ");
                         }
@@ -2323,6 +2326,35 @@ public class Element {
         
         return new ArrayList<VariableDefinition>();
     }
+    
+    public ArrayList<VariableDefinition> getEntities()
+    {
+        ArrayList<VariableDefinition> result = new ArrayList<>();
+        
+        Element tme = getTopMostElement();
+        if(tme!=null)
+            result=tme.getEditor().getEntities();
+        
+        Element tmp = this;
+        while(tmp!=null)
+        {
+            if(tmp.getClassname().equals("StartTimer")) break;
+            //System.out.println("Look vor var inside: "+this.getClass().getSimpleName());
+            if((tmp.getClassname().equals("VariableDefinition") ||
+               tmp.getClassname().equals("For")) && Library.getInstance().getProject().getEntityNames().contains(tmp.getReturnType()))
+            {
+                result.add(tmp.getVariableDefinition());
+            }
+            if(tmp.getPrev()!=null &&
+               tmp.getPrev().getClassname().equals("For") &&
+               tmp.getPrev()!=tmp.getParent())
+                tmp=tmp.getPrev().getPrev();
+            else
+                tmp=tmp.getPrev();
+        }
+        
+        return result;
+    }
 
 
     public boolean allowDockTo(Element destination, Pos pos)
@@ -2487,144 +2519,6 @@ public class Element {
             }
         }
         
-        /*
-        if((this.getClassname().equals("LoadImage")) && 
-                change.sender==null &&
-                change.position==-1 &&
-                change.cmd.equals("delete.image"))
-        {
-            if(parameters.get(0).getTitle().equals(change.from.toString()))
-                parameters.get(0).setTitle("");
-        }
-        else if((this.getClassname().equals("PlaySound")) && 
-                change.sender==null &&
-                change.position==-1 &&
-                change.cmd.equals("delete.sound"))
-        {
-            if(parameters.get(0).getTitle().equals(change.from.toString()))
-                parameters.get(0).setTitle("");
-        }
-        else if((this.getClassname().equals("AddEntity") || 
-                 this.getClassname().equals("OnTouchedEntity")) &&
-                change.sender==null &&
-                change.position==-1 &&
-                change.cmd.equals("delete.entity"))
-        {
-            if(parameters.get(0).getTitle().equals(change.from.toString()))
-                parameters.get(0).setTitle("");
-        }
-        else if((this.getClassname().equals("SetWorld")) && 
-                change.sender==null &&
-                change.position==-1 &&
-                change.cmd.equals("delete.world"))
-        {
-            if(parameters.get(0).getTitle().equals(change.from.toString()))
-                parameters.get(0).setTitle("");
-        }
-        else if((this.getClassname().equals("AddEntity") || 
-                 this.getClassname().equals("OnTouchedEntity") || 
-                 this.getClassname().equals("CountEntitiesClass")) && 
-                change.sender==null &&
-                change.position==-1 &&
-                change.cmd.equals("rename.entity"))
-        {
-            if(parameters.get(0).getTitle().equals(change.from.toString()))
-                parameters.get(0).setTitle(change.to.toString());
-        }
-        else if((this.getClassname().equals("SetWorld")) && 
-                change.sender==null &&
-                change.position==-1 &&
-                change.cmd.equals("rename.world"))
-        {
-            if(parameters.get(0).getTitle().equals(change.from.toString()))
-                parameters.get(0).setTitle(change.to.toString());
-        }
-        else if((this.getClassname().equals("LoadImage")) && 
-                change.sender==null &&
-                change.position==-1 &&
-                change.cmd.equals("rename.image"))
-        {
-            if(parameters.get(0).getTitle().equals(change.from.toString()))
-                parameters.get(0).setTitle(change.to.toString());
-        }
-        else if((this.getClassname().equals("PlaySound")) && 
-                change.sender==null &&
-                change.position==-1 &&
-                change.cmd.equals("rename.sound"))
-        {
-            if(parameters.get(0).getTitle().equals(change.from.toString()))
-                parameters.get(0).setTitle(change.to.toString());
-        }
-        else if(change.sender!=null)
-        {
-            if((this.getClassname().equals("Variable") || 
-                    this.getClassname().equals("SetVariable") || 
-                    this.getClassname().equals("VariableIncrement") || 
-                    this.getClassname().equals("VariableDecrement")) && 
-                    change.sender.getClassname().equals("VariableDefinition") &&
-                    change.position==0)
-            {
-                if(parameters.get(0).getTitle().equals(change.from))
-                    parameters.get(0).setTitle(change.to.toString());
-            }
-            else if((this.getClassname().equals("Variable") || 
-                    this.getClassname().equals("SetVariable") || 
-                    this.getClassname().equals("VariableIncrement") || 
-                    this.getClassname().equals("VariableDecrement")) && 
-                    (change.sender.getClassname().equals("VariableDefinition") || 
-                     change.sender.getClassname().equals("SetVariable")) &&
-                    change.cmd.equals("dock") &&
-                    change.position==-1)
-            {
-                //System.out.println("JA!!!");
-                if(!hasVariableWithName(this.getParameter(0).getTitle()))
-                    this.getParameter(0).setTitle("");
-            }
-            // if the type has been changed
-            else if((this.getClassname().equals("Variable") || 
-                    this.getClassname().equals("SetVariable") || 
-                    this.getClassname().equals("VariableIncrement") || 
-                    this.getClassname().equals("VariableDecrement")) && 
-                    change.sender.getClassname().equals("VariableDefinition") &&
-                    change.position==1)
-            {
-                //System.out.println("Setting return Type for "+getClassname()+" to: "+change.to.toString());
-                if(parameters.get(0).getTitle().equals(change.sender.getVariableDefinition().name))
-                {
-                    parameters.get(0).setReturnType(change.to.toString());
-                    setReturnType(change.to.toString());
-                }
-            }
-            // in case the name of a AttributeDefinition changed,
-            // all usages of the old Attribute name should be updated.
-            else if((this.getClassname().equals("Attribute") 
-                    || this.getClassname().equals("SetAttribute") || 
-                    this.getClassname().equals("AttributeIncrement") || 
-                    this.getClassname().equals("AttributeDecrement")) && 
-                    change.sender.getClassname().equals("AttributeDefinition") &&
-                    change.position==0)
-            {
-                if(parameters.get(0).getTitle().equals(change.from))
-                parameters.get(0).setTitle(change.to.toString());
-            }
-            // if the type has been changed
-            else if((this.getClassname().equals("Attribute") || 
-                    this.getClassname().equals("SetAttribute") || 
-                    this.getClassname().equals("AttributeIncrement") || 
-                    this.getClassname().equals("AttributeDecrement")) &&
-                change.sender.getClassname().equals("AttributeDefinition") &&
-                change.position==1)
-            {
-                //System.out.println("Setting return Type for "+getClassname()+" to: "+change.to.toString());
-                if(parameters.get(0).getTitle().equals(change.sender.getVariableDefinition().name))
-                {
-                    parameters.get(0).setReturnType(change.to.toString());
-                    setReturnType(change.to.toString());
-                }
-            }
-        }
-        */
-        
         // a variable or attribute definition has changed the type
         if(   ((this.getClassname().equals("VariableDefinition") || 
                 this.getClassname().equals("AttributeDefinition")) && 
@@ -2661,6 +2555,8 @@ public class Element {
             while(paramTypes.size()<3) paramTypes.add("");
             // JOS
             paramTypes.set(2, change.to.toString());
+            // update my own return type
+            setReturnType(change.to.toString());
             
             // $ = expression
             // £ = boolean
@@ -2815,6 +2711,181 @@ public class Element {
             // $ = expression
             // £ = boolean
             // § = string    
+        }
+        
+        // if the first parameter of an ObjectSetAttribute has changed,
+        // the second one has to be updated
+        if((this.getClassname().equals("ObjectSetAttribute")) &&
+                change.sender!=null &&
+                change.position==0 &&
+                change.sender==this
+           )
+        {
+            ArrayList<VariableDefinition> entities = getEntities();
+            for (int i = 0; i < entities.size(); i++) {
+                VariableDefinition vd = entities.get(i);
+                if(vd.name.equals(change.to.toString()))
+                {
+                    // get reference to the loaded project
+                    Project project = Library.getInstance().getProject();
+                    // stop if null or not set
+                    if(project==null) return;
+                    // get the selected entity
+                    Entity entity = project.getEntity(vd.classname);
+                    // stop if not found
+                    if(entity==null) return;  
+                    // stop if class has no editor
+                    if(entity.getEditor()==null) return;
+                    // retrieve list of variables
+                    ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
+                    // update the second parameter
+                    ((List)parameters.get(1)).update(attributeNames);
+                }
+            }
+        }
+        // if the second parameter of an ObjectSetAttribute has changed,
+        // the type of the third one has to be updated
+        else if((this.getClassname().equals("ObjectSetAttribute")) &&
+                change.sender!=null &&
+                change.position==1 &&
+                change.sender==this
+           )
+        {
+            ArrayList<VariableDefinition> entities = getEntities();
+            for (int i = 0; i < entities.size(); i++) {
+                VariableDefinition vd = entities.get(i);
+                if(vd.name.equals(parameters.get(0).getTitle()))
+                {
+                    // get reference to the loaded project
+                    Project project = Library.getInstance().getProject();
+                    // stop if null or not set
+                    if(project==null) return;
+                    // get the selected entity
+                    Entity entity = project.getEntity(vd.classname);
+                    // stop if not found
+                    if(entity==null) return;  
+                    // stop if class has no editor
+                    if(entity.getEditor()==null) return;
+                    // retrieve list of variables
+                    ArrayList<VariableDefinition> attributeNames = entity.getEditor().getAttributes();
+                    for (int j = 0; j < attributeNames.size(); j++) {
+                        // find the one where the name matches
+                        VariableDefinition vdi = attributeNames.get(j);
+                        if(vdi.name.equals(change.to.toString()))
+                        {
+                            if(!typeCanAcceptType(vdi.type, parameters.get(2).getReturnType()))
+                            {
+                                setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",vdi.type));
+                            }
+                            if(vdi.type.equals("boolean"))
+                            {
+                                // update title
+                                title = title.substring(0,title.length()-1);
+                                title+="£";
+                                // set new parameter
+                                if(!parameters.get(2).getClassname().equals("ConditionHolder"))
+                                    setParameter(2, new Element(Type.CONDITION,"ConditionHolder","boolean"));
+                                parameters.get(2).setReturnType(vdi.type);
+                            }
+                            else
+                            {
+                                // update title
+                                title = title.substring(0,title.length()-1);
+                                title+="$";
+                                // set new parameter
+                                if(!parameters.get(2).getClassname().equals("ExpressionHolder"))
+                                    setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",vdi.type));
+                                parameters.get(2).setReturnType(vdi.type);
+                            }
+                            // modify parameter type
+                            while(paramTypes.size()<3) paramTypes.add("");
+                            // JOS
+                            paramTypes.set(2, vdi.type);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // if the first parameter of an ObjectGetAttribute has changed,
+        // the second one has to be updated
+        if((this.getClassname().equals("ObjectGetAttribute")) &&
+                change.sender!=null &&
+                change.position==0 &&
+                change.sender==this
+           )
+        {
+            ArrayList<VariableDefinition> entities = getEntities();
+            for (int i = 0; i < entities.size(); i++) {
+                VariableDefinition vd = entities.get(i);
+                if(vd.name.equals(change.to.toString()))
+                {
+                    // get reference to the loaded project
+                    Project project = Library.getInstance().getProject();
+                    // stop if null or not set
+                    if(project==null) return;
+                    // get the selected entity
+                    Entity entity = project.getEntity(vd.classname);
+                    // stop if not found
+                    if(entity==null) return;  
+                    // stop if class has no editor
+                    if(entity.getEditor()==null) return;
+                    // retrieve list of variables
+                    ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
+                    // update the second parameter
+                    ((List)parameters.get(1)).update(attributeNames);
+                }
+            }
+        }
+        // if the second parameter of an ObjectGetAttribute has changed,
+        // the return type of this element has to be changed
+        else if((this.getClassname().equals("ObjectGetAttribute")) &&
+                change.sender!=null &&
+                change.position==1 &&
+                change.sender==this
+           )
+        {
+            ArrayList<VariableDefinition> entities = getEntities();
+            for (int i = 0; i < entities.size(); i++) {
+                VariableDefinition vd = entities.get(i);
+                if(vd.name.equals(parameters.get(0).getTitle()))
+                {
+                    // get reference to the loaded project
+                    Project project = Library.getInstance().getProject();
+                    // stop if null or not set
+                    if(project==null) return;
+                    // get the selected entity
+                    Entity entity = project.getEntity(vd.classname);
+                    // stop if not found
+                    if(entity==null) return;  
+                    // stop if class has no editor
+                    if(entity.getEditor()==null) return;
+                    // retrieve list of variables
+                    ArrayList<VariableDefinition> attributeNames = entity.getEditor().getAttributes();
+                    for (int j = 0; j < attributeNames.size(); j++) {
+                        // find the one where the name matches
+                        VariableDefinition vdi = attributeNames.get(j);
+                        if(vdi.name.equals(change.to.toString()))
+                        {
+                            setReturnType(vdi.type);
+                            if(vdi.type.equals("boolean"))
+                                setType(Type.CONDITION);
+                            else
+                                setType(Type.EXPRESSION);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // set the return type to the selected box type
+        if((this.getClassname().equals("AddEntity")) &&
+                change.sender!=null &&
+                change.position==0 &&
+                change.sender==this
+           )
+        {
+            setReturnType(change.to.toString());
         }
         
         // then pass it on
@@ -3204,6 +3275,15 @@ public class Element {
         return paramTypes;
     }
     
+    public String getEntityClassname()
+    {
+        if(getClassname().equals("AddEntity"))
+        {
+            return parameters.get(0).getTitle();
+        }
+        return null;
+    }
+    
     public VariableDefinition getVariableDefinition() {
         if(getClassname().equals("VariableDefinition") ||
            getClassname().equals("AttributeDefinition")||
@@ -3212,10 +3292,13 @@ public class Element {
             VariableDefinition v = new VariableDefinition();
             v.name = parameters.get(0).getTitle();
             v.type = parameters.get(1).getTitle();
+            if(parameters.get(2).getBody()!=null)
+                v.classname = parameters.get(2).getBody().getEntityClassname();
             if(getClassname().equals("For"))
                 v.type="double";
             else
                 v.type = parameters.get(1).getTitle();
+            //System.out.println(v);
             return v;
         }
         return null;

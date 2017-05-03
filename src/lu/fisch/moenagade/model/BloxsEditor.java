@@ -622,7 +622,7 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
 
     public ArrayList<VariableDefinition> getAttributes() 
     {
-        ArrayList<VariableDefinition> attributes = new ArrayList<VariableDefinition>();
+        ArrayList<VariableDefinition> attributes = new ArrayList<>();
         
         for (int i = 0; i < elements.size(); i++) 
         {
@@ -633,6 +633,55 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                 attributes.add(e.getVariableDefinition());
             }
         }
+        return attributes;
+    }
+
+    public ArrayList<String> getAttributeNames() 
+    {
+        ArrayList<String> attributes = new ArrayList<>();
+        
+        for (int i = 0; i < elements.size(); i++) 
+        {
+            Element e = elements.get(i);
+            //System.out.println("I: "+this+" Checking: "+e.getClassname());
+            if(e.getClassname().equals("AttributeDefinition"))
+            {
+                attributes.add(e.getVariableDefinition().name);
+            }
+        }
+        return attributes;
+    }
+    
+    public ArrayList<VariableDefinition> getEntities() 
+    {
+        ArrayList<VariableDefinition> attributes = new ArrayList<>();
+        
+        for (int i = 0; i < elements.size(); i++) 
+        {
+            Element e = elements.get(i);
+            //System.out.println("Checking: "+e.getClassname()+" with return type: "+e.getReturnType());
+            if(e.getClassname().equals("AttributeDefinition") &&  Library.getInstance().getProject().getEntityNames().contains(e.getReturnType()))
+            {
+                attributes.add(e.getVariableDefinition());
+            }
+        }
+        return attributes;
+    }
+
+    public ArrayList<String> getEntityNames() 
+    {
+        ArrayList<String> attributes = new ArrayList<>();
+        
+        for (int i = 0; i < elements.size(); i++) 
+        {
+            Element e = elements.get(i);
+            System.out.println("Checking: "+e.getClassname()+" with return type: "+e.getReturnType());
+            if(e.getClassname().equals("AttributeDefinition") && Library.getInstance().getProject().getEntityNames().contains(e.getReturnType()))
+            {
+                attributes.add(e.getVariableDefinition().name);
+            }
+        }
+        System.out.println("attributes: "+attributes);
         return attributes;
     }
 

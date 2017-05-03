@@ -1,11 +1,9 @@
 Todo
-- possibility to display text
+- create a costum method
 - add recent opened files 
-- event based on position of entity
-    (to delete the tube when they have left the screen ...)
+- contextuelle menu am blox-editor
 
-
-Current version: 0.01-10
+Current version: 0.14
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -50,3 +48,13 @@ Current version: 0.01-10
 - 10: set entity & world dimensions
 - 10: minor code optimizations
 - 10: fixed some graphical issues
+- 11: added drawing blocks
+- 11: added more mouse events
+- 11: restructured mouse events
+- 12: added getter & setter creations for attributes
+- 12: allow to add attribute & variable of type "Entity"
+- 12: possibility to modify entity instance attributes
+- 13: fixed some bugs
+- 14: added object related blocks
+- 14: changed graphic coordinates for entities to relative
+- 14: fixed minors bugs

@@ -656,6 +656,7 @@ public class MainFrame extends javax.swing.JFrame {
         rightPanel.setLayout(new java.awt.BorderLayout());
 
         splitter3.setDividerLocation(200);
+        splitter3.setResizeWeight(1.0);
 
         splitter4.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         splitter4.setResizeWeight(1.0);

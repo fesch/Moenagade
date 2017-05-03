@@ -71,13 +71,12 @@ public class MainFrame extends BloxsClass {
         code+="import moenagade.*;\n";
         code+="import moenagade.base.*;\n";
         code+="import moenagade.worlds.*;\n";
-        code+="import moenagade.entities.*;\n";
+        if(getProject().getEntities().size()>0)
+            code+="import moenagade.entities.*;\n";
         code+="\n";
         code+="public class "+getName()+" extends "+this.getClass().getSimpleName()+"\n";
         code+="{\n";
         code+=getEditor().getJavaCode(1)+"\n";
-        code+="    \n";
-        code+="    \n";
         code+="    public static void main(String args[])\n";
         code+="    {\n";
         code+="        java.awt.EventQueue.invokeLater(new Runnable() {\n";

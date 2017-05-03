@@ -70,7 +70,13 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Values", "False", "false", "", BloxsColors.$BOOLEAN, Type.CONDITION, "boolean", false, false, false, "false","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Values", "Null", "null", "", BloxsColors.$OTHER, Type.EXPRESSION, "boolean", false, false, false, "null","");
+        bd = new BloxsDefinition("Values", "Null", "null", "", BloxsColors.$OTHER, Type.EXPRESSION, "", false, false, false, "null","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Values", "StringValueOf", "value of $ as String", "double", BloxsColors.$INPUT, Type.EXPRESSION, "String", false, false, false, "String.valueOf($0)","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Values", "IntValueOf", "value of $ as integer", "String", BloxsColors.$INPUT, Type.EXPRESSION, "int", false, false, false, "Integer.valueOf($0)","");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Values", "KeyCodeLeft", "arrow left", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "37","entity");
@@ -110,16 +116,28 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Events", "OnCreate", "when created", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onCreate()\n{\n$$\n}\n\n","");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("Events", "OnDraw", "when being painted", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onDraw(Graphics g)\n{\n$$\n}\n\n","");
+        definitions.add(bd);
+        
         bd = new BloxsDefinition("Events", "OnKeyPressed", "when a key has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyPressed(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Events", "OnKeyReleased", "when a key has been release", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyReleased(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void formMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.formMousePressed(evt);\n$$\n}\n\n","world");
-        definitions.add(bd);
+        //bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void formMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.formMousePressed(evt);\n$$\n}\n\n","world");
+        //definitions.add(bd);
  
-        bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void mousePressed(java.awt.event.MouseEvent evt)\n{\n    super.mousePressed(evt);\n$$\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.onMousePressed(evt);\n$$\n}\n\n","entity,world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Events", "OnMouseReleased", "when a mouse button has been released", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseReleased(java.awt.event.MouseEvent evt)\n{\n    super.onMouseReleased(evt);\n$$\n}\n\n","entity,world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Events", "OnMouseMoved", "when the mouse has been moved", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseMoved(java.awt.event.MouseEvent evt)\n{\n    super.onMouseMoved(evt);\n$$\n}\n\n","entity,world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Events", "OnMouseDragged", "when the mouse has been dragged", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseDragged(java.awt.event.MouseEvent evt)\n{\n    super.onMouseDragged(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Events", "OnTouched", "when touched by someone else", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouched(Entity other)\n{\n$$\n}\n\n","entity");
@@ -132,17 +150,17 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Events", "OnOutOfWorld", "when entity is outside the world", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onOutOfWorld()\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "onTouchBoundary", "when entity reaches world boundary", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouchBoundary()\n{\n$$\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnTouchBoundary", "when entity reaches world boundary", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouchBoundary()\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "onPositionChanged", "when the position has changed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onPositionChanged()\n{\n$$\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnPositionChanged", "when the position has changed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onPositionChanged()\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
         
         bd = new BloxsDefinition("Input", "UserInteger", "integer §", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "$0","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Input", "UserFloat", "float §", "", BloxsColors.$INPUT, Type.EXPRESSION, "float", false, false, false, "$0f","");
+        bd = new BloxsDefinition("Input", "UserFloat", "decimal §", "", BloxsColors.$INPUT, Type.EXPRESSION, "float", false, false, false, "$0f","");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Input", "UserString", "String §", "", BloxsColors.$INPUT, Type.EXPRESSION, "String", false, false, false, "\"$0\"","");
@@ -172,9 +190,22 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Math", "MathRandom", "random number between $ and $", "int,int", BloxsColors.$MATH, Type.EXPRESSION, "", false, false, false, "(int)(Math.random() * ($1-$0+1)) + $0","");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("Math", "MathCos", "cosinus of $ °", "double", BloxsColors.$MATH, Type.EXPRESSION, "double", false, false, false, "Math.cos($0)","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Math", "MathSin", "sinus of $ °", "double", BloxsColors.$MATH, Type.EXPRESSION, "double", false, false, false, "Math.sin($0)","");
+        definitions.add(bd);
+
+        bd = new BloxsDefinition("Math", "MathAtan2", "atan2 of $ and $", "double,double", BloxsColors.$MATH, Type.EXPRESSION, "double", false, false, false, "Math.atan2($0,$1)","");
+        definitions.add(bd);
+
+        bd = new BloxsDefinition("Math", "MathFloor", "integer value of $", "double", BloxsColors.$MATH, Type.EXPRESSION, "int", false, false, false, "(int) $0","");
+        definitions.add(bd);
+        
+        
         
         bd = new BloxsDefinition("Variables", "VariableDefinition", "define variable § of type € with value $", "", BloxsColors.$VARIABLE, Type.INSTRUCTION, "", true, false, true, "$1 $0 = $2;","");
-        bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float","Entity","World"}));
+        bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         bd.setTransformation("variable");
         definitions.add(bd);
         
@@ -198,7 +229,7 @@ public class BloxsDefinitions {
         
         
 
-        bd = new BloxsDefinition("Attributes", "AttributeDefinition", "define attribute § of type € with value $", "", BloxsColors.$OBJECT, Type.INSTRUCTION, "", false, false, false, "public $1 $0 = $2;\n\n","");
+        bd = new BloxsDefinition("Attributes", "AttributeDefinition", "define attribute § of type € with value $", "", BloxsColors.$OBJECT, Type.INSTRUCTION, "", false, false, false, "private $1 $0 = $2;\n\npublic void set$0($1 $0)\n{\n    this.$0=$0;\n}\n\npublic $1 get$0()\n{\n    return $0;\n}\n\n","");
         bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         bd.setTransformation("attribute");
         definitions.add(bd);
@@ -220,7 +251,7 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Attributes", "AttributeDecrement", "decrement attribute € by $", "Attribute,double", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0-=$1;","");
         definitions.add(bd);
         
-
+        
         
         bd = new BloxsDefinition("Sound", "PlaySound", "play sound €", "Sound", BloxsColors.$SOUND, Type.INSTRUCTION, "", true, false, true, "getWorld().playSound(\"$0\");","");
         bd.setTransformation(0,"stringify");
@@ -229,6 +260,24 @@ public class BloxsDefinitions {
        
         //bd = new BloxsDefinition("**** TEST ****", "Test", "Test $", "", ColorUtils.getColor("#748C51"), Type.INSTRUCTION, "String", true, false, true, "test($0);","");
         //definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "ObjectSetAttribute", "set € . € to $", "EntityList,EntityAttributes,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.set$1($2);","");
+        definitions.add(bd);
+        
+         bd = new BloxsDefinition("Entity", "ObjectGetAttribute", "get value of € . €", "EntityList,EntityAttributes", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "$0.get$1()","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "ObjectSetX", "for € set X position $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setX($1);","world,entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "ObjectSetY", "for € set Y position $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setY($1);","world,entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "ObjectGetX", "for € get X position", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getX()","world,entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "ObjectGetY", "for € get Y position", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getY()","world,entity");
+        definitions.add(bd);
         
         bd = new BloxsDefinition("Entity", "MoveLeft", "move left by $ pixels", "int", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "moveLeft($0);","entity");
         definitions.add(bd);
@@ -281,8 +330,13 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "getWorld().addEntity(new $0(getWorld()));","entity");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Entity", "AddEntity", "add entity € at positoin x=$ y=$", "Entity,int,int", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "getWorld().addEntity(new $0(getWorld())).setX($1).setY($2);","entity");
+        bd = new BloxsDefinition("Entity", "AddEntity", "add entity € at positoin x=$ y=$", "Entity,int,int", BloxsColors.$GAME, Type.INSTRUCTION, "Entity", true, false, true, "getWorld().addEntity(new $0(getWorld())).setX($1).setY($2);","entity");
         definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.EXPRESSION, "", false, false, false, "getWorld().addEntity(new $0(getWorld()))","entity");
+        definitions.add(bd);
+
+        
        
        
         bd = new BloxsDefinition("Entity", "DeleteEntity", "delete entity", "", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "delete();","entity");
@@ -363,6 +417,45 @@ public class BloxsDefinitions {
         //bd.setList(0, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         definitions.add(bd);
 
+        bd = new BloxsDefinition("Graphical", "Repaint", "repaint", "", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "getWorld().repaint();","world,entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Graphical", "SetColor", "set color $", "Color", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.setColor($0);","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Graphical", "Color", "new RGB color wit R=$ G=$ B=$", "int,int,int", BloxsColors.$GRAPHICAL, Type.EXPRESSION, "Color", true, false, true, "new Color($0,$1,$2)","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+
+        bd = new BloxsDefinition("Graphical", "SetFontSize", "set the font size to $", "int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.setFont(new Font(g.getFont().getName(), g.getFont().getStyle(), $0));","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+
+        bd = new BloxsDefinition("Graphical", "DrawString", "draw the text $ as position x=$ y=$", "String,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.drawString($0,$1,$2);","world,entity");
+        bd.setTransformation(0,"stringify");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+
+        bd = new BloxsDefinition("Graphical", "DrawLine", "draw line between the point x1=$ y1=$ and x2=$ y2=$", "int,int,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.drawLine($0,$1,$2,$3);","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+
+        bd = new BloxsDefinition("Graphical", "DrawRect", "draw outlined rectangle at position x=$ y=$ with width=$ height=$", "int,int,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.drawRect($0,$1,$2,$3);","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+
+        bd = new BloxsDefinition("Graphical", "FillRect", "draw filled rectangle at position x=$ y=$ with width=$ height=$", "int,int,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.fillRect($0,$1,$2,$3);","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Graphical", "DrawOval", "draw outlined oval at position x=$ y=$ with width=$ height=$", "int,int,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.drawOval($0,$1,$2,$3);","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+
+        bd = new BloxsDefinition("Graphical", "FillOval", "draw filled oval at position x=$ y=$ with width=$ height=$", "int,int,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.fillOval($0,$1,$2,$3);","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
         
         
         bd = new BloxsDefinition("Application", "SetWindowSize", "set window size to $ x $ pixels", "int,int", BloxsColors.$MAIN, Type.INSTRUCTION, "", true, false, true, "setWindowSize($0, $1);","main");
@@ -380,7 +473,7 @@ public class BloxsDefinitions {
         
         
         
-        bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milli seconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n    $$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
+        bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milli seconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n$$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Timer", "StopTimer", "stop timer", "", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, false, true, "((Timer)ae.getSource()).stop();","entity,world");

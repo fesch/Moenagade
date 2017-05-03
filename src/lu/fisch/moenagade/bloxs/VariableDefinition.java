@@ -35,6 +35,7 @@ import java.util.Objects;
 public class VariableDefinition {
     public String name;
     public String type;
+    public String classname;
     //public String value;
 
     public VariableDefinition() {

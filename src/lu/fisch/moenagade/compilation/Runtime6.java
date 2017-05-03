@@ -98,7 +98,7 @@ public class Runtime6
             Iterable<String> myOptions = null;
             if(target!=null) 
              {
-                options = new String[]{"-d",path,"-source", target,"-target", target, "-cp", classPath};
+                options = new String[]{"-d",path,"-source", target,"-target", target, "-cp", classPath,"-Xlint:unchecked"};
             }
             myOptions = Arrays.asList(options);
             //for(int i=0;i<options.length;i++) System.err.print(options[i]+" // ");
@@ -182,7 +182,7 @@ public class Runtime6
 
         // set compileroptions for target JVM
         //System.err.println(path+"bin/");
-        String[] options = new String[]{"-classpath", classPath};
+        String[] options = new String[]{"-classpath", classPath,"-Xlint:unchecked"};
         Iterable<String> myOptions = null;
         myOptions = Arrays.asList(options);
 
