@@ -53,9 +53,12 @@ import lu.fisch.moenagade.bloxs.Element.Type;
 import lu.fisch.moenagade.bloxs.List;
 import lu.fisch.moenagade.bloxs.Parser;
 import lu.fisch.moenagade.bloxs.Item;
+import lu.fisch.moenagade.bloxs.Parameters;
 import lu.fisch.moenagade.bloxs.VariableDefinition;
 import lu.fisch.moenagade.gui.Change;
 import lu.fisch.moenagade.gui.LibraryPanel;
+import lu.fisch.moenagade.gui.dialogs.ConfigureParameters;
+import oracle.jrockit.jfr.tools.ConCatRepository;
 import org.xml.sax.SAXException;
 
 /**
@@ -242,6 +245,9 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
         {
             if(selected!=null)
             {
+                // disconnect it!
+                selected.setParent(null);
+                
                 // move element
                 selected.setOffset(new Point(clickPoint.x-selectedDelta.width,
                                              clickPoint.y-selectedDelta.height));
@@ -284,6 +290,7 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
     
     @Override
     public void mousePressed(MouseEvent me) {
+        
         // convert point in case we got triggered by a libraryPanel
         Point clickPoint = me.getPoint();
         //System.out.println("me.source: "+me.getSource());
@@ -297,7 +304,10 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                 if(Library.getInstance().getSelected()!=null &&
                    ((Library.getInstance().getSelected().isElementary() &&
                    !hasElementOfType(Library.getInstance().getSelected().getClassname())) ||
-                   (!Library.getInstance().getSelected().isElementary() || (Library.getInstance().getSelected().getClassname().equals("AttributeDefinition")))))
+                   (!Library.getInstance().getSelected().isElementary() 
+                        || (Library.getInstance().getSelected().getClassname().equals("AttributeDefinition"))
+                        || (Library.getInstance().getSelected().getClassname().equals("MethodDefinition"))
+                    )))
                 {
                     pushUndo();
                     selected = Library.getInstance().getSelected().clone();
@@ -319,7 +329,8 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
             //System.out.println("Selected item is: "+selected);
             if(selected!=null)
             {
-              /*System.out.println("Selected item is: "+selected);
+                /*
+                System.out.println("Selected item is: "+selected);
                 System.out.println("ParamTypes: "+selected.getParamTypes());
                 if(selected!=null)
                     System.out.println("Selected item type is: "+selected.getClass().getSimpleName());
@@ -332,8 +343,20 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                         System.out.println("Selected parent2 type is: "+selected.getParent().getParent().getClassname());
                 }/**/
 
-                //System.out.println("Selected is: "+selected.getClass().getSimpleName());
-                if(selected.getType()==Type.VALUE)
+                //System.out.println("Selected is: "+selected.getClassname());
+                if(selected.getType()==Type.PARAMETERS)// && me.getClickCount()==2)
+                {
+                    ConfigureParameters cp = ConfigureParameters.showModal(mainFrame, "Configure parameters",((Parameters)selected).getDefinitions());
+                    if(cp.isOK())
+                    {
+                        pushUndo();
+                        ((Parameters)selected).setDefinitions(cp.getDefinitions());
+                        repaint();
+                        somethingChanged();
+                        selected=null;
+                    }
+                }
+                else if(selected.getType()==Type.VALUE)
                 {
                     if(me.getClickCount()==1)
                     {
@@ -389,6 +412,19 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                             selected=selected.getParent();
                     }
                     
+                }
+                
+                if(selected!=null && 
+                        selected.getParent()!=null && 
+                        selected.getParent().getParent()!=null &&
+                        selected.getParent().getParent().getType()==Type.PARAMETERS)
+                {
+                    // copy reference
+                    Element oldSelected = selected;
+                    // clone
+                    selected = selected.clone();
+                    // dock back old reference
+                    putBack(oldSelected);
                 }
                 
                 if(selected==null)
@@ -461,12 +497,20 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                     // and make shure it is last to be drawn!!
                     if(elements.contains(selected))
                         elements.remove(selected);
-                    addElement(selected);
+                    if(selected.getType()!=Type.PARAMETERS &&
+                       selected.getType()!=Type.LIST &&
+                       selected.getType()!=Type.ITEM)
+                    {
+                        addElement(selected);
+                    }
                     // break the loop
                     break;
                 }
             }
         }
+        
+        // NOT NEEDED HERE
+        //somethingChanged();
     }
 
     @Override
@@ -481,6 +525,7 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
         
         if(selected!=null)
         {
+            
             // repostion element
             selected.setOffset(new Point(clickPoint.x-selectedDelta.width,
                                          clickPoint.y-selectedDelta.height));
@@ -663,6 +708,52 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
             if(e.getClassname().equals("AttributeDefinition") &&  Library.getInstance().getProject().getEntityNames().contains(e.getReturnType()))
             {
                 attributes.add(e.getVariableDefinition());
+            }
+        }
+        return attributes;
+    }
+    
+    public Element getMethod(String name) 
+    {
+        for (int i = 0; i < elements.size(); i++) 
+        {
+            Element e = elements.get(i);
+            //System.out.println("Checking: "+e.getClassname()+" with return type: "+e.getReturnType());
+            if(e.getClassname().equals("MethodDefinition") && e.getParameter(0).getTitle().equals(name)) // &&  Library.getInstance().getProject().getEntityNames().contains(e.getReturnType()))
+            {
+                return e;
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList<VariableDefinition> getMethods() 
+    {
+        ArrayList<VariableDefinition> attributes = new ArrayList<>();
+        
+        for (int i = 0; i < elements.size(); i++) 
+        {
+            Element e = elements.get(i);
+            //System.out.println("Checking: "+e.getClassname()+" with return type: "+e.getReturnType());
+            if(e.getClassname().equals("MethodDefinition")) // &&  Library.getInstance().getProject().getEntityNames().contains(e.getReturnType()))
+            {
+                attributes.add(e.getMethodDefinition());
+            }
+        }
+        return attributes;
+    }
+
+    public ArrayList<String> getMethodNames() 
+    {
+        ArrayList<String> attributes = new ArrayList<>();
+        
+        for (int i = 0; i < elements.size(); i++) 
+        {
+            Element e = elements.get(i);
+            //System.out.println("Checking: "+e.getClassname()+" with return type: "+e.getReturnType());
+            if(e.getClassname().equals("MethodDefinition")) // &&  Library.getInstance().getProject().getEntityNames().contains(e.getReturnType()))
+            {
+                attributes.add(e.getMethodDefinition().name);
             }
         }
         return attributes;

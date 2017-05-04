@@ -157,6 +157,31 @@ public class BloxsDefinitions {
         definitions.add(bd);
         
         
+        
+        bd = new BloxsDefinition("Methods", "MethodDefinition", "method §", "", BloxsColors.$METHOD, Type.INSTRUCTION, "", false, true, false, "public void $0()\n{\n$$\n}\n\n","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Methods", "MethodDefinition", "method § returns €", ",Types", BloxsColors.$METHOD, Type.INSTRUCTION, "", false, true, false, "public $1 $0()\n{\n$$\n}\n\n","");
+        //bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Methods", "MethodDefinition", "method § returns € with parameters ^", ",Types,Parameters", BloxsColors.$METHOD, Type.INSTRUCTION, "", false, true, false, "public $1 $0($2)\n{\n$$\n}\n\n","");
+        //bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Methods", "Return", "return $", "", BloxsColors.$METHOD, Type.INSTRUCTION, "", true, false, false, "return $0;\n","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Methods", "Return", "return £", "", BloxsColors.$METHOD, Type.INSTRUCTION, "", true, false, false, "return $0;\n","");
+        bd.setNeedsParent("MethodDefinition");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Methods", "MethodCall", "call method €", "MethodList", BloxsColors.$METHOD, Type.INSTRUCTION, "", true, false, true, "$0();\n","");
+        definitions.add(bd);
+        
+        
+        
+        
         bd = new BloxsDefinition("Input", "UserInteger", "integer §", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "$0","");
         definitions.add(bd);
         
@@ -204,8 +229,8 @@ public class BloxsDefinitions {
         
         
         
-        bd = new BloxsDefinition("Variables", "VariableDefinition", "define variable § of type € with value $", "", BloxsColors.$VARIABLE, Type.INSTRUCTION, "", true, false, true, "$1 $0 = $2;","");
-        bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
+        bd = new BloxsDefinition("Variables", "VariableDefinition", "define variable § of type € with value $", ",Type,", BloxsColors.$VARIABLE, Type.INSTRUCTION, "", true, false, true, "$1 $0 = $2;","");
+        //bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         bd.setTransformation("variable");
         definitions.add(bd);
         
@@ -229,20 +254,20 @@ public class BloxsDefinitions {
         
         
 
-        bd = new BloxsDefinition("Attributes", "AttributeDefinition", "define attribute § of type € with value $", "", BloxsColors.$OBJECT, Type.INSTRUCTION, "", false, false, false, "private $1 $0 = $2;\n\npublic void set$0($1 $0)\n{\n    this.$0=$0;\n}\n\npublic $1 get$0()\n{\n    return $0;\n}\n\n","");
-        bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
+        bd = new BloxsDefinition("Attributes", "AttributeDefinition", "define attribute § of type € with value $", ",Type,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", false, false, false, "private $1 $0 = $2;\n\npublic void set$0($1 $0)\n{\n    this.$0=$0;\n}\n\npublic $1 get$0()\n{\n    return $0;\n}\n\n","");
+        //bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         bd.setTransformation("attribute");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Attributes", "Attribute", "value of attribute €", "Attribute", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "$0","");
+        bd = new BloxsDefinition("Attributes", "Attribute", "value of attribute €", "Attribute", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "this.$0","");
         //bd.setList(0, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Attributes", "Attribute", "value of attribute €", "Attribute", BloxsColors.$OBJECT, Type.CONDITION, "", false, false, false, "$0","");
+        bd = new BloxsDefinition("Attributes", "Attribute", "value of attribute €", "Attribute", BloxsColors.$OBJECT, Type.CONDITION, "", false, false, false, "this.$0","");
         //bd.setList(0, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Attributes", "SetAttribute", "set attribute € to value $", "Attribute,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0 = $1;","");
+        bd = new BloxsDefinition("Attributes", "SetAttribute", "set attribute € to value $", "Attribute,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "this.$0 = $1;","");
         definitions.add(bd);
       
         bd = new BloxsDefinition("Attributes", "AttributeIncrement", "increment attribute € by $", "Attribute,double", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0+=$1;","");
@@ -261,23 +286,28 @@ public class BloxsDefinitions {
         //bd = new BloxsDefinition("**** TEST ****", "Test", "Test $", "", ColorUtils.getColor("#748C51"), Type.INSTRUCTION, "String", true, false, true, "test($0);","");
         //definitions.add(bd);
         
-        bd = new BloxsDefinition("Entity", "ObjectSetAttribute", "set € . € to $", "EntityList,EntityAttributes,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.set$1($2);","");
+        bd = new BloxsDefinition("Object", "ObjectSetAttribute", "set € . € to $", "EntityList,EntityAttributes,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.set$1($2);","");
         definitions.add(bd);
         
-         bd = new BloxsDefinition("Entity", "ObjectGetAttribute", "get value of € . €", "EntityList,EntityAttributes", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "$0.get$1()","");
+        bd = new BloxsDefinition("Object", "ObjectGetAttribute", "get value of € . €", "EntityList,EntityAttributes", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "$0.get$1()","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Entity", "ObjectSetX", "for € set X position $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setX($1);","world,entity");
+        bd = new BloxsDefinition("Object", "ObjectSetX", "for € set X position $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setX($1);","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Entity", "ObjectSetY", "for € set Y position $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setY($1);","world,entity");
+        bd = new BloxsDefinition("Object", "ObjectSetY", "for € set Y position $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setY($1);","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Entity", "ObjectGetX", "for € get X position", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getX()","world,entity");
+        bd = new BloxsDefinition("Object", "ObjectGetX", "for € get X position", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getX()","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Entity", "ObjectGetY", "for € get Y position", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getY()","world,entity");
+        bd = new BloxsDefinition("Object", "ObjectGetY", "for € get Y position", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getY()","");
         definitions.add(bd);
+        
+        bd = new BloxsDefinition("Object", "ObjectMethodCall", "for € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.$1();","");
+        definitions.add(bd);
+        
+        
         
         bd = new BloxsDefinition("Entity", "MoveLeft", "move left by $ pixels", "int", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "moveLeft($0);","entity");
         definitions.add(bd);
@@ -335,9 +365,6 @@ public class BloxsDefinitions {
         
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.EXPRESSION, "", false, false, false, "getWorld().addEntity(new $0(getWorld()))","entity");
         definitions.add(bd);
-
-        
-       
        
         bd = new BloxsDefinition("Entity", "DeleteEntity", "delete entity", "", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "delete();","entity");
         definitions.add(bd);

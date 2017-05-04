@@ -1552,7 +1552,11 @@ public class Project {
         Element check = check();
         if(check!=null)
         {
-            JOptionPane.showMessageDialog(frame, "Sorry, but your project still contains errors!\nPlease correct them and try again ...\n\nElement: "+check.getClassname(),"Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+            JOptionPane.showMessageDialog(frame, 
+                    "Sorry, but your project still contains errors!\nPlease correct them and try again ...\n\n"
+                    + "Class: "+check.getTopMostElement().getEditor().getBloxsClass().getName()+"\n"
+                    + "Element: "+check.getClassname()+"\n"
+                    + "Parent: "+check.getParent().getClassname(),"Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
             return false;
         }    
         

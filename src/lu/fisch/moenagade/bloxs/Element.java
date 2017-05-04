@@ -78,7 +78,7 @@ public class Element {
     public enum Pos {BODY, BOTTOM}
     
     // define tree important types
-    public enum Type {INSTRUCTION, EXPRESSION, CONDITION, VALUE, LIST, ITEM}
+    public enum Type {INSTRUCTION, EXPRESSION, CONDITION, VALUE, LIST, ITEM, PARAMETERS}
     
     public static int fontsize = 12;
     
@@ -187,6 +187,7 @@ public class Element {
         if(getType()==Type.VALUE) element = new Value();
         else if(getType()==Type.LIST) element = new List();
         else if(getType()==Type.ITEM) element = new Item();
+        else if(getType()==Type.PARAMETERS) element = new Parameters();
         else element = new Element();
         
         //System.out.println("Type: "+getType()+" Element: "+element.getClass().getSimpleName());
@@ -271,6 +272,10 @@ public class Element {
     */
 
     public void parseTitle(String title) {
+        parseTitle(title,true);
+    }
+    
+    public void parseTitle(String title, boolean setParameters) {
         this.title = title;
         
         if(title==null) return;
@@ -286,29 +291,37 @@ public class Element {
             paramCount+=countOccurrences(title, '§');
             // lists
             paramCount+=countOccurrences(title, '€');
+            // lists
+            paramCount+=countOccurrences(title, '^');
             
             titlePieces = new ArrayList<>();
-            parameters = new ArrayList<>();
+            if(setParameters)
+                parameters = new ArrayList<>();
             
             String buffer = "";
             for(int i=0; i<title.length(); i++)
             {
                 char sym = title.charAt(i);
-                if(sym=='$' || sym=='£' || sym=='§' || sym=='€')
+                if(sym=='$' || sym=='£' || sym=='§' || sym=='€' || sym=='^')
                 {
                     if(buffer.isEmpty()) buffer=" ";
                     titlePieces.add(buffer);
                     buffer="";
                     
-                    String returnType = "";
-                    if(parameters.size()<paramTypes.size() && paramTypes.size()>0) 
-                        returnType=paramTypes.get(parameters.size());
-                    //System.out.println("Parameter: "+(parameters.size())+" is a: "+returnType);
-                
-                    if(sym=='$') addParameter(new Element(Type.EXPRESSION,"ExpressionHolder",returnType));
-                    else if(sym=='£') addParameter(new Element(Type.CONDITION,"ConditionHolder","Boolean"));
-                    else if(sym=='§') addParameter(new Value());
-                    else if(sym=='€') addParameter(new List(returnType));
+                    // only set parameters if requested
+                    if(setParameters)
+                    {
+                        String returnType = "";
+                        if(parameters.size()<paramTypes.size() && paramTypes.size()>0) 
+                            returnType=paramTypes.get(parameters.size());
+                        //System.out.println("Parameter: "+(parameters.size())+" is a: "+returnType);
+
+                        if(sym=='$') addParameter(new Element(Type.EXPRESSION,"ExpressionHolder",returnType));
+                        else if(sym=='£') addParameter(new Element(Type.CONDITION,"ConditionHolder","Boolean"));
+                        else if(sym=='§') addParameter(new Value());
+                        else if(sym=='^') addParameter(new Parameters());
+                        else if(sym=='€') addParameter(new List(returnType));
+                    }
                 }
                 else
                 {
@@ -352,6 +365,11 @@ public class Element {
         parameterHolder.setParent(this);
         parameterHolder.setPrev(this);
         return this;
+    }
+    
+    public int parameterCount()
+    {
+        return parameters.size();
     }
     
     public Element getParameter(int index)
@@ -1242,6 +1260,7 @@ public class Element {
             // special case to VALUE
             if(getType()==Type.VALUE || 
                getType()==Type.LIST  ||
+               getType()==Type.PARAMETERS  ||
                getType()==Type.ITEM) 
                 return this;
             
@@ -1968,7 +1987,7 @@ public class Element {
             setError(true);
             result = this;
         }
-        else if(getType()!=Type.VALUE && isHolder() && getBody()==null) 
+        else if(getType()!=Type.VALUE && getType()!=Type.PARAMETERS && isHolder() && getBody()==null) 
         {
             setError(true);
             result = this;
@@ -2356,6 +2375,16 @@ public class Element {
         return result;
     }
 
+    public ArrayList<VariableDefinition> getMethods()
+    {
+        ArrayList<VariableDefinition> result = new ArrayList<>();
+        
+        Element tme = getTopMostElement();
+        if(tme!=null)
+            result=tme.getEditor().getMethods();
+        
+        return result;
+    }
 
     public boolean allowDockTo(Element destination, Pos pos)
     {
@@ -2877,6 +2906,152 @@ public class Element {
                 }
             }
         }
+        // get method names of selected entity
+        else if((this.getClassname().equals("ObjectMethodCall")) &&
+                change.sender!=null &&
+                change.position==0 &&
+                change.sender==this
+           )
+        {
+            ArrayList<VariableDefinition> entities = getEntities();
+            for (int i = 0; i < entities.size(); i++) {
+                VariableDefinition vd = entities.get(i);
+                if(vd.name.equals(parameters.get(0).getTitle()))
+                {
+                    // get reference to the loaded project
+                    Project project = Library.getInstance().getProject();
+                    // stop if null or not set
+                    if(project==null) return;
+                    // get the selected entity
+                    //if(vd.classname==null) return;
+                    Entity entity = project.getEntity(vd.classname);
+                    // stop if not found
+                    if(entity==null) return;  
+                    // stop if class has no editor
+                    if(entity.getEditor()==null) return;
+                    // retrieve list of variables
+                    ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
+                    ((List)parameters.get(1)).update(methodNames);
+                }
+            }
+        }
+        // we may need to add parameters
+        else if((this.getClassname().equals("ObjectMethodCall")) &&
+                change.sender!=null &&
+                change.position==1 &&
+                change.sender==this
+           )
+        {
+            ArrayList<VariableDefinition> entities = getEntities();
+            for (int i = 0; i < entities.size(); i++) {
+                VariableDefinition vd = entities.get(i);
+                if(vd.name.equals(parameters.get(0).getTitle()))
+                {
+                    // get reference to the loaded project
+                    Project project = Library.getInstance().getProject();
+                    // stop if null or not set
+                    if(project==null) return;
+                    // get the selected entity
+                    Entity entity = project.getEntity(vd.classname);
+                    // stop if not found
+                    if(entity==null) return;  
+                    // stop if class has no editor
+                    if(entity.getEditor()==null) return;
+                    // retrieve element
+                    Element e = entity.getEditor().getMethod(change.to.toString());
+                    // remove unwanted text
+                    if(title.contains("with parameters"))
+                    {
+                        title=title.substring(0, title.indexOf("with parameters")).trim();
+                        parseTitle(title,false);
+                    }
+                    // remove unwanted parameters
+                    while(parameters.size()>2)
+                        parameters.remove(parameters.size()-1); 
+                    // reset code
+                    setCode("$0.$1();");
+                    // check if parameters @ the end
+                    if(e.getTitle().endsWith("^"))
+                    {
+                        // modify code
+                        String code = "$0.$1(";
+                        // modify title
+                        String title = getTitle()+" with parameters ";
+                        // get the second parameter (= element PARAMETERS)
+                        Parameters p = ((Parameters)e.getParameter(2));
+                        // loop
+                        for (int j = 0; j < p.parameterCount(); j++) {
+                            Element param = p.getParameter(j);
+                            // add placeholder
+                            title+=" $";
+                            // add a expression holder
+                            addParameter(new Element(Type.EXPRESSION,"ExpressionHolder",param.getBody().getReturnType()));
+                            // add the expression
+                            //getParameter(2+j).setBody(new Element(Type.EXPRESSION, "?", param.getBody().getReturnType()));
+                            // Set the title
+                            //getParameter(2+j).getBody().setTitle(param.getBody().getTitle());
+                            code+="$"+(2+j);
+                            if(j<p.parameterCount()-1) code+=",";
+                        }
+                        parseTitle(title,false);
+                        code+=");";
+                        setCode(code);
+                        System.out.println(title);
+                    }
+                }
+            }
+        }
+        // we may need to add parameters
+        else if((this.getClassname().equals("MethodCall")) &&
+                change.sender!=null &&
+                change.position==0 &&
+                change.sender==this
+           )
+        {
+            Element tm = getTopMostElement();
+            if(tm==null) return;
+            Element e = tm.getEditor().getMethod(change.to.toString());
+
+            // remove unwanted text
+            if(title.contains("with parameters"))
+            {
+                title=title.substring(0, title.indexOf("with parameters")).trim();
+                parseTitle(title,false);
+            }
+            // remove unwanted parameters
+            while(parameters.size()>1)
+                parameters.remove(parameters.size()-1); 
+            // reset code
+            setCode("$0();");
+            // check if parameters @ the end
+            if(e.getTitle().endsWith("^"))
+            {
+                // modify code
+                String code = "$0(";
+                // modify title
+                String title = getTitle()+" with parameters ";
+                // get the second parameter (= element PARAMETERS)
+                Parameters p = ((Parameters)e.getParameter(2));
+                // loop
+                for (int j = 0; j < p.parameterCount(); j++) {
+                    Element param = p.getParameter(j);
+                    // add placeholder
+                    title+=" $";
+                    // add a expression holder
+                    addParameter(new Element(Type.EXPRESSION,"ExpressionHolder",param.getBody().getReturnType()));
+                    // add the expression
+                    //getParameter(2+j).setBody(new Element(Type.EXPRESSION, "?", param.getBody().getReturnType()));
+                    // Set the title
+                    //getParameter(2+j).getBody().setTitle(param.getBody().getTitle());
+                    code+="$"+(1+j);
+                    if(j<p.parameterCount()-1) code+=",";
+                }
+                parseTitle(title,false);
+                code+=");";
+                setCode(code);
+                System.out.println(title);
+            }
+        }
         
         // set the return type to the selected box type
         if((this.getClassname().equals("AddEntity")) &&
@@ -2887,6 +3062,8 @@ public class Element {
         {
             setReturnType(change.to.toString());
         }
+        
+        
         
         // then pass it on
         
@@ -2901,8 +3078,10 @@ public class Element {
         
         // next
         if(getNext()!=null)
-            getNext() .refresh(change);
+            getNext().refresh(change);
     }
+    
+    
     
     // get the top most element of the tree
     public Element getTopMostElement()
@@ -3292,13 +3471,27 @@ public class Element {
             VariableDefinition v = new VariableDefinition();
             v.name = parameters.get(0).getTitle();
             v.type = parameters.get(1).getTitle();
-            if(parameters.get(2).getBody()!=null)
-                v.classname = parameters.get(2).getBody().getEntityClassname();
+            //if(parameters.get(2).getBody()!=null)
+            //    v.classname = parameters.get(2).getBody().getEntityClassname();
+            v.classname = parameters.get(1).getTitle();
             if(getClassname().equals("For"))
                 v.type="double";
             else
                 v.type = parameters.get(1).getTitle();
             //System.out.println(v);
+            return v;
+        }
+        return null;
+    }
+    
+    public VariableDefinition getMethodDefinition() {
+        if(getClassname().equals("MethodDefinition"))
+        {
+            VariableDefinition v = new VariableDefinition();
+            v.name = parameters.get(0).getTitle();
+            v.type = "void";
+            if(parameters.size()>1)
+                v.type = parameters.get(1).getTitle();
             return v;
         }
         return null;

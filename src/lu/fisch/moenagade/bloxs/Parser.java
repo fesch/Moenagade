@@ -81,6 +81,7 @@ public class Parser extends DefaultHandler {
                 if(readtype.equals("INSTRUCTION")) type=(Element.Type.INSTRUCTION);
                 else if(readtype.equals("EXPRESSION")) type=(Element.Type.EXPRESSION);
                 else if(readtype.equals("CONDITION")) type=(Element.Type.CONDITION);
+                else if(readtype.equals("PARAMETERS")) type=(Element.Type.PARAMETERS);
                 else if(readtype.equals("VALUE")) type=(Element.Type.VALUE);
                 else if(readtype.equals("LIST")) type=(Element.Type.LIST);
                 else if(readtype.equals("ITEM")) type=(Element.Type.ITEM);
@@ -99,6 +100,8 @@ public class Parser extends DefaultHandler {
                         attributes.getValue("code"),
                         attributes.getValue("destinations")
                 );
+                
+                //System.out.println("Title = "+attributes.getValue("title"));
                 
                 bd.setNeedsParent(attributes.getValue("needsParent"));
                 if(attributes.getValue("needsParent").equals("null"))
@@ -120,6 +123,7 @@ public class Parser extends DefaultHandler {
                 if(type==Type.VALUE) e  = new Value(bd);
                 else if(type==Type.LIST) e  = new List(bd);
                 else if(type==Type.ITEM) e  = new Item(bd);
+                else if(type==Type.PARAMETERS) e  = new Parameters(bd);
                 else e  = new Element(bd);
                 
                 String transform = attributes.getValue("paramTransformations");

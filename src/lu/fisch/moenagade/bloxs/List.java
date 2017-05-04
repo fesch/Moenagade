@@ -39,6 +39,7 @@ import static lu.fisch.moenagade.bloxs.Element.fontsize;
 import lu.fisch.moenagade.bloxs.interfaces.Refresher;
 import lu.fisch.moenagade.gui.Change;
 import lu.fisch.moenagade.model.BloxsDefinition;
+import lu.fisch.moenagade.model.Entity;
 import lu.fisch.moenagade.model.Library;
 import lu.fisch.moenagade.model.Project;
 
@@ -234,12 +235,26 @@ public class List extends Element {
         
         //System.out.println("Toggle IN for: "+getClassname()+" with return type: "+getReturnType());
         
-        if(open && getParent()!=null && (
+        /*if(open && getParent()!=null && (
                 getParent().getClassname().equals("VariableDefinition") ||
                 getParent().getClassname().equals("AttributeDefinition")
-                ))
+                ))*/
+        if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Type"))
         {
             ArrayList<String> entries = new ArrayList<>();
+            entries.add("int");
+            entries.add("double");
+            entries.add("boolean");
+            entries.add("String");
+            entries.add("long");
+            entries.add("float");
+            entries.addAll(Library.getInstance().getProject().getEntityNames());
+            update(entries);
+        }
+        if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Types"))
+        {
+            ArrayList<String> entries = new ArrayList<>();
+            entries.add("void");
             entries.add("int");
             entries.add("double");
             entries.add("boolean");
@@ -311,6 +326,34 @@ public class List extends Element {
         else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("EntityList"))
         {
             update(getEntities());
+        }
+        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("MethodList"))
+        {
+            update(getMethods());
+        }
+        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("ObjectMethods"))
+        {
+            ArrayList<VariableDefinition> entities = getEntities();
+            for (int i = 0; i < entities.size(); i++) {
+                VariableDefinition vd = entities.get(i);
+                if(vd.name.equals(getParent().parameters.get(0).getTitle()))
+                {
+                    // get reference to the loaded project
+                    Project project = Library.getInstance().getProject();
+                    // stop if null or not set
+                    if(project==null) return;
+                    // get the selected entity
+                    //if(vd.classname==null) return;
+                    Entity entity = project.getEntity(vd.classname);
+                    // stop if not found
+                    if(entity==null) return;  
+                    // stop if class has no editor
+                    if(entity.getEditor()==null) return;
+                    // retrieve list of variables
+                    ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
+                    update(methodNames);
+                }
+            }
         }
         
         //System.out.println("Toggle OUT for: "+getClassname()+" with return type: "+getReturnType());

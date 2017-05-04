@@ -63,6 +63,8 @@ public class BloxsColors {
     
     public final static Color $EVENT = ColorUtils.getColor("#BB4A61");
     
+    public final static Color $METHOD = ColorUtils.getColor("#BB614A");
+    
     public final static Color $DEBUG = ColorUtils.getColor("#7A8784");
     
     public final static Color $BACKGROUND = ColorUtils.getColor("#87847A");

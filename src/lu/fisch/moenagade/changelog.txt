@@ -2,8 +2,11 @@ Todo
 - create a costum method
 - add recent opened files 
 - contextuelle menu am blox-editor
+- update method name in call if changed in class
+- overlapping select boxes do not behave the way they should
+    (a select box in the "open" state should have higher priority!)
 
-Current version: 0.14
+Current version: 0.15
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -58,3 +61,7 @@ Current version: 0.14
 - 14: added object related blocks
 - 14: changed graphic coordinates for entities to relative
 - 14: fixed minors bugs
+- 15: added parameterless method definitions
+- 15: added elements to call methods
+- 15: define methods with parameters
+- 15: modified element to call methods with parameters
