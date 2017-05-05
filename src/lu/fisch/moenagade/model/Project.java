@@ -44,6 +44,7 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1651,6 +1652,17 @@ public class Project {
         int answ = JOptionPane.showConfirmDialog(frame, "Are you sure to remove the entity \""+entity.getName()+"\"", "Remove an entity", JOptionPane.YES_NO_OPTION);
         if (answ == JOptionPane.YES_OPTION)
         {
+            try 
+            {
+                Files.delete((new File(getDirectoryName()+System.getProperty("file.separator")+
+                        "bloxs"+System.getProperty("file.separator")+
+                        "entities"+System.getProperty("file.separator")+
+                        entity.getName()+".bloxs")).toPath());
+            } 
+            catch (IOException ex) 
+            {
+                ex.printStackTrace();
+            }
             entities.remove(entity.getName());
             refresh(new Change(null, -1, "delete.entity", entity, null));
             return true;
@@ -1662,6 +1674,17 @@ public class Project {
         int answ = JOptionPane.showConfirmDialog(frame, "Are you sure to remove the world \""+world.getName()+"\"", "Remove a world", JOptionPane.YES_NO_OPTION);
         if (answ == JOptionPane.YES_OPTION)
         {
+            try 
+            {
+                Files.delete((new File(getDirectoryName()+System.getProperty("file.separator")+
+                        "bloxs"+System.getProperty("file.separator")+
+                        "worlds"+System.getProperty("file.separator")+
+                        world.getName()+".bloxs")).toPath());
+            } 
+            catch (IOException ex) 
+            {
+                ex.printStackTrace();
+            }
             worlds.remove(world.getName());
             refresh(new Change(null, -1, "delete.world", world, null));
             return true;

@@ -351,6 +351,7 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                     {
                         pushUndo();
                         ((Parameters)selected).setDefinitions(cp.getDefinitions());
+                        refresh(new Change(selected.getParent(), selected.getPosition(), "parameters.configured", null, ((Parameters)selected).getDefinitions()));
                         repaint();
                         somethingChanged();
                         selected=null;
@@ -399,6 +400,9 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                                          selected.getParent().getClassname().equals("For")) && 
                                         selected.getBlockMostElement()!=null)
                                     selected.getBlockMostElement().refresh(new Change(selected.getParent(), selected.getPosition(),"rename.variable", old, value));      
+                                // method definition
+                                else if(selected.getParent().getClassname().equals("MethodDefinition"))
+                                    refresh(new Change(selected.getParent(), selected.getPosition(),"rename.method", old, value));      
                             }
                         }
                         selected=null;
@@ -436,6 +440,7 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                     // toggle the list
                     ((List) selected).toggle();
                     repaint();
+                    selected=null;
                 }
                 else if(selected instanceof Item)
                 {
@@ -448,8 +453,10 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                     // notify topmost element
                     /*
                     System.out.println("S: "+selected);
-                    System.out.println("SP: "+selected.getParent().getParent());
+                    System.out.println("SP: "+selected.getParent());
+                    System.out.println("SPP: "+selected.getParent().getParent());
                     System.out.println("SBM: "+selected.getBlockMostElement());
+                    
                     /**/
                     if(selected.getBlockMostElement()!=null)
                     {
@@ -473,6 +480,7 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                     // repaint
                     repaint();
                     somethingChanged();
+                    selected=null;
                 }
                 else
                 {
@@ -535,7 +543,12 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                                              (clickPoint.y-selectedDelta.height)-((clickPoint.y-selectedDelta.height)% 10)));
             }
             
-            putBack(selected); 
+            if(selected.getType()!=Type.PARAMETERS &&
+                       selected.getType()!=Type.LIST &&
+                       selected.getType()!=Type.ITEM)
+            {
+                putBack(selected); 
+            }
             
             // something changed
             somethingChanged();
@@ -566,6 +579,8 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                 {
                     // delete it!
                     elements.remove(selected);
+                    
+                    refresh(new Change(selected, -1,"delete."+selected.getClassname(), null, null));      
                 }
             }
             get.cleanDockStatus();
@@ -790,12 +805,22 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
     }
     
     public void refresh(Change change) {
+        Project p = Library.getInstance().getProject();
+        if(p!=null)
+        {
+            p.refresh(change);
+        }
+        else
+            refreshElements(change);
+    }
+    
+    public void refreshElements(Change change) {
         for (int i = 0; i < elements.size(); i++) 
         {
             elements.get(i).refresh(change);
         }
     }
-
+    
     public BloxsClass getBloxsClass() {
         return bloxsClass;
     }

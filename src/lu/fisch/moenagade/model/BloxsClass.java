@@ -104,7 +104,7 @@ public abstract class BloxsClass {
      */
     public void refresh(Change change)
     {
-        editor.refresh(change);
+        editor.refreshElements(change);
     }
     
     public abstract void saveSourceToFile(String dirname) throws FileNotFoundException, UnsupportedEncodingException, IOException;

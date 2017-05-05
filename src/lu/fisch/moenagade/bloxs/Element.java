@@ -48,6 +48,7 @@ import lu.fisch.moenagade.model.BloxsDefinition;
 import lu.fisch.moenagade.model.Entity;
 import lu.fisch.moenagade.model.Library;
 import lu.fisch.moenagade.model.Project;
+import sun.swing.SwingUtilities2;
 
 
 /**
@@ -385,6 +386,8 @@ public class Element {
         if(getBody()==null) 
         {
             setBody(element);
+            //if(element!=null)
+            //    element.setPrev(getBody());
             /*if(element!=null) ---> done by setBody()
             {
                 element.setParent(this);
@@ -397,6 +400,8 @@ public class Element {
             Element tmp = getBody();
             while(tmp.getNext()!=null) tmp=tmp.getNext();
             tmp.setNext(element);
+            //if(element!=null)
+            //    element.setPrev(tmp);
             
         }
         if(element!=null)
@@ -460,7 +465,11 @@ public class Element {
                     if(get.name.equals(parameter.getTitle())) 
                         found = true;
                 }
-                if(!found) parameter.setTitle("");
+                if(!found) 
+                {
+                    parameter.setTitle("");
+                    setReturnType("");
+                }
             }
             else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("Attributes"))
             {
@@ -471,7 +480,11 @@ public class Element {
                     if(get.name.equals(parameter.getTitle())) 
                         found = true;
                 }
-                if(!found) parameter.setTitle("");
+                if(!found) 
+                {
+                    parameter.setTitle("");
+                    setReturnType("");
+                }
             }
             else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("Sound"))
             {
@@ -2401,31 +2414,22 @@ public class Element {
         }
     }
 
-    
-    public void refresh(Change change)
+    // This method refreshed parameters based upon their type.
+    // 
+    //    ATTENTION
+    //
+    // Only use this for things that are always the same for
+    // andy kind of element.
+    private void refreshParameters(Change change)
     {
-        /*
-        
-            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
-            Don't forget, that some elements (Variable, Attribute, Entity, World, Sound, Image)
-            are being checked before being drawn!
-        
-        */
-        
-        //System.out.println("I ("+this.getClassname()+") got a refresh: "+change);
-        
-        // first react on the event
-                
-        // in case the name of a VariableDefinition changed,
-        // all usages of the old variable name should be updated.
-        
-        for (int i = 0; i < parameters.size(); i++) {
+        // loop through all paramters of the current element
+        for (int i = 0; i < parameters.size(); i++) 
+        {
             Element parameter = parameters.get(i);
             
+            // Type: VARIABLE
             if(parameter.getReturnType()!=null && parameter.getReturnType().equals("Variable"))
             {
-                //System.out.println("I ("+this.getClassname()+") got a refresh: "+change+" // for parameter "+i+": "+parameter);
                 // variable has been renamed
                 if(change.sender!=null &&
                    (change.sender.getClassname().equals("VariableDefinition") || change.sender.getClassname().equals("For")) &&
@@ -2456,7 +2460,27 @@ public class Element {
                     parameter.setTitle("");
                 }
             }
-            else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("Attribute"))
+            // Type: ENTITY ATTRIBUTES
+            else if(parameter.getReturnType()!=null && (
+                    parameter.getReturnType().equals("EntityAttributes")
+                    ))
+            {
+                if(change.sender!=null &&
+                   change.sender.getClassname().equals("AttributeDefinition") &&
+                   change.position==0 &&
+                   change.cmd.equals("rename.attribute") &&
+                   parameter.getTitle().equals(change.from.toString()))
+                {
+                    System.out.println("BloxName "+change.sender.getTopMostElement().getEditor().getBloxsClass().getName());
+                    System.out.println("NameOfAtt "+parameter.getParent().getParameter(0).getTitle());
+                    System.out.println("TypeOfAtt "+parameter.getParent().getParameter(2).getReturnType());
+                }
+            }
+            // Type: ATTRIBUTE & ENTITY LIST
+            else if(parameter.getReturnType()!=null && (
+                    parameter.getReturnType().equals("Attribute") ||
+                    parameter.getReturnType().equals("EntityList")
+                    ))
             {
                 // attribute has been renamed
                 if(change.sender!=null &&
@@ -2474,10 +2498,39 @@ public class Element {
                    //change.cmd.equals("rename.variable") &&
                    parameter.getTitle().equals(change.sender.getVariableDefinition().name))
                 {
-                    //parameter.setReturnType(change.to.toString());
-                    setReturnType(change.to.toString());
+                    // erase the title
+                    if(parameter.getReturnType().equals("EntityList"))
+                    {
+                        String old=parameter.getTitle();
+                        parameter.setTitle("");
+                        refresh(new Change(this, 0, "list", old, ""));
+                    }
+                    else
+                    {
+                        //parameter.setReturnType(change.to.toString());
+                        setReturnType(change.to.toString());
+                    }
+                }
+                // attribute type has deleted
+                if(change.sender!=null &&
+                   change.cmd.equals("delete.AttributeDefinition") &&
+                   change.position==-1 &&
+                   //change.cmd.equals("rename.variable") &&
+                   parameter.getTitle().equals(change.sender.getVariableDefinition().name))
+                {
+                    if(parameter.getReturnType().equals("EntityList"))
+                    {
+                        String old = parameter.getTitle();
+                        parameter.setTitle("");
+                        refresh(new Change(this, parameter.getPosition(), "list", old, ""));
+                    }
+                    else
+                    {
+                        parameter.setTitle("");
+                    }
                 }
             }
+            // Type: WORLD
             else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("World"))
             {
                 if( change.sender==null &&
@@ -2495,6 +2548,7 @@ public class Element {
                     parameter.setTitle(change.to.toString());
                 }
             }
+            // Type: ENTITY
             else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("Entity"))
             {
                 if( change.sender==null &&
@@ -2512,6 +2566,7 @@ public class Element {
                     parameter.setTitle(change.to.toString());
                 }
             }
+            // Type: IMAGE
             else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("Image"))
             {
                 if( change.sender==null &&
@@ -2529,6 +2584,7 @@ public class Element {
                     parameter.setTitle(change.to.toString());
                 }
             }
+            // Type: SOUND
             else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("Sound"))
             {
                 if( change.sender==null &&
@@ -2546,13 +2602,362 @@ public class Element {
                     parameter.setTitle(change.to.toString());
                 }
             }
+            // Type: METHODLIST
+            else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("MethodList"))
+            {
+                if( change.sender!=null &&
+                    change.position==-1 &&
+                    change.cmd.equals("delete.MethodDefinition") &&
+                    parameter.getTitle().equals(change.sender.getParameter(0).getTitle()))
+                {
+                    parameter.setTitle("");
+                }
+                else if( change.sender!=null &&
+                    change.position==0 &&
+                    change.cmd.equals("rename.method") &&
+                    parameter.getTitle().equals(change.from.toString()))
+                {
+                    parameter.setTitle(change.to.toString());
+                }
+            }
+        }
+    }
+    
+    private void refreshElements(Change change)
+    {
+        if(this.getClassname().startsWith("Object"))
+            refreshHandleObject(change);
+        else if(this.getClassname().startsWith("Variable")  || this.getClassname().endsWith("Variable"))
+            refreshHandleVariable(change);
+        else if(this.getClassname().startsWith("Attribute") || this.getClassname().startsWith("Attribute"))
+            refreshHandleAttribute(change);
+        else if(this.getClassname().startsWith("Method") || this.getClassname().startsWith("Method"))
+            refreshHandleMethod(change);
+    }
+    
+    private void refreshHandleObject(Change change)
+    {
+        
+    }
+    
+    private void refreshHandleVariable(Change change)
+    {
+        // Elements to be updates
+        // - VariableDefinition
+        //      if an entity is being renamed, the type ($1) has to be changed (if selected)
+        if(
+                this.getClassname().equals("VariableDefinition") && 
+                change.cmd.equals("rename.entity")
+           )
+        {
+            // test if the type ($1) is the same than the old value of the entity
+            if(getParameter(1).getTitle().equals(change.from.toString()))
+            {
+                // set it ($1) to the new one
+                getParameter(1).setTitle(change.to.toString());
+            }
+        }
+        // - VariableDefinition
+        //      change the type of the holder ($2) if the type ($1) has been changed
+        else if(
+                this.getClassname().equals("VariableDefinition") &&
+                change.sender == this &&
+                !change.cmd.equals("dock")
+           )
+        {
+            // if the actual content if the holder ($2) is not comptaible with the newly
+            // selcted type, a new holder has to be created, discarding the old content
+            if(parameters.get(2).getBody()!=null &&
+               !typeCanAcceptType(parameters.get(1).getTitle(), parameters.get(2).getBody().getReturnType()))
+            {
+                setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+            }
+            // switch between "boolean" type and others
+            if(change.to.equals("boolean"))
+            {
+                // update title
+                title = title.substring(0,title.length()-1);
+                title+="£";
+                // set new parameter
+                if(!parameters.get(2).getClassname().equals("ConditionHolder"))
+                    setParameter(2, new Element(Type.CONDITION,"ConditionHolder","boolean"));
+                parameters.get(2).setReturnType(change.to.toString());
+            }
+            else
+            {
+                // update title
+                title = title.substring(0,title.length()-1);
+                title+="$";
+                // set new parameter
+                if(!parameters.get(2).getClassname().equals("ExpressionHolder"))
+                    setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+                parameters.get(2).setReturnType(change.to.toString());
+            }
+            // make shure enough types have been defined
+            while(paramTypes.size()<3) paramTypes.add("");
+            // modify parameter type
+            paramTypes.set(2, change.to.toString());
+            // modify type of parameter
+            parameters.get(2).setReturnType(change.to.toString());
+            // update my own return type
+            setReturnType(change.to.toString());
+        }
+        // - Variable
+        //      change the return type if another variable has been selected
+        else if( 
+                this.getClassname().equals("Variable") &&
+                change.sender==this
+           )
+        {
+            // get the names of all variables at this place
+            ArrayList<VariableDefinition> variables = getVariables();
+            // find the one with the same name
+            for (int i = 0; i < variables.size(); i++) {
+                VariableDefinition vd = variables.get(i);
+                // if found
+                if(vd.name.equals(change.to.toString()))
+                {
+                    // change the return type accordingly
+                    setReturnType(vd.type);
+                    // test if the holder accepts this type
+                    if(getParent()!=null &&
+                       !typeCanAcceptType(getParent().getReturnType(), getReturnType()))
+                    {
+                        // clean title of parameter
+                        getParameter(0).setTitle("");
+                        // reset the return type
+                        setReturnType(""); 
+                    }
+                }
+            }
+        }
+        // - Variable
+        //      change the *return type* if the corresponding definition has changed it's type ($1)
+        else if( 
+                this.getClassname().equals("Variable") &&
+                change.sender!=null &&
+                change.position==1 &&   // $1 = type
+                change.sender.getClassname().equals("VariableDefinition")
+           )
+        {
+            // only apply change if the name of the variable is the same
+            if(parameters.get(0).getTitle().equals(change.sender.getVariableDefinition().name))
+            {
+                // change the type
+                if(change.to.equals("boolean"))
+                    setType(Type.CONDITION);
+                else
+                    setType(Type.EXPRESSION);
+                // set the return type
+                setReturnType(change.to.toString());    
+                // clean (deselect) if type mismatches
+                if(getParent()!=null &&
+                   !typeCanAcceptType(getParent().getReturnType(), getReturnType()))
+                {
+                    // clean title of parameter
+                    getParameter(0).setTitle("");
+                    // reset the return type
+                    setReturnType("");
+                }
+            }
+        }
+        // - Variable
+        //      change the name ($0) if the corresponding definition has changed it's name ($0)
+        else if( 
+                this.getClassname().equals("Variable") &&
+                change.sender!=null &&
+                change.position==0 &&   // $0 = name
+                change.sender.getClassname().equals("VariableDefinition")
+           )
+        {
+            if(parameters.get(0).getTitle().equals(change.from.toString()))
+            {
+                parameters.get(0).setTitle(change.to.toString());
+            }
+        }
+        // - SetVariable || VariableIncrement || VariableDecrement
+        //      change return type of holder ($1) then variable selection($0 ) changes
+        else if(
+                (this.getClassname().equals("SetVariable") || this.getClassname().equals("VariableIncrement") || this.getClassname().equals("VariableDecrement"))&&
+                change.sender == this &&
+                change.position==0 
+           )
+        {
+            // get the names of all variables at this place
+            ArrayList<VariableDefinition> variables = getVariables();
+            // find the one with the same name
+            for (int i = 0; i < variables.size(); i++) {
+                VariableDefinition vd = variables.get(i);
+                // if found
+                if(vd.name.equals(change.to.toString()))
+                {
+                    // change the return type accordingly
+                    parameters.get(1).setReturnType(vd.type);
+                    // disacrd content if not type compatible
+                    if(parameters.get(1).getBody()!=null &&
+                       !typeCanAcceptType(vd.type,parameters.get(1).getBody().getReturnType()))
+                    {
+                        parameters.get(1).setBody(null);
+                    }
+                }
+            }
+        }
+        // - SetVariable || VariableIncrement || VariableDecrement
+        //      change the type of the holder ($2) if the corresponding definition has changed it's type ($1)
+        else if(
+                (this.getClassname().equals("SetVariable") || this.getClassname().equals("VariableIncrement") || this.getClassname().equals("VariableDecrement"))&&
+                change.sender!=null &&
+                change.position==1 &&   // $1 = type
+                change.sender.getClassname().equals("VariableDefinition")
+           )
+        {
+            // only change the usage with the same variable name
+            if(getParameter(0).getTitle().equals(change.sender.getParameter(0).getTitle()))
+            {
+                // if the actual content if the holder ($2) is not comptaible with the newly
+                // selcted type, a new holder has to be created, discarding the old content
+                if(parameters.get(1).getBody()!=null &&
+                   !typeCanAcceptType(change.to.toString(), parameters.get(1).getBody().getReturnType()))
+                {
+                    setParameter(1, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+                }
+                // case of a "boolean"
+                if(change.to.equals("boolean"))
+                {
+                    // update title
+                    title = title.substring(0,title.length()-1);
+                    title+="£";
+                    // set new parameter
+                    if(!parameters.get(1).getClassname().equals("ConditionHolder"))
+                        setParameter(1, new Element(Type.CONDITION,"ConditionHolder","boolean"));
+                    parameters.get(1).setReturnType(change.to.toString());
+                }
+                else
+                {
+                    // update title
+                    title = title.substring(0,title.length()-1);
+                    title+="$";
+                    // set new parameter
+                    if(!parameters.get(1).getClassname().equals("ExpressionHolder"))
+                        setParameter(1, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+                    parameters.get(1).setReturnType(change.to.toString());
+                }
+
+                // make shure enough types have been defined
+                while(paramTypes.size()<2) paramTypes.add("");
+                // modify parameter type
+                paramTypes.set(1, change.to.toString());
+                // modify type of parameter
+                parameters.get(1).setReturnType(change.to.toString());
+            }
+        }
+        // - SetVariable || VariableIncrement || VariableDecrement
+        //      change the name ($0) if the corresponding definition has changed it's name ($0)
+        else if(
+                (this.getClassname().equals("SetVariable") || this.getClassname().equals("VariableIncrement") || this.getClassname().equals("VariableDecrement"))&&
+                change.sender!=null &&
+                change.position==0 &&   // $0 = name
+                change.sender.getClassname().equals("VariableDefinition")
+           )
+        {
+            // only change the usage with the same variable name
+            if(getParameter(0).getTitle().equals(change.from.toString()))
+            {
+                getParameter(0).setTitle(change.to.toString());
+            }
+        }
+    }
+    
+    private void refreshHandleAttribute(Change change)
+    {
+        
+    }
+    
+    private void refreshHandleMethod(Change change)
+    {
+        
+    }
+    
+    public void refresh(Change change)
+    {
+        /*
+        
+            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+            Don't forget, that some elements (Variable, Attribute, Entity, World, Sound, Image)
+            are being checked before being drawn!
+        
+        */
+        
+        System.out.println("I ("+this.getClassname()+") got a refresh: "+change);
+        
+        // refresh parameters
+        refreshParameters(change);
+        
+        // refresh elements
+        refreshElements(change);
+        
+        // forward the changes to each parameter
+        for (int i = 0; i < parameters.size(); i++) {
+            parameters.get(i).refresh(change);
         }
         
+        // forward the changes to the body
+        if(getBody()!=null)
+            getBody().refresh(change);
+        
+        // forward the changes to the next element
+        if(getNext()!=null)
+            getNext().refresh(change);
+    }
+    
+    public void refreshOther(Change change)
+    {
+        // first react on the event
+                
+        if((this.getClassname().equals("ObjectSetAttribute") || this.getClassname().equals("ObjectGetAttribute")) &&
+                change.sender!=null &&
+                change.position==-1 &&
+                change.cmd.equals("delete.AttributeDefinition")
+           )
+        {
+            String old = getParameter(1).getTitle();
+            // the name of the deleted attribute (of anther class)
+            // is the name of an attribute of this class
+            if(old.equals(change.sender.getParameter(0).getTitle()))
+            {
+                getParameter(1).setTitle("");
+                refresh(new Change(this, 1, "list", old, ""));
+                // update list as well
+                refresh(new Change(this, 0, "list", getParameter(0).getTitle(), getParameter(0).getTitle()));
+            }
+            
+            old = getParameter(0).getTitle();
+            if(old.equals(change.sender.getParameter(0).getTitle()))
+            {
+                getParameter(0).setTitle("");
+                refresh(new Change(this, 0, "list", old, ""));
+            }
+        }
+
+        
+        
         // a variable or attribute definition has changed the type
-        if(   ((this.getClassname().equals("VariableDefinition") || 
-                this.getClassname().equals("AttributeDefinition")) && 
+        if(   (
+                this.getClassname().equals("AttributeDefinition") && 
+                change.cmd.equals("rename.entity") &&
+                change.position==-1)
+           )
+        {
+            if(getParameter(1).getTitle().equals(change.from.toString()))
+            {
+                getParameter(1).setTitle(change.to.toString());
+            }
+        }
+        else if(   
+                this.getClassname().equals("AttributeDefinition") && 
                 change.sender == this &&
-                change.position==1)
+                change.position==1
            )
         {
             if(!typeCanAcceptType(parameters.get(1).getTitle(), parameters.get(2).getReturnType()))
@@ -2595,7 +3000,7 @@ public class Element {
         //System.out.println("this: "+getClassname());
         
         // variables have to change the type
-        if(((this.getClassname().equals("Variable") || this.getClassname().equals("Attribute"))) &&
+        if(((this.getClassname().equals("Attribute"))) &&
                 change.sender!=null &&
                 change.position==1 &&
                 (change.sender.getClassname().equals("VariableDefinition") || change.sender.getClassname().equals("AttributeDefinition"))
@@ -2750,25 +3155,34 @@ public class Element {
                 change.sender==this
            )
         {
-            ArrayList<VariableDefinition> entities = getEntities();
-            for (int i = 0; i < entities.size(); i++) {
-                VariableDefinition vd = entities.get(i);
-                if(vd.name.equals(change.to.toString()))
-                {
-                    // get reference to the loaded project
-                    Project project = Library.getInstance().getProject();
-                    // stop if null or not set
-                    if(project==null) return;
-                    // get the selected entity
-                    Entity entity = project.getEntity(vd.classname);
-                    // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list of variables
-                    ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
-                    // update the second parameter
-                    ((List)parameters.get(1)).update(attributeNames);
+            if(getParameter(0).getTitle().isEmpty())
+            {
+                String old = getParameter(1).getTitle();
+                getParameter(1).setTitle("");
+                refresh(new Change(this, 1, "list", old, ""));
+            }
+            else
+            {
+                ArrayList<VariableDefinition> entities = getEntities();
+                for (int i = 0; i < entities.size(); i++) {
+                    VariableDefinition vd = entities.get(i);
+                    if(vd.name.equals(change.to.toString()))
+                    {
+                        // get reference to the loaded project
+                        Project project = Library.getInstance().getProject();
+                        // stop if null or not set
+                        if(project==null) return;
+                        // get the selected entity
+                        Entity entity = project.getEntity(vd.classname);
+                        // stop if not found
+                        if(entity==null) return;  
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list of variables
+                        ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
+                        // update the second parameter
+                        ((List)parameters.get(1)).update(attributeNames);
+                    }
                 }
             }
         }
@@ -2780,56 +3194,64 @@ public class Element {
                 change.sender==this
            )
         {
-            ArrayList<VariableDefinition> entities = getEntities();
-            for (int i = 0; i < entities.size(); i++) {
-                VariableDefinition vd = entities.get(i);
-                if(vd.name.equals(parameters.get(0).getTitle()))
-                {
-                    // get reference to the loaded project
-                    Project project = Library.getInstance().getProject();
-                    // stop if null or not set
-                    if(project==null) return;
-                    // get the selected entity
-                    Entity entity = project.getEntity(vd.classname);
-                    // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list of variables
-                    ArrayList<VariableDefinition> attributeNames = entity.getEditor().getAttributes();
-                    for (int j = 0; j < attributeNames.size(); j++) {
-                        // find the one where the name matches
-                        VariableDefinition vdi = attributeNames.get(j);
-                        if(vdi.name.equals(change.to.toString()))
-                        {
-                            if(!typeCanAcceptType(vdi.type, parameters.get(2).getReturnType()))
+            if(getParameter(0).getTitle().isEmpty())
+            {
+                String old = getParameter(1).getTitle();
+                getParameter(1).setTitle("");
+            }
+            else
+            {
+                ArrayList<VariableDefinition> entities = getEntities();
+                for (int i = 0; i < entities.size(); i++) {
+                    VariableDefinition vd = entities.get(i);
+                    if(vd.name.equals(parameters.get(0).getTitle()))
+                    {
+                        // get reference to the loaded project
+                        Project project = Library.getInstance().getProject();
+                        // stop if null or not set
+                        if(project==null) return;
+                        // get the selected entity
+                        Entity entity = project.getEntity(vd.classname);
+                        // stop if not found
+                        if(entity==null) return;  
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list of variables
+                        ArrayList<VariableDefinition> attributeNames = entity.getEditor().getAttributes();
+                        for (int j = 0; j < attributeNames.size(); j++) {
+                            // find the one where the name matches
+                            VariableDefinition vdi = attributeNames.get(j);
+                            if(vdi.name.equals(change.to.toString()))
                             {
-                                setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",vdi.type));
-                            }
-                            if(vdi.type.equals("boolean"))
-                            {
-                                // update title
-                                title = title.substring(0,title.length()-1);
-                                title+="£";
-                                // set new parameter
-                                if(!parameters.get(2).getClassname().equals("ConditionHolder"))
-                                    setParameter(2, new Element(Type.CONDITION,"ConditionHolder","boolean"));
-                                parameters.get(2).setReturnType(vdi.type);
-                            }
-                            else
-                            {
-                                // update title
-                                title = title.substring(0,title.length()-1);
-                                title+="$";
-                                // set new parameter
-                                if(!parameters.get(2).getClassname().equals("ExpressionHolder"))
+                                if(!typeCanAcceptType(vdi.type, parameters.get(2).getReturnType()))
+                                {
                                     setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",vdi.type));
-                                parameters.get(2).setReturnType(vdi.type);
+                                }
+                                if(vdi.type.equals("boolean"))
+                                {
+                                    // update title
+                                    title = title.substring(0,title.length()-1);
+                                    title+="£";
+                                    // set new parameter
+                                    if(!parameters.get(2).getClassname().equals("ConditionHolder"))
+                                        setParameter(2, new Element(Type.CONDITION,"ConditionHolder","boolean"));
+                                    parameters.get(2).setReturnType(vdi.type);
+                                }
+                                else
+                                {
+                                    // update title
+                                    title = title.substring(0,title.length()-1);
+                                    title+="$";
+                                    // set new parameter
+                                    if(!parameters.get(2).getClassname().equals("ExpressionHolder"))
+                                        setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",vdi.type));
+                                    parameters.get(2).setReturnType(vdi.type);
+                                }
+                                // modify parameter type
+                                while(paramTypes.size()<3) paramTypes.add("");
+                                // JOS
+                                paramTypes.set(2, vdi.type);
                             }
-                            // modify parameter type
-                            while(paramTypes.size()<3) paramTypes.add("");
-                            // JOS
-                            paramTypes.set(2, vdi.type);
                         }
                     }
                 }
@@ -2844,25 +3266,34 @@ public class Element {
                 change.sender==this
            )
         {
-            ArrayList<VariableDefinition> entities = getEntities();
-            for (int i = 0; i < entities.size(); i++) {
-                VariableDefinition vd = entities.get(i);
-                if(vd.name.equals(change.to.toString()))
-                {
-                    // get reference to the loaded project
-                    Project project = Library.getInstance().getProject();
-                    // stop if null or not set
-                    if(project==null) return;
-                    // get the selected entity
-                    Entity entity = project.getEntity(vd.classname);
-                    // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list of variables
-                    ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
-                    // update the second parameter
-                    ((List)parameters.get(1)).update(attributeNames);
+            if(getParameter(0).getTitle().isEmpty())
+            {
+                String old = getParameter(1).getTitle();
+                getParameter(1).setTitle("");
+                refresh(new Change(this, 1, "list", old, ""));
+            }
+            else
+            {
+                ArrayList<VariableDefinition> entities = getEntities();
+                for (int i = 0; i < entities.size(); i++) {
+                    VariableDefinition vd = entities.get(i);
+                    if(vd.name.equals(change.to.toString()))
+                    {
+                        // get reference to the loaded project
+                        Project project = Library.getInstance().getProject();
+                        // stop if null or not set
+                        if(project==null) return;
+                        // get the selected entity
+                        Entity entity = project.getEntity(vd.classname);
+                        // stop if not found
+                        if(entity==null) return;  
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list of variables
+                        ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
+                        // update the second parameter
+                        ((List)parameters.get(1)).update(attributeNames);
+                    }
                 }
             }
         }
@@ -2908,98 +3339,168 @@ public class Element {
         }
         // get method names of selected entity
         else if((this.getClassname().equals("ObjectMethodCall")) &&
+                change.cmd.equals("list") &&
                 change.sender!=null &&
                 change.position==0 &&
                 change.sender==this
            )
         {
-            ArrayList<VariableDefinition> entities = getEntities();
-            for (int i = 0; i < entities.size(); i++) {
-                VariableDefinition vd = entities.get(i);
-                if(vd.name.equals(parameters.get(0).getTitle()))
-                {
-                    // get reference to the loaded project
-                    Project project = Library.getInstance().getProject();
-                    // stop if null or not set
-                    if(project==null) return;
-                    // get the selected entity
-                    //if(vd.classname==null) return;
-                    Entity entity = project.getEntity(vd.classname);
-                    // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list of variables
-                    ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
-                    ((List)parameters.get(1)).update(methodNames);
+            if(parameters.get(0).getTitle().isEmpty())
+            {
+                String old = parameters.get(1).getTitle();
+                parameters.get(1).setTitle("");
+                refresh(new Change(this, 1, "list", old, ""));
+            }
+            else
+            {
+                ArrayList<VariableDefinition> entities = getEntities();
+                for (int i = 0; i < entities.size(); i++) {
+                    VariableDefinition vd = entities.get(i);
+                    if(vd.name.equals(parameters.get(0).getTitle()))
+                    {
+                        // get reference to the loaded project
+                        Project project = Library.getInstance().getProject();
+                        // stop if null or not set
+                        if(project==null) return;
+                        // get the selected entity
+                        //if(vd.classname==null) return;
+                        Entity entity = project.getEntity(vd.classname);
+                        // stop if not found
+                        if(entity==null) return;  
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list of variables
+                        ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
+                        ((List)parameters.get(1)).update(methodNames);
+                    }
                 }
             }
         }
+        // change of name from another class
+        else if((this.getClassname().equals("ObjectMethodCall")) &&
+                change.cmd.equals("rename.method") &&
+                change.sender!=null &&
+                change.position==0
+           )
+        {
+            // change title
+            if(getParameter(1).getTitle().equals(change.from.toString()))
+                getParameter(1).setTitle(change.to.toString());
+        }
+        // method deleted
+        else if((this.getClassname().equals("ObjectMethodCall")) &&
+                change.cmd.equals("delete.MethodDefinition") &&
+                change.sender!=null &&
+                change.position==-1
+           )
+        {
+            // change title
+            if(getParameter(1).getTitle().equals(change.sender.getParameter(0).getTitle()))
+                getParameter(1).setTitle("");
+        }
+        // method changed paramters
+        else if((this.getClassname().equals("ObjectMethodCall")) &&
+                change.cmd.equals("parameters.configured") &&
+                change.sender!=null &&
+                change.position==2
+           )
+        {
+            // change title
+            refresh(new Change(this, 1, "list", getParameter(1).getTitle(), getParameter(1).getTitle()));
+        }
         // we may need to add parameters
         else if((this.getClassname().equals("ObjectMethodCall")) &&
+                change.cmd.equals("list") &&
                 change.sender!=null &&
                 change.position==1 &&
                 change.sender==this
            )
         {
-            ArrayList<VariableDefinition> entities = getEntities();
-            for (int i = 0; i < entities.size(); i++) {
-                VariableDefinition vd = entities.get(i);
-                if(vd.name.equals(parameters.get(0).getTitle()))
+            if(change.to.toString().isEmpty())
+            {
+                // remove unwanted text
+                if(title.contains("with parameters"))
                 {
-                    // get reference to the loaded project
-                    Project project = Library.getInstance().getProject();
-                    // stop if null or not set
-                    if(project==null) return;
-                    // get the selected entity
-                    Entity entity = project.getEntity(vd.classname);
-                    // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve element
-                    Element e = entity.getEditor().getMethod(change.to.toString());
-                    // remove unwanted text
-                    if(title.contains("with parameters"))
+                    title=title.substring(0, title.indexOf("with parameters")).trim();
+                    parseTitle(title,false);
+                }
+                // remove unwanted parameters
+                while(parameters.size()>2)
+                    parameters.remove(parameters.size()-1); 
+                // reset code
+                setCode("$0.$1();");
+            }
+            else
+            {
+                ArrayList<VariableDefinition> entities = getEntities();
+                for (int i = 0; i < entities.size(); i++) {
+                    VariableDefinition vd = entities.get(i);
+                    if(vd.name.equals(parameters.get(0).getTitle()))
                     {
-                        title=title.substring(0, title.indexOf("with parameters")).trim();
-                        parseTitle(title,false);
-                    }
-                    // remove unwanted parameters
-                    while(parameters.size()>2)
-                        parameters.remove(parameters.size()-1); 
-                    // reset code
-                    setCode("$0.$1();");
-                    // check if parameters @ the end
-                    if(e.getTitle().endsWith("^"))
-                    {
-                        // modify code
-                        String code = "$0.$1(";
-                        // modify title
-                        String title = getTitle()+" with parameters ";
-                        // get the second parameter (= element PARAMETERS)
-                        Parameters p = ((Parameters)e.getParameter(2));
-                        // loop
-                        for (int j = 0; j < p.parameterCount(); j++) {
-                            Element param = p.getParameter(j);
-                            // add placeholder
-                            title+=" $";
-                            // add a expression holder
-                            addParameter(new Element(Type.EXPRESSION,"ExpressionHolder",param.getBody().getReturnType()));
-                            // add the expression
-                            //getParameter(2+j).setBody(new Element(Type.EXPRESSION, "?", param.getBody().getReturnType()));
-                            // Set the title
-                            //getParameter(2+j).getBody().setTitle(param.getBody().getTitle());
-                            code+="$"+(2+j);
-                            if(j<p.parameterCount()-1) code+=",";
+                        // get reference to the loaded project
+                        Project project = Library.getInstance().getProject();
+                        // stop if null or not set
+                        if(project==null) return;
+                        // get the selected entity
+                        Entity entity = project.getEntity(vd.classname);
+                        // stop if not found
+                        if(entity==null) return;  
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve element
+                        Element e = entity.getEditor().getMethod(change.to.toString());
+                        // remove unwanted text
+                        if(title.contains("with parameters"))
+                        {
+                            title=title.substring(0, title.indexOf("with parameters")).trim();
+                            parseTitle(title,false);
                         }
-                        parseTitle(title,false);
-                        code+=");";
-                        setCode(code);
-                        System.out.println(title);
+                        // remove unwanted parameters
+                        while(parameters.size()>2)
+                            parameters.remove(parameters.size()-1); 
+                        // reset code
+                        setCode("$0.$1();");
+                        // check if parameters @ the end
+                        if(e.getTitle().endsWith("^"))
+                        {
+                            // modify code
+                            String code = "$0.$1(";
+                            // modify title
+                            String title = getTitle()+" with parameters ";
+                            // get the second parameter (= element PARAMETERS)
+                            Parameters p = ((Parameters)e.getParameter(2));
+                            // loop
+                            for (int j = 0; j < p.parameterCount(); j++) {
+                                Element param = p.getParameter(j);
+                                // add placeholder
+                                title+=" $";
+                                // add a expression holder
+                                addParameter(new Element(Type.EXPRESSION,"ExpressionHolder",param.getBody().getReturnType()));
+                                // add the expression
+                                //getParameter(2+j).setBody(new Element(Type.EXPRESSION, "?", param.getBody().getReturnType()));
+                                // Set the title
+                                //getParameter(2+j).getBody().setTitle(param.getBody().getTitle());
+                                code+="$"+(2+j);
+                                if(j<p.parameterCount()-1) code+=",";
+                            }
+                            parseTitle(title,false);
+                            code+=");";
+                            setCode(code);
+                            //System.out.println(title);
+                        }
                     }
                 }
             }
+        }
+        // method changed paramters
+        else if((this.getClassname().equals("MethodCall")) &&
+                change.cmd.equals("parameters.configured") &&
+                change.sender!=null &&
+                change.position==2
+           )
+        {
+            // change title
+            refresh(new Change(this, 0, "list", getParameter(0).getTitle(), getParameter(0).getTitle()));
         }
         // we may need to add parameters
         else if((this.getClassname().equals("MethodCall")) &&
@@ -3065,20 +3566,6 @@ public class Element {
         
         
         
-        // then pass it on
-        
-        // parameters
-        for (int i = 0; i < parameters.size(); i++) {
-            parameters.get(i).refresh(change);
-        }
-        
-        // body
-        if(getBody()!=null)
-            getBody().refresh(change);
-        
-        // next
-        if(getNext()!=null)
-            getNext().refresh(change);
     }
     
     
@@ -3260,9 +3747,9 @@ public class Element {
         }
 
         result+= getIndent(indent)  +"<element class=\""+this.getClassname()
+                +"\" return=\""+this.getReturnType()
                 +"\" title=\""+xmlEscapeText(this.getTitle())
                 +"\" paramTypes=\""+(paramTypes==null?"NULL":paramTypes.toString().replace(", ", ",").replace("[", "").replace("]", ""))
-                +"\" return=\""+this.getReturnType()
                 +"\" type=\""+this.getType()
                 +"\" needsParent=\""+this.getNeedsParent()
                 +"\" position=\""+this.getPosition()
@@ -3371,8 +3858,8 @@ public class Element {
     }
     
     public String getReturnType() {
-        if(isHolder() && getBody()!=null)
-            return body.getReturnType();
+        //if(isHolder() && getBody()!=null)
+        //    return body.getReturnType();
         return returnType;
     }
 

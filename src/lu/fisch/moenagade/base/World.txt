@@ -163,6 +163,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         return entities;
     }
     
+    @SuppressWarnings("unchecked")
     public <T extends Entity> T addEntity(Entity e) 
     {
         e.setWorld(this);
@@ -172,6 +173,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
             return null;
     }    
 
+    @SuppressWarnings("unchecked")
     public <T extends Entity> T removeEntity(Entity e)
     {
         //e.setWorld(null);

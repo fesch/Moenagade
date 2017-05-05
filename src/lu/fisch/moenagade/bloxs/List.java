@@ -233,13 +233,17 @@ public class List extends Element {
     public void toggle() {
         open=!open;
         
+        /*
+        System.out.println("Toggle IN for: "+getClassname());
+        System.out.println("Parent       : "+getParent());
+        /**/
         //System.out.println("Toggle IN for: "+getClassname()+" with return type: "+getReturnType());
         
         /*if(open && getParent()!=null && (
                 getParent().getClassname().equals("VariableDefinition") ||
                 getParent().getClassname().equals("AttributeDefinition")
                 ))*/
-        if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Type"))
+        if(open && getReturnType()!=null && getReturnType().equals("Type"))
         {
             ArrayList<String> entries = new ArrayList<>();
             entries.add("int");
@@ -251,7 +255,7 @@ public class List extends Element {
             entries.addAll(Library.getInstance().getProject().getEntityNames());
             update(entries);
         }
-        if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Types"))
+        if(open && getReturnType()!=null && getReturnType().equals("Types"))
         {
             ArrayList<String> entries = new ArrayList<>();
             entries.add("void");
@@ -264,7 +268,7 @@ public class List extends Element {
             entries.addAll(Library.getInstance().getProject().getEntityNames());
             update(entries);
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Variable"))
+        else if(open && getReturnType()!=null && getReturnType().equals("Variable"))
                 /*(
                 getParent().getClassname().equals("Variable") ||
                 getParent().getClassname().equals("SetVariable") ||
@@ -274,7 +278,7 @@ public class List extends Element {
         {
             update(getVariables());
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Image"))
+        else if(open && getReturnType()!=null && getReturnType().equals("Image"))
                 //getParent().getClassname().equals("LoadImage"))
         {
             Project project = Library.getInstance().getProject();
@@ -283,7 +287,7 @@ public class List extends Element {
                 update(project.getImageNames());
             }
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Sound"))
+        else if(open && getReturnType()!=null && getReturnType().equals("Sound"))
             //getParent().getClassname().equals("PlaySound"))
         {
             Project project = Library.getInstance().getProject();
@@ -292,7 +296,7 @@ public class List extends Element {
                 update(project.getSoundNames());
             }
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("World"))
+        else if(open && getReturnType()!=null && getReturnType().equals("World"))
             // getParent().getClassname().equals("SetWorld"))
         {
             Project project = Library.getInstance().getProject();
@@ -301,7 +305,7 @@ public class List extends Element {
                 update(project.getWorldNames());
             }
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Entity"))
+        else if(open && getReturnType()!=null && getReturnType().equals("Entity"))
             /*(getParent().getClassname().equals("AddEntity") ||
                                               getParent().getClassname().equals("OnTouchedEntity") ||
                                               getParent().getClassname().equals("CountEntitiesClass") ||
@@ -313,7 +317,7 @@ public class List extends Element {
                 update(project.getEntityNames());
             }
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("Attribute"))
+        else if(open && getReturnType()!=null && getReturnType().equals("Attribute"))
                 /*(
                 getParent().getClassname().equals("Attribute") ||
                 getParent().getClassname().equals("SetAttribute")||
@@ -323,15 +327,15 @@ public class List extends Element {
         {
             update(getAttributes());
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("EntityList"))
+        else if(open && getReturnType()!=null && getReturnType().equals("EntityList"))
         {
             update(getEntities());
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("MethodList"))
+        else if(open && getReturnType()!=null && getReturnType().equals("MethodList"))
         {
             update(getMethods());
         }
-        else if(open && getParent()!=null && getReturnType()!=null && getReturnType().equals("ObjectMethods"))
+        else if(open && getReturnType()!=null && getReturnType().equals("ObjectMethods"))
         {
             ArrayList<VariableDefinition> entities = getEntities();
             for (int i = 0; i < entities.size(); i++) {
