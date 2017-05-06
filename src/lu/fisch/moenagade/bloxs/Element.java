@@ -2629,9 +2629,9 @@ public class Element {
             refreshHandleObject(change);
         else if(this.getClassname().startsWith("Variable")  || this.getClassname().endsWith("Variable"))
             refreshHandleVariable(change);
-        else if(this.getClassname().startsWith("Attribute") || this.getClassname().startsWith("Attribute"))
+        else if(this.getClassname().startsWith("Attribute") || this.getClassname().endsWith("Attribute"))
             refreshHandleAttribute(change);
-        else if(this.getClassname().startsWith("Method") || this.getClassname().startsWith("Method"))
+        else if(this.getClassname().startsWith("Method") || this.getClassname().endsWith("Method"))
             refreshHandleMethod(change);
     }
     
@@ -2643,7 +2643,7 @@ public class Element {
     private void refreshHandleVariable(Change change)
     {
         // Elements to be updates
-        // - VariableDefinition
+        // 1- VariableDefinition
         //      if an entity is being renamed, the type ($1) has to be changed (if selected)
         if(
                 this.getClassname().equals("VariableDefinition") && 
@@ -2657,7 +2657,7 @@ public class Element {
                 getParameter(1).setTitle(change.to.toString());
             }
         }
-        // - VariableDefinition
+        // 2- VariableDefinition
         //      change the type of the holder ($2) if the type ($1) has been changed
         else if(
                 this.getClassname().equals("VariableDefinition") &&
@@ -2702,7 +2702,7 @@ public class Element {
             // update my own return type
             setReturnType(change.to.toString());
         }
-        // - Variable
+        // 3- Variable
         //      change the return type if another variable has been selected
         else if( 
                 this.getClassname().equals("Variable") &&
@@ -2731,7 +2731,7 @@ public class Element {
                 }
             }
         }
-        // - Variable
+        // 4- Variable
         //      change the *return type* if the corresponding definition has changed it's type ($1)
         else if( 
                 this.getClassname().equals("Variable") &&
@@ -2761,7 +2761,7 @@ public class Element {
                 }
             }
         }
-        // - Variable
+        // 5- Variable
         //      change the name ($0) if the corresponding definition has changed it's name ($0)
         else if( 
                 this.getClassname().equals("Variable") &&
@@ -2775,11 +2775,12 @@ public class Element {
                 parameters.get(0).setTitle(change.to.toString());
             }
         }
-        // - SetVariable || VariableIncrement || VariableDecrement
-        //      change return type of holder ($1) then variable selection($0 ) changes
+        // 6- SetVariable || VariableIncrement || VariableDecrement
+        //      change return type of holder ($1) when variable selection ($0) changes
         else if(
                 (this.getClassname().equals("SetVariable") || this.getClassname().equals("VariableIncrement") || this.getClassname().equals("VariableDecrement"))&&
                 change.sender == this &&
+                !change.cmd.equals("dock") &&
                 change.position==0 
            )
         {
@@ -2791,18 +2792,37 @@ public class Element {
                 // if found
                 if(vd.name.equals(change.to.toString()))
                 {
-                    // change the return type accordingly
-                    parameters.get(1).setReturnType(vd.type);
                     // disacrd content if not type compatible
                     if(parameters.get(1).getBody()!=null &&
                        !typeCanAcceptType(vd.type,parameters.get(1).getBody().getReturnType()))
                     {
                         parameters.get(1).setBody(null);
                     }
+                    // case of a "boolean"
+                    if(vd.type.equals("boolean"))
+                    {
+                        // update title
+                        title = title.substring(0,title.length()-1);
+                        title+="£";
+                        // set new parameter
+                        if(!parameters.get(1).getClassname().equals("ConditionHolder"))
+                            setParameter(1, new Element(Type.CONDITION,"ConditionHolder","boolean"));
+                    }
+                    else
+                    {
+                        // update title
+                        title = title.substring(0,title.length()-1);
+                        title+="$";
+                        // set new parameter
+                        if(!parameters.get(1).getClassname().equals("ExpressionHolder"))
+                            setParameter(1, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+                    }
+                    // change the return type accordingly
+                    parameters.get(1).setReturnType(vd.type);
                 }
             }
         }
-        // - SetVariable || VariableIncrement || VariableDecrement
+        // 7- SetVariable || VariableIncrement || VariableDecrement
         //      change the type of the holder ($2) if the corresponding definition has changed it's type ($1)
         else if(
                 (this.getClassname().equals("SetVariable") || this.getClassname().equals("VariableIncrement") || this.getClassname().equals("VariableDecrement"))&&
@@ -2851,7 +2871,7 @@ public class Element {
                 parameters.get(1).setReturnType(change.to.toString());
             }
         }
-        // - SetVariable || VariableIncrement || VariableDecrement
+        // 8- SetVariable || VariableIncrement || VariableDecrement
         //      change the name ($0) if the corresponding definition has changed it's name ($0)
         else if(
                 (this.getClassname().equals("SetVariable") || this.getClassname().equals("VariableIncrement") || this.getClassname().equals("VariableDecrement"))&&
@@ -2870,7 +2890,250 @@ public class Element {
     
     private void refreshHandleAttribute(Change change)
     {
-        
+        // Elements to be updates
+        // 1- AttributeDefinition
+        //      if an entity is being renamed, the type ($1) has to be changed (if selected)
+        if(
+                this.getClassname().equals("AttributeDefinition") && 
+                change.cmd.equals("rename.entity")
+           )
+        {
+            // test if the type ($1) is the same than the old value of the entity
+            if(getParameter(1).getTitle().equals(change.from.toString()))
+            {
+                // set it ($1) to the new one
+                getParameter(1).setTitle(change.to.toString());
+            }
+        }
+        // 2- AttributeDefinition
+        //      change the type of the holder ($2) if the type ($1) has been changed
+	else if(
+                this.getClassname().equals("AttributeDefinition") &&
+                change.sender == this &&
+                !change.cmd.equals("dock")
+           )
+        {
+            // if the actual content if the holder ($2) is not comptaible with the newly
+            // selcted type, a new holder has to be created, discarding the old content
+            if(parameters.get(2).getBody()!=null &&
+               !typeCanAcceptType(parameters.get(1).getTitle(), parameters.get(2).getBody().getReturnType()))
+            {
+                setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+            }
+            // switch between "boolean" type and others
+            if(change.to.equals("boolean"))
+            {
+                // update title
+                title = title.substring(0,title.length()-1);
+                title+="£";
+                // set new parameter
+                if(!parameters.get(2).getClassname().equals("ConditionHolder"))
+                    setParameter(2, new Element(Type.CONDITION,"ConditionHolder","boolean"));
+                parameters.get(2).setReturnType(change.to.toString());
+            }
+            else
+            {
+                // update title
+                title = title.substring(0,title.length()-1);
+                title+="$";
+                // set new parameter
+                if(!parameters.get(2).getClassname().equals("ExpressionHolder"))
+                    setParameter(2, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+                parameters.get(2).setReturnType(change.to.toString());
+            }
+            // make shure enough types have been defined
+            while(paramTypes.size()<3) paramTypes.add("");
+            // modify parameter type
+            paramTypes.set(2, change.to.toString());
+            // modify type of parameter
+            parameters.get(2).setReturnType(change.to.toString());
+            // update my own return type
+            setReturnType(change.to.toString());
+        }
+        // 3- Attribute
+        //      change the return type if another attribute has been selected
+        else if( 
+                this.getClassname().equals("Attribute") &&
+                change.sender==this
+           )
+        {
+            // get the names of all attributes at this place
+            ArrayList<VariableDefinition> attributes = getAttributes();
+            // find the one with the same name
+            for (int i = 0; i < attributes.size(); i++) {
+                VariableDefinition vd = attributes.get(i);
+                // if found
+                if(vd.name.equals(change.to.toString()))
+                {
+                    // change the return type accordingly
+                    setReturnType(vd.type);
+                    // test if the holder accepts this type
+                    if(getParent()!=null &&
+                       !typeCanAcceptType(getParent().getReturnType(), getReturnType()))
+                    {
+                        // clean title of parameter
+                        getParameter(0).setTitle("");
+                        // reset the return type
+                        setReturnType(""); 
+                    }
+                }
+            }
+        }
+        // 4- Attribute
+        //      change the *return type* if the corresponding definition has changed it's type ($1)
+         else if( 
+                this.getClassname().equals("Attribute") &&
+                change.sender!=null &&
+                change.position==1 &&   // $1 = type
+                change.sender.getClassname().equals("AttributeDefinition")
+           )
+        {
+            // only apply change if the name of the attribute is the same
+            if(parameters.get(0).getTitle().equals(change.sender.getVariableDefinition().name))
+            {
+                // change the type
+                if(change.to.equals("boolean"))
+                    setType(Type.CONDITION);
+                else
+                    setType(Type.EXPRESSION);
+                // set the return type
+                setReturnType(change.to.toString());    
+                // clean (deselect) if type mismatches
+                if(getParent()!=null &&
+                   !typeCanAcceptType(getParent().getReturnType(), getReturnType()))
+                {
+                    // clean title of parameter
+                    getParameter(0).setTitle("");
+                    // reset the return type
+                    setReturnType("");
+                }
+            }
+        }
+        // 5- Attribute
+        //      change the name ($0) if the corresponding definition has changed it's name ($0)
+        else if( 
+                this.getClassname().equals("Attribute") &&
+                change.sender!=null &&
+                change.position==0 &&   // $0 = name
+                change.sender.getClassname().equals("AttributeDefinition")
+           )
+        {
+            if(parameters.get(0).getTitle().equals(change.from.toString()))
+            {
+                parameters.get(0).setTitle(change.to.toString());
+            }
+        }
+        // 6- SetAttribute || AttributeIncrement || AttributeDecrement
+        //      change return type of holder ($1) when variable selection ($0) changes
+        else if(
+                (this.getClassname().equals("SetAttribute") || this.getClassname().equals("AttributeIncrement") || this.getClassname().equals("AttributeDecrement"))&&
+                change.sender == this &&
+                !change.cmd.equals("dock") &&
+                change.position==0 
+           )
+        {
+            // get the names of all attribute at this place
+            ArrayList<VariableDefinition> attributes = getAttributes();
+            // find the one with the same name
+            for (int i = 0; i < attributes.size(); i++) {
+                VariableDefinition vd = attributes.get(i);
+                // if found
+                if(vd.name.equals(change.to.toString()))
+                {
+                    // disacrd content if not type compatible
+                    if(parameters.get(1).getBody()!=null &&
+                       !typeCanAcceptType(vd.type,parameters.get(1).getBody().getReturnType()))
+                    {
+                        parameters.get(1).setBody(null);
+                    }
+                    // case of a "boolean"
+                    if(vd.type.equals("boolean"))
+                    {
+                        // update title
+                        title = title.substring(0,title.length()-1);
+                        title+="£";
+                        // set new parameter
+                        if(!parameters.get(1).getClassname().equals("ConditionHolder"))
+                            setParameter(1, new Element(Type.CONDITION,"ConditionHolder","boolean"));
+                    }
+                    else
+                    {
+                        // update title
+                        title = title.substring(0,title.length()-1);
+                        title+="$";
+                        // set new parameter
+                        if(!parameters.get(1).getClassname().equals("ExpressionHolder"))
+                            setParameter(1, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+                    }
+                    // change the return type accordingly
+                    parameters.get(1).setReturnType(vd.type);
+                }
+            }
+        }
+        // 7- SetAttribute || AttributeIncrement || AttributeDecrement
+        //      change the type of the holder ($2) if the corresponding definition has changed it's type ($1)
+        else if(
+                (this.getClassname().equals("SetAttribute") || this.getClassname().equals("AttributeIncrement") || this.getClassname().equals("AttributeDecrement"))&&
+                change.sender!=null &&
+                change.position==1 &&   // $1 = type
+                change.sender.getClassname().equals("AttributeDefinition")
+           )
+        {
+            // only change the usage with the same attribute name
+            if(getParameter(0).getTitle().equals(change.sender.getParameter(0).getTitle()))
+            {
+                // if the actual content if the holder ($2) is not comptaible with the newly
+                // selcted type, a new holder has to be created, discarding the old content
+                if(parameters.get(1).getBody()!=null &&
+                   !typeCanAcceptType(change.to.toString(), parameters.get(1).getBody().getReturnType()))
+                {
+                    setParameter(1, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+                }
+                // case of a "boolean"
+                if(change.to.equals("boolean"))
+                {
+                    // update title
+                    title = title.substring(0,title.length()-1);
+                    title+="£";
+                    // set new parameter
+                    if(!parameters.get(1).getClassname().equals("ConditionHolder"))
+                        setParameter(1, new Element(Type.CONDITION,"ConditionHolder","boolean"));
+                    parameters.get(1).setReturnType(change.to.toString());
+                }
+                else
+                {
+                    // update title
+                    title = title.substring(0,title.length()-1);
+                    title+="$";
+                    // set new parameter
+                    if(!parameters.get(1).getClassname().equals("ExpressionHolder"))
+                        setParameter(1, new Element(Type.EXPRESSION,"ExpressionHolder",change.to.toString()));
+                    parameters.get(1).setReturnType(change.to.toString());
+                }
+
+                // make shure enough types have been defined
+                while(paramTypes.size()<2) paramTypes.add("");
+                // modify parameter type
+                paramTypes.set(1, change.to.toString());
+                // modify type of parameter
+                parameters.get(1).setReturnType(change.to.toString());
+            }
+        }
+        // 8- SetAttribute || AttributeIncrement || AttributeDecrement
+        //      change the name ($0) if the corresponding definition has changed it's name ($0)
+        else if(
+                (this.getClassname().equals("SetAttribute") || this.getClassname().equals("AttributeIncrement") || this.getClassname().equals("AttributeDecrement"))&&
+                change.sender!=null &&
+                change.position==0 &&   // $0 = name
+                change.sender.getClassname().equals("AttributeDefinition")
+           )
+        {
+            // only change the usage with the same variable name
+            if(getParameter(0).getTitle().equals(change.from.toString()))
+            {
+                getParameter(0).setTitle(change.to.toString());
+            }
+        }
     }
     
     private void refreshHandleMethod(Change change)

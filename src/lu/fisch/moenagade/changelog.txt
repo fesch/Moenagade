@@ -71,3 +71,5 @@ Current version: 0.15
 - 15: suppress compiler warnings of unchecked cast in world
 - 15: fixes a nasty bug in lists (click & move = error)
 - 15: recoded variable related notifications
+- 15: recoded attribute related notifications
+- 15: found another bug in the variable related notifications
