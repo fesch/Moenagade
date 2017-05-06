@@ -510,6 +510,7 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                        selected.getType()!=Type.ITEM)
                     {
                         addElement(selected);
+                        refresh(new Change(selected, -1, "undock", null, selected));
                     }
                     // break the loop
                     break;
