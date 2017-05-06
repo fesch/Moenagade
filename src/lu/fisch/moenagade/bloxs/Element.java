@@ -3964,7 +3964,44 @@ public class Element {
                 change.position == 0    // name
            )
         {
-            System.out.println("TODO - TODO - TODO");
+            // get all entities
+            ArrayList<VariableDefinition> vds = getEntities();
+            // check if this one fits
+            for (int i = 0; i < vds.size(); i++) 
+            {
+                // get the actual definition
+                VariableDefinition vd = vds.get(i);
+                // does it fit?
+                if(getParameter(1).getTitle().equals(change.from.toString()) &&
+                   getParameter(0).getTitle().equals(vd.name) &&
+                   vd.type.equals(change.sender.getTopMostElement().getEditor().getBloxsClass().getName()))
+                {
+                    String old = getParameter(1).getTitle();
+                    getParameter(1).setTitle(change.to.toString());
+                    // pass the change
+                    refresh(new Change(this, 1, "list", old, ""));
+                }
+                
+                // if the type fits, we need to update the second parameter (list - $1)
+                if(getParameter(0).getTitle().equals(vd.name) &&
+                   vd.type.equals(change.sender.getTopMostElement().getEditor().getBloxsClass().getName()))
+                {
+                    // get reference to the loaded project
+                    Project project = Library.getInstance().getProject();
+                    // stop if null or not set
+                    if(project==null) return;
+                    // get the selected entity
+                    //if(vd.classname==null) return;
+                    Entity entity = project.getEntity(vd.classname);
+                    // stop if not found
+                    if(entity==null) return;  
+                    // stop if class has no editor
+                    if(entity.getEditor()==null) return;
+                    // retrieve list oall methods of that entity
+                    ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
+                    ((List)parameters.get(1)).update(methodNames);                   
+                }
+            }
         }
         // 7- ObjectMethodCall
         //      if the MethodDefinition has changed it's type
@@ -3976,7 +4013,35 @@ public class Element {
                 change.position == 1    // type
            )
         {
-            System.out.println("TODO - TODO - TODO");
+            // get all entities
+            ArrayList<VariableDefinition> vds = getEntities();
+            // check if this one fits
+            for (int i = 0; i < vds.size(); i++) 
+            {
+                // get the actual definition
+                VariableDefinition vd = vds.get(i);
+                // does it fit?
+                if(getParameter(1).getTitle().equals(change.sender.getParameter(0).getTitle()) &&
+                   getParameter(0).getTitle().equals(vd.name) &&
+                   vd.type.equals(change.sender.getTopMostElement().getEditor().getBloxsClass().getName()))
+                {
+                    // change return type
+                    setReturnType(change.to.toString());
+                    // check if it fits
+                    if(getType()==Type.EXPRESSION &&
+                        getParent()!=null &&
+                        !typeCanAcceptType(getParent().getReturnType(), getReturnType()))
+                    {
+                        String old = getParameter(1).getTitle();
+                        // clean title of selected method
+                        getParameter(1).setTitle("");
+                        // reset the return type
+                        setReturnType("");
+                        // pass change
+                        refresh(new Change(this, 1, "list", old, ""));
+                    }
+                }
+            }
         }
         // 8- MethodCall
         //      if the parameters where changed

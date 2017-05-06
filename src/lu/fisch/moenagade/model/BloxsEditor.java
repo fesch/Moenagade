@@ -352,9 +352,9 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                         pushUndo();
                         ((Parameters)selected).setDefinitions(cp.getDefinitions());
                         refresh(new Change(selected.getParent(), selected.getPosition(), "parameters.configured", null, ((Parameters)selected).getDefinitions()));
-                        repaint();
                         somethingChanged();
                         selected=null;
+                        repaint();
                     }
                 }
                 else if(selected.getType()==Type.VALUE)

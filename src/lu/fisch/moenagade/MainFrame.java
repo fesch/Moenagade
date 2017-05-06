@@ -396,7 +396,7 @@ public class MainFrame extends javax.swing.JFrame {
         if(bloxsClass!=null)
         {
             textArea.setText(bloxsClass.getJavaCode());
-            textArea.setText(Library.getInstance().getBloxsEditor().getXml());
+            //textArea.setText(Library.getInstance().getBloxsEditor().getXml());
         }
     }
     
