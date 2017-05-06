@@ -460,7 +460,10 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                     /**/
                     if(selected.getBlockMostElement()!=null)
                     {
-                        if(selected.getBlockMostElement().getClassname().equals("AttributeDefinition"))
+                        if(
+                                selected.getBlockMostElement().getClassname().equals("AttributeDefinition") ||
+                                selected.getBlockMostElement().getClassname().equals("MethodDefinition")
+                          )
                         {
                             //System.out.println("Yes");
                             refresh(

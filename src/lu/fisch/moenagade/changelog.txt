@@ -75,3 +75,4 @@ Current version: 0.15
 - 15: found another bug in the variable related notifications
 - 15: recoded & bug fixed entity related notifications
 - 15: recoded & bug fixed object related notifications
+- 15: recoded & bug fixed method related notifications 

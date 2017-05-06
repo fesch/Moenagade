@@ -335,7 +335,7 @@ public class List extends Element {
         {
             update(getMethods());
         }
-        else if(open && getReturnType()!=null && getReturnType().equals("ObjectMethods"))
+        /*else if(open && getReturnType()!=null && getReturnType().equals("ObjectMethods"))
         {
             ArrayList<VariableDefinition> entities = getEntities();
             for (int i = 0; i < entities.size(); i++) {
@@ -358,7 +358,7 @@ public class List extends Element {
                     update(methodNames);
                 }
             }
-        }
+        }*/
         
         //System.out.println("Toggle OUT for: "+getClassname()+" with return type: "+getReturnType());
         

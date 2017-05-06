@@ -179,6 +179,9 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Methods", "MethodCall", "call method €", "MethodList", BloxsColors.$METHOD, Type.INSTRUCTION, "", true, false, true, "$0();\n","");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("Methods", "MethodCall", "call method €", "MethodList", BloxsColors.$METHOD, Type.EXPRESSION, "", true, false, true, "$0();\n","");
+        definitions.add(bd);
+        
         
         
         
@@ -305,6 +308,9 @@ public class BloxsDefinitions {
         definitions.add(bd);
         
         bd = new BloxsDefinition("Object", "ObjectMethodCall", "for € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.$1();","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Object", "ObjectMethodCall", "for € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.EXPRESSION, "", true, false, true, "$0.$1()","");
         definitions.add(bd);
         
         
