@@ -173,7 +173,7 @@ public class MainFrame extends javax.swing.JFrame {
         speNewActionPerformed(null);
         
         // connect the console
-        Console.disconnectAll();
+        //Console.disconnectAll();
     }
 
     public void loadLibrary(String destination)

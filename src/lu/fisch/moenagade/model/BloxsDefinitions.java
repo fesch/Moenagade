@@ -295,22 +295,22 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Object", "ObjectGetAttribute", "get value of € . €", "EntityList,EntityAttributes", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "$0.get$1()","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Object", "ObjectSetX", "for € set X position $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setX($1);","");
+        bd = new BloxsDefinition("Object", "ObjectSetX", "set X position of € to $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setX($1);","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Object", "ObjectSetY", "for € set Y position $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setY($1);","");
+        bd = new BloxsDefinition("Object", "ObjectSetY", "set Y position of € to $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setY($1);","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Object", "ObjectGetX", "for € get X position", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getX()","");
+        bd = new BloxsDefinition("Object", "ObjectGetX", "get X position of €", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getX()","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Object", "ObjectGetY", "for € get Y position", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getY()","");
+        bd = new BloxsDefinition("Object", "ObjectGetY", "get Y position of €", "EntityList", BloxsColors.$OBJECT, Type.EXPRESSION, "int", true, false, true, "$0.getY()","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Object", "ObjectMethodCall", "for € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.$1();","");
+        bd = new BloxsDefinition("Object", "ObjectMethodCall", "on object € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.$1();","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Object", "ObjectMethodCall", "for € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.EXPRESSION, "", true, false, true, "$0.$1()","");
+        bd = new BloxsDefinition("Object", "ObjectMethodCall", "on object € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.EXPRESSION, "", true, false, true, "$0.$1()","");
         definitions.add(bd);
         
         

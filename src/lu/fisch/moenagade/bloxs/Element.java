@@ -2514,6 +2514,7 @@ public class Element {
                     }
                 }
                 // attribute type has deleted
+                /*
                 if(change.sender!=null &&
                    change.cmd.equals("delete.AttributeDefinition") &&
                    change.position==-1 &&
@@ -2530,7 +2531,7 @@ public class Element {
                     {
                         parameter.setTitle("");
                     }
-                }
+                }/**/
             }
             // Type: WORLD
             else if(parameter.getReturnType()!=null && parameter.getReturnType().equals("World"))
@@ -3450,7 +3451,8 @@ public class Element {
         //      if an entity is being renamed, the type ($1) has to be changed (if selected)
         if(
                 this.getClassname().equals("AttributeDefinition") && 
-                change.cmd.equals("rename.entity")
+                change.cmd.equals("rename.entity") && 
+                change.sender.getTopMostElement().getEditor().equals(getTopMostElement().getEditor()) // same class
            )
         {
             // test if the type ($1) is the same than the old value of the entity
@@ -3541,7 +3543,8 @@ public class Element {
                 this.getClassname().equals("Attribute") &&
                 change.sender!=null &&
                 change.position==1 &&   // $1 = type
-                change.sender.getClassname().equals("AttributeDefinition")
+                change.sender.getClassname().equals("AttributeDefinition") && 
+                change.sender.getTopMostElement().getEditor().equals(getTopMostElement().getEditor()) // same class
            )
         {
             // only apply change if the name of the attribute is the same
@@ -3688,6 +3691,32 @@ public class Element {
             if(getParameter(0).getTitle().equals(change.from.toString()))
             {
                 getParameter(0).setTitle(change.to.toString());
+            }
+        }
+        // 9- Attribute || SetAttribute || GetAttribute || AttributeIncrement || AttributeDecrement
+        //      empty if the attribute definition has been deleted
+        else if( 
+                (
+                    this.getClassname().equals("Attribute") ||
+                    this.getClassname().equals("SetAttribute") ||
+                    this.getClassname().equals("GetAttribute") ||
+                    this.getClassname().equals("AttributeIncrement") ||
+                    this.getClassname().equals("AttributeDecrement")
+                ) &&
+                change.sender!=null &&
+                change.position==-1 &&   // $1 = type
+                change.sender.getClassname().equals("AttributeDefinition") && 
+                change.cmd.equals("delete.AttributeDefinition") &&
+                change.sender.getTopMostElement().getEditor().equals(getTopMostElement().getEditor()) // same class
+           )
+        {
+            // only apply change if the name of the attribute is the same
+            if(parameters.get(0).getTitle().equals(change.sender.getVariableDefinition().name))
+            {
+                // clean title of parameter
+                getParameter(0).setTitle("");
+                // reset the return type
+                setReturnType("");
             }
         }
     }
