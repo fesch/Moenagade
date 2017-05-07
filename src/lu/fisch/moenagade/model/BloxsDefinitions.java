@@ -40,6 +40,7 @@ public class BloxsDefinitions {
     public BloxsDefinitions() {
         
         BloxsDefinition bd;
+        BloxsDefinition sbd;
         
         bd = new BloxsDefinition("Structures", "If", "if £", "", BloxsColors.$STRUCTURE, Type.INSTRUCTION, "", true, true, true, "if ($0)\n{\n$$\n}","");
         definitions.add(bd);
@@ -119,26 +120,59 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Events", "OnDraw", "when being painted", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onDraw(Graphics g)\n{\n$$\n}\n\n","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnKeyPressed", "when a key has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyPressed(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnKeyPressed", "when a key has been pressed `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyPressed(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnKeyReleased", "when a key has been release", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyReleased(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
+            sbd = new BloxsDefinition("Input", "KeyCode", "key code", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "keyEvent.getKeyCode()","entity");
+            sbd.setNeedsParent("OnKeyPressed,OnKeyReleased");
+            bd.addSub(0, sbd);
+        
+        
+        bd = new BloxsDefinition("Events", "OnKeyReleased", "when a key has been released `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyReleased(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
+        
+            sbd = new BloxsDefinition("Input", "KeyCode", "key code", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "keyEvent.getKeyCode()","entity");
+            sbd.setNeedsParent("OnKeyPressed,OnKeyReleased");
+            bd.addSub(0, sbd);
         
         //bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void formMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.formMousePressed(evt);\n$$\n}\n\n","world");
         //definitions.add(bd);
  
-        bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.onMousePressed(evt);\n$$\n}\n\n","entity,world");
+        bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.onMousePressed(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnMouseReleased", "when a mouse button has been released", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseReleased(java.awt.event.MouseEvent evt)\n{\n    super.onMouseReleased(evt);\n$$\n}\n\n","entity,world");
+            sbd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
+            bd.addSub(0, sbd);
+
+            sbd = new BloxsDefinition("Mouse", "GetMouseY", "get mouse y", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseY()","entity,world");
+            bd.addSub(0, sbd);
+        
+        bd = new BloxsDefinition("Events", "OnMouseReleased", "when a mouse button has been released `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseReleased(java.awt.event.MouseEvent evt)\n{\n    super.onMouseReleased(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnMouseMoved", "when the mouse has been moved", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseMoved(java.awt.event.MouseEvent evt)\n{\n    super.onMouseMoved(evt);\n$$\n}\n\n","entity,world");
+            sbd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
+            bd.addSub(0, sbd);
+
+            sbd = new BloxsDefinition("Mouse", "GetMouseY", "get mouse y", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseY()","entity,world");
+            bd.addSub(0, sbd);
+        
+        bd = new BloxsDefinition("Events", "OnMouseMoved", "when the mouse has been moved `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseMoved(java.awt.event.MouseEvent evt)\n{\n    super.onMouseMoved(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnMouseDragged", "when the mouse has been dragged", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseDragged(java.awt.event.MouseEvent evt)\n{\n    super.onMouseDragged(evt);\n$$\n}\n\n","entity,world");
+            sbd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
+            bd.addSub(0, sbd);
+
+            sbd = new BloxsDefinition("Mouse", "GetMouseY", "get mouse y", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseY()","entity,world");
+            bd.addSub(0, sbd);
+        
+        bd = new BloxsDefinition("Events", "OnMouseDragged", "when the mouse has been dragged `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseDragged(java.awt.event.MouseEvent evt)\n{\n    super.onMouseDragged(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
+        
+            sbd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
+            bd.addSub(0, sbd);
+
+            sbd = new BloxsDefinition("Mouse", "GetMouseY", "get mouse y", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseY()","entity,world");
+            bd.addSub(0, sbd);
         
         bd = new BloxsDefinition("Events", "OnTouched", "when touched by someone else", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouched(Entity other)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);

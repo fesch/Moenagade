@@ -4,7 +4,7 @@ Todo
 - overlapping select boxes do not behave the way they should
     (a select box in the "open" state should have higher priority!)
 
-Current version: 0.16
+Current version: 0.17
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -79,3 +79,4 @@ Current version: 0.16
 - 15: more bug fixed in notification system
 - 16: testing with quick start document
 - 16: more bug fixed in notification system
+- 17: added fix parameters to events

@@ -94,8 +94,21 @@ public class LibraryPanel extends JPanel {
                                 System.out.println("Selected parent2 is: "+Library.getInstance().getSelected().getParent().getParent().getClass().getSimpleName());
                         }/**/
                         
-                        if(Library.getInstance().getSelected().getType()==Type.VALUE || 
-                           Library.getInstance().getSelected().getType()==Type.LIST)
+                        if(Library.getInstance().getSelected().getType()==Type.EXPRESSION)
+                        {
+                            System.out.println("TOO BE CHECKED --> LibraryPanel");
+                            // get the parent (should be Value)
+                            if(Library.getInstance().getSelected().getParent()!=null &&
+                               Library.getInstance().getSelected().getParent().getParent()!=null &&
+                               Library.getInstance().getSelected().getParent().getParent().getParent()!=null)
+                            {
+                                Library.getInstance().setSelected(Library.getInstance().getSelected().getParent().getParent().getParent().clone());
+                            }
+                        }
+
+                        else if(Library.getInstance().getSelected().getType()==Type.VALUE || 
+                           Library.getInstance().getSelected().getType()==Type.LIST || 
+                           Library.getInstance().getSelected().getType()==Type.PARAMETERS)
                         {
                             // get the parent (should be Value)
                             if(Library.getInstance().getSelected().getParent()!=null)
@@ -104,7 +117,6 @@ public class LibraryPanel extends JPanel {
                             //if(Library.getInstance().getSelected().getParent()!=null)
                             //    Library.getInstance().setSelected(Library.getInstance().getSelected().getParent().clone());
                         }
-
 
                         // calculate & save the delta-click position
                         Library.getInstance().setSelectedDelta(new Dimension(me.getX()-Library.getInstance().getSelected().getOffset().x, 

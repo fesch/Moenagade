@@ -24,6 +24,8 @@ public class Parameters extends Element {
 
     public final static String CONFIG_SYMBOL = "\u267B";
     
+    private boolean allowConfig = true;
+    
     public Parameters() {
         init();
         setTitle(CONFIG_SYMBOL);
@@ -52,6 +54,45 @@ public class Parameters extends Element {
             addToBody(item);
         }
     }
+    
+    @Override
+    public Parameters clone()
+    {
+        Parameters element = (Parameters) super.clone();
+        element.allowConfig = this.allowConfig;
+        
+        return element;
+    }
+
+    public boolean allowConfig() {
+        return allowConfig;
+    }
+
+    public void setAllowConfig(boolean allowConfig) {
+        if(allowConfig)
+        {
+            if(!title.startsWith(CONFIG_SYMBOL))
+                title=CONFIG_SYMBOL+" "+title.trim();
+        }
+        else
+            title=title.replace(CONFIG_SYMBOL, "").trim();
+        
+        this.allowConfig = allowConfig;
+        
+        setTitle(title);
+    }
+
+    @Override
+    public Element addParameter(Element parameterHolder) {
+        if(parameterHolder.getType()==Type.EXPRESSION)
+            title+=" $";
+        else if(parameterHolder.getType()==Type.CONDITION)
+            title+=" £";
+        else if(parameterHolder.getType()==Type.VALUE)
+            title+=" °";
+        parseTitle(title,false);
+        return super.addParameter(parameterHolder); 
+    }
 
     private void init()
     {
@@ -64,11 +105,12 @@ public class Parameters extends Element {
     @Override
     public String getJavaCode(int indent) {
         String code = "";
-        for (int i = 0; i < parameters.size(); i++) {
-            Element param = parameters.get(i);
-            code+=param.getBody().getReturnType()+" "+param.getBody().getTitle();
-            if(i<parameters.size()-1) code+=", ";
-        }
+        if(allowConfig)
+            for (int i = 0; i < parameters.size(); i++) {
+                Element param = parameters.get(i);
+                code+=param.getBody().getReturnType()+" "+param.getBody().getTitle();
+                if(i<parameters.size()-1) code+=", ";
+            }
         
         return code;
     }
@@ -88,6 +130,7 @@ public class Parameters extends Element {
     {
         // generate the title
         title = CONFIG_SYMBOL;
+        if(!allowConfig) title="";
         for (int i = 0; i < def.size(); i++) {
             VariableDefinition vd = def.get(i);
             title+=" $";

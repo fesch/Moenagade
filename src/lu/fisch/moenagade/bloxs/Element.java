@@ -147,7 +147,7 @@ public class Element {
         if(type==Type.EXPRESSION)
             color=ColorUtils.getColor("#0480C8");
         else if(type==Type.CONDITION)
-            color=ColorUtils.getColor("##748C51");
+            color=ColorUtils.getColor("#748C51");
     }
     
     public Element(BloxsDefinition bd)
@@ -176,6 +176,17 @@ public class Element {
             setParameter(key, value.clone());
         }
 
+        // add sub elements
+        for(int i=0; i<parameterCount(); i++)
+        {
+            for (int j = 0; j < bd.getSubs(i).size(); j++) {
+                BloxsDefinition sbd = bd.getSubs(i).get(j);
+                Element expressionHolder = new Element(Type.EXPRESSION, "ExpressionHolder", "");
+                expressionHolder.addToBody(new Element(sbd));
+                getParameter(i).addParameter(expressionHolder);
+            }
+        }
+        
         //System.out.println(getClassname()+" I: "+allowDockInside+" A: "+allowDockAfter);
     }
     
@@ -281,7 +292,15 @@ public class Element {
         
         if(title==null) return;
         
-        if(!title.trim().isEmpty())
+        titlePieces = new ArrayList<>();
+        if(setParameters)
+            parameters = new ArrayList<>();
+        
+        if(title.trim().isEmpty())
+        {
+            titlePieces.add("");
+        }
+        else
         {
             int paramCount = 0;
             // expressions
@@ -292,18 +311,15 @@ public class Element {
             paramCount+=countOccurrences(title, '§');
             // lists
             paramCount+=countOccurrences(title, '€');
-            // lists
+            // parameters
             paramCount+=countOccurrences(title, '^');
-            
-            titlePieces = new ArrayList<>();
-            if(setParameters)
-                parameters = new ArrayList<>();
+            paramCount+=countOccurrences(title, '`');
             
             String buffer = "";
             for(int i=0; i<title.length(); i++)
             {
                 char sym = title.charAt(i);
-                if(sym=='$' || sym=='£' || sym=='§' || sym=='€' || sym=='^')
+                if(sym=='$' || sym=='£' || sym=='§' || sym=='€' || sym=='^' || sym=='`' )
                 {
                     if(buffer.isEmpty()) buffer=" ";
                     titlePieces.add(buffer);
@@ -322,6 +338,12 @@ public class Element {
                         else if(sym=='§') addParameter(new Value());
                         else if(sym=='^') addParameter(new Parameters());
                         else if(sym=='€') addParameter(new List(returnType));
+                        else if(sym=='`') 
+                        {
+                            Parameters parameters = new Parameters();
+                            parameters.setAllowConfig(false);
+                            addParameter(parameters);
+                        }
                     }
                 }
                 else
@@ -4220,7 +4242,7 @@ public class Element {
         
         */
         
-        System.out.println("I ("+this.getClassname()+") got a refresh: "+change);
+        //System.out.println("I ("+this.getClassname()+") got a refresh: "+change);
         
         // refresh parameters
         refreshParameters(change);

@@ -309,7 +309,8 @@ public class ConfigureParameters extends javax.swing.JDialog {
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         DefaultTableModel tm = (DefaultTableModel) tblParams.getModel();
-        tm.removeRow(tblParams.getSelectedRow());
+        if(tblParams.getSelectedRow()>=0)
+            tm.removeRow(tblParams.getSelectedRow());
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**

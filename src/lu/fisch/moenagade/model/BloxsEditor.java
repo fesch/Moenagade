@@ -346,16 +346,23 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                 //System.out.println("Selected is: "+selected.getClassname());
                 if(selected.getType()==Type.PARAMETERS)// && me.getClickCount()==2)
                 {
-                    ConfigureParameters cp = ConfigureParameters.showModal(mainFrame, "Configure parameters",((Parameters)selected).getDefinitions());
-                    if(cp.isOK())
+                    Parameters parameters = ((Parameters)selected);
+                    
+                    if(parameters.allowConfig())
                     {
-                        pushUndo();
-                        ((Parameters)selected).setDefinitions(cp.getDefinitions());
-                        refresh(new Change(selected.getParent(), selected.getPosition(), "parameters.configured", null, ((Parameters)selected).getDefinitions()));
-                        somethingChanged();
-                        selected=null;
-                        repaint();
+                        ConfigureParameters cp = ConfigureParameters.showModal(mainFrame, "Configure parameters",parameters.getDefinitions());
+                        if(cp.isOK())
+                        {
+                            pushUndo();
+                            parameters.setDefinitions(cp.getDefinitions());
+                            refresh(new Change(selected.getParent(), selected.getPosition(), "parameters.configured", null, parameters.getDefinitions()));
+                            somethingChanged();
+                            selected=null;
+                            repaint();
+                        }
                     }
+                    
+                    selected=null;
                 }
                 else if(selected.getType()==Type.VALUE)
                 {

@@ -166,14 +166,14 @@ public class MainFrame extends javax.swing.JFrame {
 	miQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
         
+        // connect the console
+        Console.disconnectAll();
+
         // load the library
         loadLibrary("");
         
         // blank the project
         speNewActionPerformed(null);
-        
-        // connect the console
-        //Console.disconnectAll();
     }
 
     public void loadLibrary(String destination)

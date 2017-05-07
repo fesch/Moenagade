@@ -57,6 +57,8 @@ public class BloxsDefinition {
     private HashMap<Integer,List> lists = new HashMap<>();
     private ArrayList<String> paramTypes = new ArrayList<>();
     
+    private ArrayList<ArrayList<BloxsDefinition>> parameterSubs = new ArrayList<>();
+    
     private String code;
 
     public BloxsDefinition(String categorie, String classname, String title, String paramTypes, Color color, Element.Type type, String returnType, boolean hasTop, boolean hasBody, boolean hasBottom, String code, String destinations) {
@@ -249,6 +251,19 @@ public class BloxsDefinition {
 
     public void setNeedsParent(String needsParent) {
         this.needsParent = needsParent;
+    }
+    
+    public boolean addSub(int paramPos, BloxsDefinition sub)
+    {
+        while(parameterSubs.size()<=paramPos)
+            parameterSubs.add(new ArrayList<BloxsDefinition>());
+        return parameterSubs.get(paramPos).add(sub);
+    }
+
+    public ArrayList<BloxsDefinition> getSubs(int paramPos) {
+        while(parameterSubs.size()<=paramPos)
+            parameterSubs.add(new ArrayList<BloxsDefinition>());
+        return parameterSubs.get(paramPos);
     }
     
     
