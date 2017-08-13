@@ -66,7 +66,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import lu.fisch.moenagade.bloxs.Element;
 import lu.fisch.moenagade.compilation.Runtime6;
-import lu.fisch.moenagade.gui.About;
+import lu.fisch.moenagade.About;
 import lu.fisch.moenagade.gui.Change;
 import lu.fisch.moenagade.gui.ImageFile;
 import lu.fisch.moenagade.gui.SoundFile;
@@ -1535,6 +1535,7 @@ public class Project {
         a.setLocationRelativeTo(frame);
         a.setVisible(true);
         //System.err.println("about");
+        //System.err.println(frame);
     }
     
     private boolean readyToRunOrCompile()

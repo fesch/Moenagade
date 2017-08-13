@@ -90,7 +90,7 @@ public class Parameters extends Element {
             title+=" £";
         else if(parameterHolder.getType()==Type.VALUE)
             title+=" °";
-        parseTitle(title,false);
+        parseTitle(title.trim(),false);
         return super.addParameter(parameterHolder); 
     }
 

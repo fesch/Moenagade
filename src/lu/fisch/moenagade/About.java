@@ -24,7 +24,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package lu.fisch.moenagade.gui;
+package lu.fisch.moenagade;
 
 /******************************************************************************************************
  *
@@ -235,7 +235,11 @@ public class About extends JDialog implements ActionListener, KeyListener
 		String input = new String();
 		try
 		{
-			BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("../changelog.txt")));
+			BufferedReader in = new BufferedReader(
+                                new InputStreamReader(
+                                        getClass().getResourceAsStream("changelog.txt"),"UTF8"
+                                )
+                        );
 			String str;
 			while ((str = in.readLine()) != null)
 			{
@@ -259,7 +263,7 @@ public class About extends JDialog implements ActionListener, KeyListener
 		input = new String();
 		try
 		{
-			BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("../license.txt")));
+			BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("license.txt"),"UTF8"));
 			String str;
 			while ((str = in.readLine()) != null)
 			{

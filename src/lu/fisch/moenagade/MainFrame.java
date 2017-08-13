@@ -26,6 +26,9 @@
 
 package lu.fisch.moenagade;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
@@ -36,14 +39,22 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Vector;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -55,6 +66,7 @@ import lu.fisch.moenagade.gui.SoundFile;
 import lu.fisch.moenagade.gui.TreeRenderer;
 import lu.fisch.moenagade.model.BloxsClass;
 import lu.fisch.moenagade.model.BloxsColors;
+import lu.fisch.moenagade.model.BloxsDefinitions;
 import lu.fisch.moenagade.model.BloxsEditor;
 import lu.fisch.moenagade.model.Entity;
 import lu.fisch.moenagade.model.Library;
@@ -88,7 +100,7 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
-              
+        
         // set editor
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
@@ -182,6 +194,45 @@ public class MainFrame extends javax.swing.JFrame {
         Library library = Library.getInstance();
         library.load(destination);
         tabs.removeAll();
+
+        // hide the tabs
+        tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT); //WRAP_TAB_LAYOUT || SCROLL_TAB_LAYOUT);
+        tabs.setUI(new BasicTabbedPaneUI() {  
+            @Override  
+            protected int calculateTabAreaHeight(int tab_placement, int run_count, int max_tab_height) {  
+                /*if (tabs.getTabCount() > 1)
+                    return super.calculateTabAreaHeight(tab_placement, run_count, max_tab_height);  
+                else*/ 
+                    return 0;  
+            }  
+        });
+        
+        // jlist with colored items
+        catList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                Color col = (new BloxsDefinitions()).getColor(value.toString());
+                if (col==null) col=Color.white;
+                
+                setBackground(col);
+                if (isSelected) {
+                     setBackground(getBackground().darker());
+                }
+                
+                JPanel p = new JPanel();
+                p.setLayout(new BorderLayout());
+                p.setBorder(new LineBorder(col, 5));
+                p.add(c,BorderLayout.CENTER);
+                return p;
+            }
+        });
+        //catList.setFixedCellHeight(50);
+        //catList.setFixedCellWidth(100);
+        
+
+        
+        Vector<String> names = new Vector<>();
         for (int i = 0; i < library.getTabs().size(); i++) {
             LibraryPanel ep = library.getTabs().get(i);
             // register the library for the mouse events
@@ -192,8 +243,10 @@ public class MainFrame extends javax.swing.JFrame {
             JScrollPane scroll = new JScrollPane(ep);
             scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            names.add(ep.getLabel());
             tabs.add(ep.getLabel(), scroll);
         }
+        catList.setListData(names);
     }
     
     public void closeWindow()
@@ -439,7 +492,10 @@ public class MainFrame extends javax.swing.JFrame {
         splitter2 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tree = new javax.swing.JTree();
+        jPanel1 = new javax.swing.JPanel();
         tabs = new javax.swing.JTabbedPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        catList = new javax.swing.JList<>();
         tbRun = new javax.swing.JToolBar();
         speRun = new javax.swing.JButton();
         speJar = new javax.swing.JButton();
@@ -524,6 +580,11 @@ public class MainFrame extends javax.swing.JFrame {
         treePopper.add(popRename);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -652,6 +713,11 @@ public class MainFrame extends javax.swing.JFrame {
         topPanel.setLayout(new java.awt.BorderLayout());
 
         splitter1.setDividerLocation(200);
+        splitter1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                splitter1PropertyChange(evt);
+            }
+        });
 
         rightPanel.setLayout(new java.awt.BorderLayout());
 
@@ -680,6 +746,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         splitter2.setDividerLocation(150);
         splitter2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        splitter2.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                splitter2ComponentResized(evt);
+            }
+        });
 
         tree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -694,14 +765,40 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tree);
 
         splitter2.setLeftComponent(jScrollPane1);
-        splitter2.setRightComponent(tabs);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(tabs, java.awt.BorderLayout.CENTER);
+
+        catList.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        catList.setForeground(new java.awt.Color(255, 255, 255));
+        catList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 6" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        catList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
+        catList.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                catListComponentResized(evt);
+            }
+        });
+        catList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                catListValueChanged(evt);
+            }
+        });
+        jScrollPane3.setViewportView(catList);
+
+        jPanel1.add(jScrollPane3, java.awt.BorderLayout.PAGE_START);
+
+        splitter2.setRightComponent(jPanel1);
 
         splitter1.setLeftComponent(splitter2);
 
         topPanel.add(splitter1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(topPanel);
-        topPanel.setBounds(0, 112, 585, 336);
+        topPanel.setBounds(0, 112, 585, 431);
 
         tbRun.setRollover(true);
 
@@ -1349,6 +1446,27 @@ public class MainFrame extends javax.swing.JFrame {
         speJarActionPerformed(evt);
     }//GEN-LAST:event_miJarActionPerformed
 
+    private void catListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_catListValueChanged
+        tabs.setSelectedIndex(catList.getSelectedIndex());
+    }//GEN-LAST:event_catListValueChanged
+
+    private void splitter1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_splitter1PropertyChange
+        
+    }//GEN-LAST:event_splitter1PropertyChange
+
+    private void catListComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_catListComponentResized
+        
+    }//GEN-LAST:event_catListComponentResized
+
+    private void splitter2ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_splitter2ComponentResized
+        catList.setFixedCellWidth((splitter2.getBottomComponent().getWidth()-2)/3);
+    }//GEN-LAST:event_splitter2ComponentResized
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // re-align categories
+        catList.setFixedCellWidth((splitter2.getBottomComponent().getWidth()-2)/3);
+    }//GEN-LAST:event_formComponentShown
+
     /**
      * @param args the command line arguments
      */
@@ -1386,10 +1504,13 @@ public class MainFrame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<String> catList;
     private lu.fisch.moenagade.console.Console console;
     private javax.swing.JScrollPane editorScroller;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;

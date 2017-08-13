@@ -68,14 +68,14 @@ public class LibraryPanel extends JPanel {
                     Element element = elements.get(i);
                     // try to select it or one of it's sub-elements
                     
-                    Element sel = element.getSelected(me.getPoint());
+                    Element sel = element.getSelected(me.getPoint(),false);
                     // if there is a Library.getInstance().getSelected() element
                     
                     if(sel!=null)
                     {
                         // clone the element
                         //Library.getInstance().setSelected((Element) Element.cloneObject(Library.getInstance().getSelected()));
-                        Library.getInstance().setSelected(sel.clone());
+                        //Library.getInstance().setSelected(sel.clone());
                         
                         
                         /*
@@ -93,30 +93,22 @@ public class LibraryPanel extends JPanel {
                             if(Library.getInstance().getSelected().getParent().getParent()!=null)
                                 System.out.println("Selected parent2 is: "+Library.getInstance().getSelected().getParent().getParent().getClass().getSimpleName());
                         }/**/
-                        
-                        if(Library.getInstance().getSelected().getType()==Type.EXPRESSION)
-                        {
-                            System.out.println("TOO BE CHECKED --> LibraryPanel");
-                            // get the parent (should be Value)
-                            if(Library.getInstance().getSelected().getParent()!=null &&
-                               Library.getInstance().getSelected().getParent().getParent()!=null &&
-                               Library.getInstance().getSelected().getParent().getParent().getParent()!=null)
-                            {
-                                Library.getInstance().setSelected(Library.getInstance().getSelected().getParent().getParent().getParent().clone());
-                            }
-                        }
 
-                        else if(Library.getInstance().getSelected().getType()==Type.VALUE || 
-                           Library.getInstance().getSelected().getType()==Type.LIST || 
-                           Library.getInstance().getSelected().getType()==Type.PARAMETERS)
+                        if(sel.getType()==Type.EXPRESSION)
+                        {
+                            sel=sel.getParent().getParent().getParent();
+                            repaint();
+                        }
+                        else if(sel.getType()==Type.VALUE || 
+                           sel.getType()==Type.LIST || 
+                           sel.getType()==Type.PARAMETERS)
                         {
                             // get the parent (should be Value)
-                            if(Library.getInstance().getSelected().getParent()!=null)
-                                Library.getInstance().setSelected(Library.getInstance().getSelected().getParent().clone());
-                            // get the parent (should be contained element)
-                            //if(Library.getInstance().getSelected().getParent()!=null)
-                            //    Library.getInstance().setSelected(Library.getInstance().getSelected().getParent().clone());
+                            if(sel.getParent()!=null)
+                                sel=sel.getParent();
                         }
+                        
+                        Library.getInstance().setSelected(sel.clone());
 
                         // calculate & save the delta-click position
                         Library.getInstance().setSelectedDelta(new Dimension(me.getX()-Library.getInstance().getSelected().getOffset().x, 
@@ -143,7 +135,6 @@ public class LibraryPanel extends JPanel {
                     Library.getInstance().getSelected().setOffset(new Point(me.getX()-Library.getInstance().getSelectedDelta().width,
                                                  me.getY()-Library.getInstance().getSelectedDelta().height));
                     elements.remove(Library.getInstance().getSelected());
-                    
                 }   
                 Library.getInstance().setSelected(null);
                 repaint();

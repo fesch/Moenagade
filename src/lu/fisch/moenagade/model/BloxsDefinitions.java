@@ -26,7 +26,9 @@
 
 package lu.fisch.moenagade.model;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import lu.fisch.moenagade.bloxs.Element.Type;
 import lu.fisch.moenagade.bloxs.List;
 
@@ -36,11 +38,16 @@ import lu.fisch.moenagade.bloxs.List;
  */
 public class BloxsDefinitions {
     private ArrayList<BloxsDefinition> definitions = new ArrayList<>();
+    private HashMap<String,Color> catColors = new HashMap<>();
 
     public BloxsDefinitions() {
         
         BloxsDefinition bd;
         BloxsDefinition sbd;
+        
+        
+        
+        catColors.put("Structures", BloxsColors.$STRUCTURE);
         
         bd = new BloxsDefinition("Structures", "If", "if £", "", BloxsColors.$STRUCTURE, Type.INSTRUCTION, "", true, true, true, "if ($0)\n{\n$$\n}","");
         definitions.add(bd);
@@ -64,6 +71,8 @@ public class BloxsDefinitions {
         definitions.add(bd);
         
         
+        
+        catColors.put("Values", BloxsColors.$BACKGROUND);
         
         bd = new BloxsDefinition("Values", "True", "true", "", BloxsColors.$BOOLEAN, Type.CONDITION, "boolean", false, false, false, "true","");
         definitions.add(bd);
@@ -100,8 +109,10 @@ public class BloxsDefinitions {
         bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
         definitions.add(bd);
         
-
         
+        
+        catColors.put("Logical", BloxsColors.$BOOLEAN);
+
         bd = new BloxsDefinition("Logical", "And", "£ and £", "", BloxsColors.$BOOLEAN, Type.CONDITION, "boolean", false, false, false, "($0 && $1)","");
         definitions.add(bd);
         
@@ -113,6 +124,9 @@ public class BloxsDefinitions {
         bd.setTransformation("compare");
         definitions.add(bd);
         
+        
+        
+        catColors.put("Events", BloxsColors.$EVENT);
         
         bd = new BloxsDefinition("Events", "OnCreate", "when created", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onCreate()\n{\n$$\n}\n\n","");
         definitions.add(bd);
@@ -192,6 +206,8 @@ public class BloxsDefinitions {
         
         
         
+        catColors.put("Methods", BloxsColors.$METHOD);
+        
         bd = new BloxsDefinition("Methods", "MethodDefinition", "method §", "", BloxsColors.$METHOD, Type.INSTRUCTION, "", false, true, false, "public void $0()\n{\n$$\n}\n\n","");
         definitions.add(bd);
         
@@ -218,6 +234,7 @@ public class BloxsDefinitions {
         
         
         
+        catColors.put("Input", BloxsColors.$INPUT);
         
         bd = new BloxsDefinition("Input", "UserInteger", "integer §", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "$0","");
         definitions.add(bd);
@@ -233,6 +250,9 @@ public class BloxsDefinitions {
         bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
         definitions.add(bd);
         
+        
+        
+        catColors.put("Math", BloxsColors.$MATH);
         
         bd = new BloxsDefinition("Math", "MathSum", "$ + $", "double,double", BloxsColors.$MATH, Type.EXPRESSION, "", false, false, false, "($0 + $1)","");
         definitions.add(bd);
@@ -266,6 +286,8 @@ public class BloxsDefinitions {
         
         
         
+        catColors.put("Variables", BloxsColors.$VARIABLE);
+        
         bd = new BloxsDefinition("Variables", "VariableDefinition", "define variable § of type € with value $", ",Type,", BloxsColors.$VARIABLE, Type.INSTRUCTION, "", true, false, true, "$1 $0 = $2;","");
         //bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         bd.setTransformation("variable");
@@ -290,6 +312,7 @@ public class BloxsDefinitions {
         
         
         
+        catColors.put("Attributes", BloxsColors.$OBJECT);
 
         bd = new BloxsDefinition("Attributes", "AttributeDefinition", "define attribute § of type € with value $", ",Type,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", false, false, false, "private $1 $0 = $2;\n\npublic void set$0($1 $0)\n{\n    this.$0=$0;\n}\n\npublic $1 get$0()\n{\n    return $0;\n}\n\n","");
         //bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
@@ -315,10 +338,15 @@ public class BloxsDefinitions {
         
         
         
+        catColors.put("Sound", BloxsColors.$SOUND);
+        
         bd = new BloxsDefinition("Sound", "PlaySound", "play sound €", "Sound", BloxsColors.$SOUND, Type.INSTRUCTION, "", true, false, true, "getWorld().playSound(\"$0\");","");
         bd.setTransformation(0,"stringify");
         definitions.add(bd);
         
+        
+        
+        catColors.put("Object", BloxsColors.$OBJECT);
        
         //bd = new BloxsDefinition("**** TEST ****", "Test", "Test $", "", ColorUtils.getColor("#748C51"), Type.INSTRUCTION, "String", true, false, true, "test($0);","");
         //definitions.add(bd);
@@ -348,6 +376,8 @@ public class BloxsDefinitions {
         definitions.add(bd);
         
         
+        
+        catColors.put("Entity", BloxsColors.$ENTITY);
         
         bd = new BloxsDefinition("Entity", "MoveLeft", "move left by $ pixels", "int", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "moveLeft($0);","entity");
         definitions.add(bd);
@@ -419,6 +449,7 @@ public class BloxsDefinitions {
         
         
         
+        catColors.put("World", BloxsColors.$WORLD);
 
         bd = new BloxsDefinition("World", "SetWorld", "set initial world €", "World", BloxsColors.$MAIN, Type.INSTRUCTION, "", true, false, true, "setWorld(new $0());","main");
         definitions.add(bd);
@@ -480,6 +511,8 @@ public class BloxsDefinitions {
         
         
         
+        catColors.put("Graphical", BloxsColors.$GRAPHICAL);
+        
         bd = new BloxsDefinition("Graphical", "LoadImage", "load image €", "Image", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "loadImage(\"$0\");","world,entity");
         //bd.setList(0, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         definitions.add(bd);
@@ -525,6 +558,9 @@ public class BloxsDefinitions {
         definitions.add(bd);
         
         
+        
+        catColors.put("Application", BloxsColors.$MAIN);
+        
         bd = new BloxsDefinition("Application", "SetWindowSize", "set window size to $ x $ pixels", "int,int", BloxsColors.$MAIN, Type.INSTRUCTION, "", true, false, true, "setWindowSize($0, $1);","main");
         definitions.add(bd);
         
@@ -540,6 +576,8 @@ public class BloxsDefinitions {
         
         
         
+        catColors.put("Timer", BloxsColors.$OTHER);
+        
         bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milli seconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n$$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
         definitions.add(bd);
         
@@ -547,6 +585,9 @@ public class BloxsDefinitions {
         bd.setNeedsParent("StartTimer");
         definitions.add(bd);
         
+        
+        
+        catColors.put("Mouse", BloxsColors.$MOUSE);
        
         bd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
         definitions.add(bd);
@@ -557,6 +598,8 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Mouse", "IsMouseInside", "mouse inside?", "", BloxsColors.$MOUSE, Type.CONDITION, "", false, false, false, "mouseInside()","entity");
         definitions.add(bd);
         
+        
+        catColors.put("Debug", BloxsColors.$DEBUG);
        
         bd = new BloxsDefinition("Debug", "SystemOutPrintln", "print to console $", "", BloxsColors.$DEBUG, Type.INSTRUCTION, "", true, false, true, "System.out.println($0);","");
         definitions.add(bd);
@@ -567,6 +610,11 @@ public class BloxsDefinitions {
         
         
        
+    }
+    
+    public Color getColor(String categorie)
+    {
+        return catColors.get(categorie);
     }
 
     public ArrayList<BloxsDefinition> getDefinitions(String categorie) {

@@ -1200,6 +1200,11 @@ public class Element {
     
     public Element getSelected(Point point)
     {
+        return getSelected(point,true);
+    }
+    
+    public Element getSelected(Point point, boolean detach)
+    {
         /***
          * ANALYSING
          */
@@ -1223,7 +1228,7 @@ public class Element {
             for (int i = 0; i < parameters.size(); i++) {
                 Element param = parameters.get(i);
                 //System.out.println("Checking parameter: "+param.getClassname());
-                Element result = param.getSelected(point);
+                Element result = param.getSelected(point,detach);
                 if(result!=null)
                 {
                     //System.out.println("Selecting parameter: "+result.getClassname());
@@ -1247,7 +1252,7 @@ public class Element {
                 if(go)
                 {
                     //System.out.println("Checking parameter: "+param.getClassname());
-                    Element result = param.getSelected(point);
+                    Element result = param.getSelected(point,detach);
                     if(result!=null)
                     {
                         //System.out.println("Selecting parameter: "+result.getClassname());
@@ -1261,8 +1266,8 @@ public class Element {
         if(getBody()!=null)
         {
             //System.out.println("Checking body of "+getClassname());
-            Element result = getBody().getSelected(point);
-            if(result!=null)
+            Element result = getBody().getSelected(point,detach);
+            if(result!=null && detach)
             {
                 // detach if first element
                 if(result==body && result.getType()!=Type.ITEM)
@@ -1282,7 +1287,7 @@ public class Element {
         // don't forget to check the next
         if(getNext()!=null)
         {
-            Element result = getNext().getSelected(point);
+            Element result = getNext().getSelected(point,detach);
             if(result!=null)
                 return result;
         }/**/
@@ -1306,7 +1311,7 @@ public class Element {
             if(prev!=null)
             {
                 // are we the top most element of some other body?
-                if(prev!=parent)
+                if(prev!=parent && detach)
                 {
                     Element last = getLastElementForStructureByPosition(Pos.BOTTOM);
                     // make my previous' element point to my next element
@@ -1323,218 +1328,6 @@ public class Element {
         }
         
         return selected;
-    }
-    
-    public Element getSelected_old(Point point)
-    {
-        /*if(isHolder && body!=null)
-        {
-            Element sub = body.getSelected(point);
-            if(sub!=null) return sub;
-        }*/
-        
-        // this applies only for Lists, as wee need to check if one of the subitems has been clicked on
-        System.out.println("Checking: "+this.getClassname());
-        /*if(getType()==Type.LIST)
-        {
-            //System.out.println("Check the list: "+getClassname());
-            if(getBody()!=null && ((List) this).isOpen())
-            {
-                Element sub = getBody();
-                while(sub!=null)
-                {
-                    //System.out.println("Sub: "+sub.getClass().getSimpleName());
-                    if(sub.isInside(point))
-                    {
-                        //System.out.println("--Sub: "+sub.getClass().getSimpleName());
-                        if(sub!=null)
-                            sub.onDetach(sub.getPrev());
-                        return sub;
-                    }
-                    sub=sub.getNext();
-                }
-            }
-        }*/
-        
-        /*
-        System.out.println("I am: "+this.getClass().getSimpleName());
-        if(getType()==Type.LIST)
-            System.out.println("-- and I am: "+((List)this).isOpen());
-        */
-        
-        // try parameters first
-        for (int i = 0; i < parameters.size(); i++) {
-            Element param = parameters.get(i);
-            System.out.println("Param: "+param.getClassname());
-            
-            if(param.getType()==Type.LIST)
-            {
-                System.out.println("Type: List, Class: "+getClass().getSimpleName());
-                if(isInside(point)) {
-                    //((List)this).toggle();
-                    return this;
-                }
-            }
-            else
-            // check if we are inside the parameter
-            /*boolean go = param.isInside(point);
-            if(param.getType()==Type.LIST && param.getBody()!=null)
-            {
-                System.out.println("Got LIST and I am: "+((List)param.body).isOpen());
-                go = go || ((List)param.getBody()).isOpen();
-            }*/
-            //if(go)
-            //if(param.isInside(point) || (param instanceof List && ((List)param.body).isOpen()))
-            {
-                // check if this parameter has a body and is not a value
-                if(param.getBody()!=null)
-                {
-                    // the body may contain parameters too, so try to get them
-                    Element sub = param.getBody().getSelected(point);
-                    // if we found something
-                    // the previous getSelected will also catch the item iteself, 
-                    // so pay attention to discard that one!!!
-                    if(sub!=null && sub!=param.getBody())
-                    {
-                        //System.out.println("Found sub: "+sub+" / "+sub.getClass().getSimpleName()+" inside: "+param.body+" / "+param.body.getClass().getSimpleName());
-                        // sub will contain the reference to the sub-parameters body
-                        // so return it.
-                        //System.out.println("Return sub: "+sub.getClass().getSimpleName());
-                        if(sub.getType()==Type.LIST)
-                        {
-                            if(((List)sub.getParent()).isOpen())
-                            {
-                                if(sub!=null)
-                                    sub.onDetach(sub.getPrev());
-                                return sub;
-                            }
-                        }
-                        else
-                        {
-                            if(sub!=null)
-                                sub.onDetach(sub.getPrev());
-                            return sub;
-                        }
-                    }
-                    
-                    if(param.isInside(point))
-                    {
-                        // store a reference to the body
-                        Element paramBody = param.getBody();
-                        // disconnect the body if not a value
-                        //System.out.println("BODY PARAM: "+param.body.getClass().getSimpleName());
-                        //if(!(param.body instanceof Text) && !(param.body instanceof List) && !(param.body instanceof Item))
-                        if(getType()!=Type.VALUE && 
-                           getType()!=Type.LIST && 
-                           getType()!=Type.ITEM) 
-                        {
-                            //System.out.println("Disco"); 
-                            param.setBody(null);
-                        }
-                        // return the body element
-                        //System.out.println("Return paramBody: "+paramBody.getClass().getSimpleName());
-                        if(paramBody!=null)
-                            paramBody.onDetach(paramBody.getPrev());
-                        return paramBody;
-                    }
-                }
-                // we are in the case of a parameter that cannot be dragged away with the mouse.
-                else
-                {
-                    //System.out.println("Value: "+param.isInside(point));
-                    if(param.isInside(point) && 
-                            (param.getType()==Type.VALUE ||
-                            param.getType()==Type.LIST ||
-                            param.getType()==Type.ITEM))
-                    {
-                        return param;
-                    }
-                }
-            }
-        }
-      
-        // base element
-        if(isInside(point)) 
-        {
-            //System.out.println("Here we are! "+this.getClassname());
-            this.onDetach(this.getPrev());
-            return this;
-        }
-        
-        /*
-        // any of the inputs
-        for (int i = 0; i < parameters.size(); i++) {
-            Element get = parameters.get(i);
-            if(get.isInside(point)) 
-            {
-                parameters.remove(get);
-                //get.parent=null;
-                return get;
-            }
-        }
-        */
-        
-        // any of the body elements
-        Element tmp = getBody();
-        Element prev = null;
-        while(tmp!=null)
-        {
-            //System.out.println("tmp: "+tmp);
-            //System.out.println("next: "+tmp.next);
-            
-            // try sub element first (disconnect by recursive called method)
-            Element selected = tmp.getSelected(point);
-            if(selected!=tmp && selected!=null) 
-            {
-                //System.out.println("Found in "+this+" sub element: "+selected);
-                if(selected!=null)
-                    selected.onDetach(selected.getPrev());
-                return selected;
-            }
-            
-            // if not, try the element itself
-            if(tmp.isInside(point))  
-            {
-                if(tmp!=null && tmp.getType()!=Type.ITEM)
-                {
-                    // connect node that is after tmp
-                    if(prev==null)
-                        setBody(tmp.getNext());
-                    else
-                        prev.setNext(tmp.getNext());
-                    // diconnect tmp from the next nore
-                    tmp.setNext(null);
-                }
-                
-                //System.out.println("Found in "+this+" body element: "+tmp);
-                if(tmp!=null)
-                    tmp.onDetach(tmp.getPrev());
-                return tmp;
-            }
-            
-            prev=tmp;
-            tmp=tmp.getNext();
-        }
-        
-        // one of the connected elements
-        if(getNext()!=null)
-        {
-            Element testNext = getNext().getSelected(point);
-            
-            // diconnect is done by previous recursive call
-            if(testNext==getNext())
-            {
-                setNext(getNext().getNext());
-                testNext.setNext(null);
-            }
-            //System.out.println("Found in "+this+" next element: "+testNext);
-            if(testNext!=null)
-                testNext.onDetach(testNext.getPrev());
-            return testNext;
-        }
-        
-        // none
-        return null;
     }
     
     public boolean isInside(Point point)

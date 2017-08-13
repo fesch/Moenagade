@@ -92,10 +92,15 @@ public class Main
         Moenagade.messages.add("Apply look and feel ...");
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            /*if(System.getProperty("os.name").toLowerCase().contains("os x"))
+                UIManager.setLookAndFeel(new javax.swing.plaf.nimbus.NimbusLookAndFeel());
+            else
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());/**/
             //SwingUtilities.updateComponentTreeUI(mainform);
             //updateComponentTreeUI(mainform);
         } 
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) 
+        //catch (UnsupportedLookAndFeelException ex)
         {
             ex.printStackTrace();
             Moenagade.messages.add("Applying look and feel failed!");
