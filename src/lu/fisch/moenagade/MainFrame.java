@@ -510,6 +510,9 @@ public class MainFrame extends javax.swing.JFrame {
         miSaveAs = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         miQuit = new javax.swing.JMenuItem();
+        miEdit = new javax.swing.JMenu();
+        miUndo = new javax.swing.JMenuItem();
+        miRedo = new javax.swing.JMenuItem();
         miProject = new javax.swing.JMenu();
         miWorld = new javax.swing.JMenuItem();
         miEntity = new javax.swing.JMenuItem();
@@ -907,6 +910,28 @@ public class MainFrame extends javax.swing.JFrame {
         miFile.add(miQuit);
 
         miMenu.add(miFile);
+
+        miEdit.setText("Edit");
+
+        miUndo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/icons/iconfinder_undo_gplaleksandra_wolska.png"))); // NOI18N
+        miUndo.setText("Undo");
+        miUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miUndoActionPerformed(evt);
+            }
+        });
+        miEdit.add(miUndo);
+
+        miRedo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/icons/iconfinder_redo_gplaleksandra_wolska.png"))); // NOI18N
+        miRedo.setText("Redo");
+        miRedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miRedoActionPerformed(evt);
+            }
+        });
+        miEdit.add(miRedo);
+
+        miMenu.add(miEdit);
 
         miProject.setText("Project");
 
@@ -1467,6 +1492,14 @@ public class MainFrame extends javax.swing.JFrame {
         catList.setFixedCellWidth((splitter2.getBottomComponent().getWidth()-2)/3);
     }//GEN-LAST:event_formComponentShown
 
+    private void miUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miUndoActionPerformed
+        bloxsClass.getEditor().undo();
+    }//GEN-LAST:event_miUndoActionPerformed
+
+    private void miRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miRedoActionPerformed
+        bloxsClass.getEditor().redo();
+    }//GEN-LAST:event_miRedoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1517,6 +1550,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JMenuItem miAbout;
     private javax.swing.JMenuItem miDelete;
+    private javax.swing.JMenu miEdit;
     private javax.swing.JMenuItem miEntity;
     private javax.swing.JMenu miFile;
     private javax.swing.JMenu miHelp;
@@ -1527,11 +1561,13 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem miOpen;
     private javax.swing.JMenu miProject;
     private javax.swing.JMenuItem miQuit;
+    private javax.swing.JMenuItem miRedo;
     private javax.swing.JMenuItem miRename;
     private javax.swing.JMenuItem miRun;
     private javax.swing.JMenuItem miSave;
     private javax.swing.JMenuItem miSaveAs;
     private javax.swing.JMenuItem miSound;
+    private javax.swing.JMenuItem miUndo;
     private javax.swing.JMenuItem miWorld;
     private javax.swing.JMenuItem popDelete;
     private javax.swing.JMenuItem popEntity;

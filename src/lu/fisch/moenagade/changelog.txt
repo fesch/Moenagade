@@ -4,7 +4,7 @@ Todo
 - overlapping select boxes do not behave the way they should
     (a select box in the "open" state should have higher priority!)
 
-Current version: 0.19
+Current version: 0.21
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -82,3 +82,5 @@ Current version: 0.19
 - 17: added fix parameters to events
 - 18: modified LAF on OSX
 - 19: added new, more user friendly, library browser
+- 20: added undo & redo actions to main menu
+- 21: fixed a bug where selecting expressions from the library was not possible

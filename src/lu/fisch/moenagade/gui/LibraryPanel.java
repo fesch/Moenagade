@@ -73,6 +73,7 @@ public class LibraryPanel extends JPanel {
                     
                     if(sel!=null)
                     {
+                        //System.out.println(sel);
                         // clone the element
                         //Library.getInstance().setSelected((Element) Element.cloneObject(Library.getInstance().getSelected()));
                         //Library.getInstance().setSelected(sel.clone());
@@ -96,7 +97,10 @@ public class LibraryPanel extends JPanel {
 
                         if(sel.getType()==Type.EXPRESSION)
                         {
-                            sel=sel.getParent().getParent().getParent();
+                            if(sel.getParent()!=null) sel=sel.getParent();
+                            if(sel.getParent()!=null) sel=sel.getParent();
+                            if(sel.getParent()!=null) sel=sel.getParent();
+                            //sel=sel.getParent().getParent().getParent();
                             repaint();
                         }
                         else if(sel.getType()==Type.VALUE || 
