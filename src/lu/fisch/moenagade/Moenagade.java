@@ -35,7 +35,7 @@ import lu.fisch.utils.StringList;
 public class Moenagade
 {
     public final static String E_NAME = "Moenagade";
-    public final static String E_VERSION = "0.21" +
+    public final static String E_VERSION = "0.24" +
             "" +
             "";
 

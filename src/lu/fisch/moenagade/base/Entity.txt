@@ -51,14 +51,14 @@ public abstract class Entity implements KeyListener {
     
     public Entity(World world) {
         setWorld(world);
-        onCreate();
+        //onCreate(); --> make this call in the classes constructor in order to be able to access local attributes
     }
     
     public Entity(World world, int x, int y) {
         setWorld(world);
         location.x=x;
         location.y=y;
-        onCreate();
+        //onCreate();
     }
     
     protected void onCreate() 

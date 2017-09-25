@@ -74,6 +74,16 @@ public class BloxsDefinitions {
         
         catColors.put("Values", BloxsColors.$BACKGROUND);
         
+        bd = new BloxsDefinition("Values", "UserInteger", "integer §", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "$0","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Values", "UserFloat", "decimal §", "", BloxsColors.$INPUT, Type.EXPRESSION, "float", false, false, false, "$0f","");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Values", "UserString", "String §", "", BloxsColors.$INPUT, Type.EXPRESSION, "String", false, false, false, "\"$0\"","");
+        bd.setTransformation(0,"stringify");
+        definitions.add(bd);
+        
         bd = new BloxsDefinition("Values", "True", "true", "", BloxsColors.$BOOLEAN, Type.CONDITION, "boolean", false, false, false, "true","");
         definitions.add(bd);
         
@@ -89,25 +99,7 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Values", "IntValueOf", "value of $ as integer", "String", BloxsColors.$INPUT, Type.EXPRESSION, "int", false, false, false, "Integer.valueOf($0)","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Values", "KeyCodeLeft", "arrow left", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "37","entity");
-        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
-        definitions.add(bd);
         
-        bd = new BloxsDefinition("Values", "KeyCodeRight", "arrow right", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "39","entity");
-        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
-        definitions.add(bd);
-        
-        bd = new BloxsDefinition("Values", "KeyCodeUp", "arrow up", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "38","entity");
-        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
-        definitions.add(bd);
-        
-        bd = new BloxsDefinition("Values", "KeyCodeDown", "arrow down", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "40","entity");
-        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
-        definitions.add(bd);
-        
-        bd = new BloxsDefinition("Values", "KeySpace", "space key", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "32","entity");
-        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
-        definitions.add(bd);
         
         
         
@@ -134,7 +126,7 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Events", "OnDraw", "when being painted", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onDraw(Graphics g)\n{\n$$\n}\n\n","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Events", "OnKeyPressed", "when a key has been pressed `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyPressed(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnKeyPressed", "when key has been pressed `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyPressed(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
             sbd = new BloxsDefinition("Input", "KeyCode", "key code", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "keyEvent.getKeyCode()","entity");
@@ -142,7 +134,7 @@ public class BloxsDefinitions {
             bd.addSub(0, sbd);
         
         
-        bd = new BloxsDefinition("Events", "OnKeyReleased", "when a key has been released `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyReleased(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnKeyReleased", "when key has been released `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void keyReleased(KeyEvent keyEvent)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
         
             sbd = new BloxsDefinition("Input", "KeyCode", "key code", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "keyEvent.getKeyCode()","entity");
@@ -152,7 +144,7 @@ public class BloxsDefinitions {
         //bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void formMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.formMousePressed(evt);\n$$\n}\n\n","world");
         //definitions.add(bd);
  
-        bd = new BloxsDefinition("Events", "OnMousePressed", "when a mouse button has been pressed `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.onMousePressed(evt);\n$$\n}\n\n","entity,world");
+        bd = new BloxsDefinition("Events", "OnMousePressed", "when mouse button has been pressed `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMousePressed(java.awt.event.MouseEvent evt)\n{\n    super.onMousePressed(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
         
             sbd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
@@ -161,7 +153,7 @@ public class BloxsDefinitions {
             sbd = new BloxsDefinition("Mouse", "GetMouseY", "get mouse y", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseY()","entity,world");
             bd.addSub(0, sbd);
         
-        bd = new BloxsDefinition("Events", "OnMouseReleased", "when a mouse button has been released `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseReleased(java.awt.event.MouseEvent evt)\n{\n    super.onMouseReleased(evt);\n$$\n}\n\n","entity,world");
+        bd = new BloxsDefinition("Events", "OnMouseReleased", "when mouse button has been released `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseReleased(java.awt.event.MouseEvent evt)\n{\n    super.onMouseReleased(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
         
             sbd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
@@ -170,7 +162,7 @@ public class BloxsDefinitions {
             sbd = new BloxsDefinition("Mouse", "GetMouseY", "get mouse y", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseY()","entity,world");
             bd.addSub(0, sbd);
         
-        bd = new BloxsDefinition("Events", "OnMouseMoved", "when the mouse has been moved `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseMoved(java.awt.event.MouseEvent evt)\n{\n    super.onMouseMoved(evt);\n$$\n}\n\n","entity,world");
+        bd = new BloxsDefinition("Events", "OnMouseMoved", "when mouse has been moved `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseMoved(java.awt.event.MouseEvent evt)\n{\n    super.onMouseMoved(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
         
             sbd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
@@ -179,7 +171,7 @@ public class BloxsDefinitions {
             sbd = new BloxsDefinition("Mouse", "GetMouseY", "get mouse y", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseY()","entity,world");
             bd.addSub(0, sbd);
         
-        bd = new BloxsDefinition("Events", "OnMouseDragged", "when the mouse has been dragged `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseDragged(java.awt.event.MouseEvent evt)\n{\n    super.onMouseDragged(evt);\n$$\n}\n\n","entity,world");
+        bd = new BloxsDefinition("Events", "OnMouseDragged", "when mouse has been dragged `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\nprotected void onMouseDragged(java.awt.event.MouseEvent evt)\n{\n    super.onMouseDragged(evt);\n$$\n}\n\n","entity,world");
         definitions.add(bd);
         
             sbd = new BloxsDefinition("Mouse", "GetMouseX", "get mouse x", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseX()","entity,world");
@@ -234,19 +226,29 @@ public class BloxsDefinitions {
         
         
         
-        catColors.put("Input", BloxsColors.$INPUT);
+        catColors.put("Keyboard", BloxsColors.$INPUT);
         
-        bd = new BloxsDefinition("Input", "UserInteger", "integer §", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "$0","");
+        bd = new BloxsDefinition("Keyboard", "KeyCode", "key code", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "keyEvent.getKeyCode()","entity");
+        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Input", "UserFloat", "decimal §", "", BloxsColors.$INPUT, Type.EXPRESSION, "float", false, false, false, "$0f","");
+        bd = new BloxsDefinition("Keyboard", "KeyCodeLeft", "arrow left", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "37","entity");
+        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Input", "UserString", "String §", "", BloxsColors.$INPUT, Type.EXPRESSION, "String", false, false, false, "\"$0\"","");
-        bd.setTransformation(0,"stringify");
+        bd = new BloxsDefinition("Keyboard", "KeyCodeRight", "arrow right", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "39","entity");
+        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Input", "KeyCode", "key code", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "keyEvent.getKeyCode()","entity");
+        bd = new BloxsDefinition("Keyboard", "KeyCodeUp", "arrow up", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "38","entity");
+        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Keyboard", "KeyCodeDown", "arrow down", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "40","entity");
+        bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Keyboard", "KeySpace", "space key", "", BloxsColors.$INPUT, Type.EXPRESSION, "integer", false, false, false, "32","entity");
         bd.setNeedsParent("OnKeyPressed,OnKeyReleased");
         definitions.add(bd);
         
@@ -314,7 +316,7 @@ public class BloxsDefinitions {
         
         catColors.put("Attributes", BloxsColors.$OBJECT);
 
-        bd = new BloxsDefinition("Attributes", "AttributeDefinition", "define attribute § of type € with value $", ",Type,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", false, false, false, "private $1 $0 = $2;\n\npublic void set$0($1 $0)\n{\n    this.$0=$0;\n}\n\npublic $1 get$0()\n{\n    return $0;\n}\n\n","");
+        bd = new BloxsDefinition("Attributes", "AttributeDefinition", "define attribute § of type € with value $", ",Type,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", false, false, false, "private $1 $0 = ($1) $2;\n\npublic void set$0($1 $0)\n{\n    this.$0=$0;\n}\n\npublic $1 get$0()\n{\n    return $0;\n}\n\n","");
         //bd.setList(1, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         bd.setTransformation("attribute");
         definitions.add(bd);
@@ -457,6 +459,9 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("World", "SetWorld", "set world €", "World", BloxsColors.$MAIN, Type.INSTRUCTION, "", true, false, true, "getMain().setWorld(new $0());","world");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("World", "GetWorld", "get actual world", "World", BloxsColors.$WORLD, Type.EXPRESSION, "", false, false, false, "getWorld()","entity");
+        definitions.add(bd);
+        
         bd = new BloxsDefinition("World", "GetWidth", "width of world", "", BloxsColors.$WORLD, Type.EXPRESSION, "int", false, false, false, "getWorld().getWidth()","entity");
         definitions.add(bd);
         
@@ -508,8 +513,7 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("World", "CountEntitiesClass", "number of entities in world of class €", "Entity", BloxsColors.$WORLD, Type.EXPRESSION, "int", false, false, false, "countEntities(\"$0\")","world");
         bd.setTransformation(0,"stringify");
         definitions.add(bd);
-        
-        
+
         
         catColors.put("Graphical", BloxsColors.$GRAPHICAL);
         
@@ -524,7 +528,10 @@ public class BloxsDefinitions {
         bd.setNeedsParent("OnDraw");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Graphical", "Color", "new RGB color wit R=$ G=$ B=$", "int,int,int", BloxsColors.$GRAPHICAL, Type.EXPRESSION, "Color", true, false, true, "new Color($0,$1,$2)","world,entity");
+        bd = new BloxsDefinition("Graphical", "Color", "new RGB color with R=$ G=$ B=$", "int,int,int", BloxsColors.$GRAPHICAL, Type.EXPRESSION, "Color", true, false, true, "new Color($0,$1,$2)","world,entity");
+        bd.setNeedsParent("OnDraw");
+        definitions.add(bd);
+        bd = new BloxsDefinition("Graphical", "Color", "new HEX color $", "String", BloxsColors.$GRAPHICAL, Type.EXPRESSION, "Color", true, false, true, "new Color((int) Long.parseLong($0, 16))","world,entity");
         bd.setNeedsParent("OnDraw");
         definitions.add(bd);
 
@@ -532,7 +539,7 @@ public class BloxsDefinitions {
         bd.setNeedsParent("OnDraw");
         definitions.add(bd);
 
-        bd = new BloxsDefinition("Graphical", "DrawString", "draw the text $ as position x=$ y=$", "String,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.drawString($0,$1,$2);","world,entity");
+        bd = new BloxsDefinition("Graphical", "DrawString", "draw the text $ at position x=$ y=$", "String,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.drawString($0,$1,$2);","world,entity");
         bd.setTransformation(0,"stringify");
         bd.setNeedsParent("OnDraw");
         definitions.add(bd);
@@ -578,7 +585,7 @@ public class BloxsDefinitions {
         
         catColors.put("Timer", BloxsColors.$OTHER);
         
-        bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milli seconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n$$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
+        bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milli    seconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n$$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Timer", "StopTimer", "stop timer", "", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, false, true, "((Timer)ae.getSource()).stop();","entity,world");

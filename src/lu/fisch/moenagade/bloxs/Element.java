@@ -48,6 +48,7 @@ import lu.fisch.moenagade.model.BloxsDefinition;
 import lu.fisch.moenagade.model.Entity;
 import lu.fisch.moenagade.model.Library;
 import lu.fisch.moenagade.model.Project;
+import lu.fisch.moenagade.model.World;
 import sun.swing.SwingUtilities2;
 
 
@@ -2202,6 +2203,37 @@ public class Element {
         
         return result;
     }
+    
+    public ArrayList<VariableDefinition> getObjects()
+    {
+        ArrayList<VariableDefinition> result = new ArrayList<>();
+        
+        Element tme = getTopMostElement();
+        if(tme!=null)
+        {
+            result=tme.getEditor().getEntities();
+        }
+        
+        Element tmp = this;
+        while(tmp!=null)
+        {
+            if(tmp.getClassname().equals("StartTimer")) break;
+            //System.out.println("Look vor var inside: "+this.getClass().getSimpleName());
+            if((tmp.getClassname().equals("VariableDefinition") ||
+               tmp.getClassname().equals("For")) && Library.getInstance().getProject().getEntityNames().contains(tmp.getReturnType()))
+            {
+                result.add(tmp.getVariableDefinition());
+            }
+            if(tmp.getPrev()!=null &&
+               tmp.getPrev().getClassname().equals("For") &&
+               tmp.getPrev()!=tmp.getParent())
+                tmp=tmp.getPrev().getPrev();
+            else
+                tmp=tmp.getPrev();
+        }
+        
+        return result;
+    }
 
     public ArrayList<VariableDefinition> getMethods()
     {
@@ -2519,12 +2551,25 @@ public class Element {
                         if(project==null) return;
                         // get the selected entity
                         Entity entity = project.getEntity(vd.classname);
+                        World world = project.getWorld(vd.classname);
+                                            
                         // stop if not found
-                        if(entity==null) return;  
-                        // stop if class has no editor
-                        if(entity.getEditor()==null) return;
-                        // retrieve list of variables
-                        ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
+                        if(entity==null && world==null) return;  
+                        ArrayList<String> attributeNames;
+                        if(entity!=null) 
+                        {
+                            // stop if class has no editor
+                            if(entity.getEditor()==null) return;
+                            // retrieve list of variables
+                            attributeNames = entity.getEditor().getAttributeNames();
+                        }
+                        else
+                        {
+                            // stop if class has no editor
+                            if(world.getEditor()==null) return;
+                            // retrieve list of variables
+                            attributeNames = world.getEditor().getAttributeNames();
+                        }
                         // update the second parameter
                         ((List)parameters.get(1)).update(attributeNames);
                         // reset the attribute name
@@ -2573,12 +2618,25 @@ public class Element {
                         if(project==null) return;
                         // get the selected entity
                         Entity entity = project.getEntity(vd.classname);
+                        World world = project.getWorld(vd.classname);
                         // stop if not found
-                        if(entity==null) return;  
-                        // stop if class has no editor
-                        if(entity.getEditor()==null) return;
-                        // retrieve list of variables
-                        ArrayList<VariableDefinition> attributeNames = entity.getEditor().getAttributes();
+                        if(entity==null && world==null) return;  
+                        ArrayList<VariableDefinition> attributeNames;
+                        if(entity!=null)
+                        {
+                            // stop if class has no editor
+                            if(entity.getEditor()==null) return;
+                            // retrieve list of variables
+                            attributeNames = entity.getEditor().getAttributes();
+                        }
+                        else
+                        {
+                            // stop if class has no editor
+                            if(world.getEditor()==null) return;
+                            // retrieve list of variables
+                            attributeNames = world.getEditor().getAttributes();
+                        }
+                        
                         for (int j = 0; j < attributeNames.size(); j++) {
                             // find the one where the name matches
                             VariableDefinition vdi = attributeNames.get(j);
@@ -2661,12 +2719,24 @@ public class Element {
                         if(project==null) return;
                         // get the selected entity
                         Entity entity = project.getEntity(vd.classname);
+                        World world = project.getWorld(vd.classname);
                         // stop if not found
-                        if(entity==null) return;  
-                        // stop if class has no editor
-                        if(entity.getEditor()==null) return;
-                        // retrieve list of variables
-                        ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
+                        if(entity==null && world==null) return;  
+                        ArrayList<String> attributeNames;
+                        if(entity!=null)
+                        {
+                            // stop if class has no editor
+                            if(entity.getEditor()==null) return;
+                            // retrieve list of variables
+                            attributeNames = entity.getEditor().getAttributeNames();
+                        }
+                        else
+                        {
+                            // stop if class has no editor
+                            if(world.getEditor()==null) return;
+                            // retrieve list of variables
+                            attributeNames = world.getEditor().getAttributeNames();
+                        }
                         // update the second parameter
                         ((List)parameters.get(1)).update(attributeNames);
                         // reset the attribute name
@@ -2715,12 +2785,25 @@ public class Element {
                         if(project==null) return;
                         // get the selected entity
                         Entity entity = project.getEntity(vd.classname);
+                        World world = project.getWorld(vd.classname);
                         // stop if not found
-                        if(entity==null) return;  
-                        // stop if class has no editor
-                        if(entity.getEditor()==null) return;
-                        // retrieve list of variables
-                        ArrayList<VariableDefinition> attributeNames = entity.getEditor().getAttributes();
+                        if(entity==null && world==null) return;  
+                        ArrayList<VariableDefinition> attributeNames;
+                        
+                        if(entity!=null)
+                        {
+                            // stop if class has no editor
+                            if(entity.getEditor()==null) return;
+                            // retrieve list of variables
+                            attributeNames = entity.getEditor().getAttributes();
+                        }
+                        else
+                        {
+                            // stop if class has no editor
+                            if(world.getEditor()==null) return;
+                            // retrieve list of variables
+                            attributeNames = world.getEditor().getAttributes();
+                        }
                         for (int j = 0; j < attributeNames.size(); j++) {
                             // find the one where the name matches
                             VariableDefinition vdi = attributeNames.get(j);
@@ -2840,12 +2923,26 @@ public class Element {
                     if(project==null) return;
                     // get the selected entity
                     Entity entity = project.getEntity(vd.classname);
+                    World world = project.getWorld(vd.classname);
+                    
                     // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list of variables
-                    ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
+                    if(entity==null && world==null) return;  
+                    ArrayList<String> attributeNames;
+                     
+                    if(entity!=null)
+                    {
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list of variables
+                        attributeNames = entity.getEditor().getAttributeNames();
+                    }
+                    else
+                    {
+                        // stop if class has no editor
+                        if(world.getEditor()==null) return;
+                        // retrieve list of variables
+                        attributeNames = world.getEditor().getAttributeNames();
+                    }
                     // update the second parameter
                     ((List)parameters.get(1)).update(attributeNames);                    
                 }
@@ -2892,12 +2989,26 @@ public class Element {
                     if(project==null) return;
                     // get the selected entity
                     Entity entity = project.getEntity(vd.classname);
+                    World world = project.getWorld(vd.classname);
+                    
                     // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list of variables
-                    ArrayList<String> attributeNames = entity.getEditor().getAttributeNames();
+                    if(entity==null && world==null) return;  
+                    ArrayList<String> attributeNames;
+                    
+                    if(entity!=null)
+                    {
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list of variables
+                        attributeNames = entity.getEditor().getAttributeNames();
+                    }
+                    else
+                    {
+                        // stop if class has no editor
+                        if(world.getEditor()==null) return;
+                        // retrieve list of variables
+                        attributeNames = world.getEditor().getAttributeNames();
+                    }
                     // update the second parameter
                     ((List)parameters.get(1)).update(attributeNames);                    
                 }
@@ -3267,7 +3378,7 @@ public class Element {
         if(
                 this.getClassname().equals("AttributeDefinition") && 
                 change.cmd.equals("rename.entity") && 
-                change.sender.getTopMostElement().getEditor().equals(getTopMostElement().getEditor()) // same class
+                (change.sender==null || change.sender.getTopMostElement().getEditor().equals(getTopMostElement().getEditor())) // same class
            )
         {
             // test if the type ($1) is the same than the old value of the entity
@@ -3454,7 +3565,12 @@ public class Element {
            )
         {
             // only change the usage with the same attribute name
-            if(getParameter(0).getTitle().equals(change.sender.getParameter(0).getTitle()))
+            // and the same editor/class
+            if(
+                getParameter(0).getTitle().equals(change.sender.getParameter(0).getTitle())
+                    &&
+                this.getTopMostElement().getEditor().equals(change.sender.getTopMostElement().getEditor())
+              )
             {
                 // if the actual content if the holder ($2) is not comptaible with the newly
                 // selcted type, a new holder has to be created, discarding the old content
@@ -3572,12 +3688,26 @@ public class Element {
                         // get the selected entity
                         //if(vd.classname==null) return;
                         Entity entity = project.getEntity(vd.classname);
+                        World world = project.getWorld(vd.classname);
+                        
                         // stop if not found
-                        if(entity==null) return;  
-                        // stop if class has no editor
-                        if(entity.getEditor()==null) return;
-                        // retrieve list oall methods of that entity
-                        ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
+                        if(entity==null && world==null) return;  
+                        ArrayList<VariableDefinition> methodNames;
+                                
+                        if(entity!=null)
+                        {
+                            // stop if class has no editor
+                            if(entity.getEditor()==null) return;
+                            // retrieve list oall methods of that entity
+                            methodNames = entity.getEditor().getMethods();
+                        }
+                        else
+                        {
+                            // stop if class has no editor
+                            if(world.getEditor()==null) return;
+                            // retrieve list oall methods of that entity
+                            methodNames = world.getEditor().getMethods();
+                        }
                         ((List)parameters.get(1)).update(methodNames);
                     }
                 }
@@ -3626,12 +3756,26 @@ public class Element {
                         if(project==null) return;
                         // get the selected entity
                         Entity entity = project.getEntity(vd.classname);
+                        World world = project.getWorld(vd.classname);
+                        
                         // stop if not found
-                        if(entity==null) return;  
-                        // stop if class has no editor
-                        if(entity.getEditor()==null) return;
-                        // retrieve element
-                        Element method = entity.getEditor().getMethod(change.to.toString());
+                        if(entity==null && world==null) return;  
+                        Element method;
+                        
+                        if(entity!=null)
+                        {
+                            // stop if class has no editor
+                            if(entity.getEditor()==null) return;
+                            // retrieve element
+                            method = entity.getEditor().getMethod(change.to.toString());
+                        }
+                        else
+                        {
+                            // stop if class has no editor
+                            if(world.getEditor()==null) return;
+                            // retrieve element
+                            method = world.getEditor().getMethod(change.to.toString());
+                        }
                         // remove unwanted text
                         if(title.contains("with parameters"))
                         {
@@ -3729,12 +3873,26 @@ public class Element {
                     // get the selected entity
                     //if(vd.classname==null) return;
                     Entity entity = project.getEntity(vd.classname);
+                    World world = project.getWorld(vd.classname);
+                    
                     // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list oall methods of that entity
-                    ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
+                    if(entity==null && world==null) return;  
+                    ArrayList<VariableDefinition> methodNames;
+                    
+                    if(entity!=null)
+                    {
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list oall methods of that entity
+                        methodNames = entity.getEditor().getMethods();
+                    }
+                    else
+                    {
+                        // stop if class has no editor
+                        if(world.getEditor()==null) return;
+                        // retrieve list oall methods of that entity
+                        methodNames = world.getEditor().getMethods();
+                    }
                     ((List)parameters.get(1)).update(methodNames);                   
                 }
             }
@@ -3776,12 +3934,26 @@ public class Element {
                     // get the selected entity
                     //if(vd.classname==null) return;
                     Entity entity = project.getEntity(vd.classname);
+                    World world = project.getWorld(vd.classname);
+                    
                     // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list oall methods of that entity
-                    ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
+                    if(entity==null && world==null) return; 
+                    ArrayList<VariableDefinition> methodNames;
+                    
+                    if(entity!=null)
+                    {
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list oall methods of that entity
+                        methodNames = entity.getEditor().getMethods();
+                    }
+                    else
+                    {
+                        // stop if class has no editor
+                        if(world.getEditor()==null) return;
+                        // retrieve list oall methods of that entity
+                        methodNames = world.getEditor().getMethods();
+                    }
                     ((List)parameters.get(1)).update(methodNames);                   
                 }
             }
@@ -3837,12 +4009,26 @@ public class Element {
                     // get the selected entity
                     //if(vd.classname==null) return;
                     Entity entity = project.getEntity(vd.classname);
+                    World world = project.getWorld(vd.classname);
+                    
                     // stop if not found
-                    if(entity==null) return;  
-                    // stop if class has no editor
-                    if(entity.getEditor()==null) return;
-                    // retrieve list oall methods of that entity
-                    ArrayList<VariableDefinition> methodNames = entity.getEditor().getMethods();
+                    if(entity==null && world==null) return;  
+                    ArrayList<VariableDefinition> methodNames;
+                    
+                    if(entity!=null)
+                    {
+                        // stop if class has no editor
+                        if(entity.getEditor()==null) return;
+                        // retrieve list oall methods of that entity
+                        methodNames = entity.getEditor().getMethods();
+                    }
+                    else
+                    {
+                        // stop if class has no editor
+                        if(world.getEditor()==null) return;
+                        // retrieve list oall methods of that entity
+                        methodNames = world.getEditor().getMethods();
+                    }
                     ((List)parameters.get(1)).update(methodNames);                   
                 }
             }

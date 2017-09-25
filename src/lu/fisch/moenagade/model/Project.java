@@ -131,6 +131,11 @@ public class Project {
         return entities.get(name);
     }
     
+    public World getWorld(String name)
+    {
+        return worlds.get(name);
+    }
+    
     public boolean isChanged() {
         return changed;
     }

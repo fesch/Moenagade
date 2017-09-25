@@ -335,6 +335,10 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         if(entities!=null) {
             //for (int i = 0; i < entities.size(); i++) {
             for (int i = entities.size()-1; i>=0; i--) {
+                // it seams as if this may happen if the list changes during the 
+                // execution of the loop (--> threads!), so check again ...
+                if(i>=entities.size()) return;
+
                 Entity check = entities.get(i);
                 
                 if(entities.contains(check))

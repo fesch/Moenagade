@@ -772,6 +772,9 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(tabs, java.awt.BorderLayout.CENTER);
 
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
         catList.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         catList.setForeground(new java.awt.Color(255, 255, 255));
         catList.setModel(new javax.swing.AbstractListModel<String>() {
@@ -801,7 +804,7 @@ public class MainFrame extends javax.swing.JFrame {
         topPanel.add(splitter1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(topPanel);
-        topPanel.setBounds(0, 112, 585, 431);
+        topPanel.setBounds(0, 112, 585, 418);
 
         tbRun.setRollover(true);
 
@@ -818,7 +821,7 @@ public class MainFrame extends javax.swing.JFrame {
         tbRun.add(speRun);
 
         speJar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/icons/java_jar.png"))); // NOI18N
-        speJar.setToolTipText("Run the project ...");
+        speJar.setToolTipText("Create executable JAR ...");
         speJar.setFocusable(false);
         speJar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         speJar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -1050,6 +1053,7 @@ public class MainFrame extends javax.swing.JFrame {
         setTitleNew();
         updateProjectTree();
         openBloxsEditor(project.getMain());
+        System.gc();
     }//GEN-LAST:event_speNewActionPerformed
 
     private void speNewWorldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speNewWorldActionPerformed
@@ -1223,6 +1227,7 @@ public class MainFrame extends javax.swing.JFrame {
         {
             if(project.askToSave(true))
             {
+                setTitleNew();
                 project.openImage(this);
                 updateProjectTree();
             }
@@ -1440,6 +1445,7 @@ public class MainFrame extends javax.swing.JFrame {
         {
             if(project.askToSave(true))
             {
+                setTitleNew();
                 project.openSound(this);
                 updateProjectTree();
             }

@@ -83,6 +83,8 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
     
     private MainFrame mainFrame = null;
     
+    private Element list = null;
+    
     /**
      * Creates new form BloxsEditor
      */
@@ -317,10 +319,28 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                 }
             }
         }
-        // loop through all elements contained inside the editor
-        //for (int i = 0; i < elements.size() && selected==null; i++) {
-        for (int i = elements.size()-1; i >=0 && selected==null; i--) {
+        
+        // first let's see if there is not an opened list
+        if(list!=null)
+        {
+            // execute the event on the opened list
+            mouseOnElement(list,me);
+        }
+        // if not, loop through all elements contained inside the editor
+        else for (int i = elements.size()-1; i >=0 && selected==null; i--) {
             Element element = elements.get(i);
+            // execute the event on the actual element,
+            // break the loop if requested
+            if(mouseOnElement(element,me)) break;
+        }
+        
+        // NOT NEEDED HERE
+        //somethingChanged();
+    }
+    
+    private boolean mouseOnElement(Element element,MouseEvent me)
+    {
+        
             // try to select it or one of it's sub-elements
             //System.out.println("------------------------------");
             selected = element.getSelected(me.getPoint());
@@ -523,13 +543,11 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                         refresh(new Change(selected, -1, "undock", null, selected));
                     }
                     // break the loop
-                    break;
+                    //break;
+                    return true;
                 }
             }
-        }
-        
-        // NOT NEEDED HERE
-        //somethingChanged();
+            return false;
     }
 
     @Override
@@ -542,9 +560,9 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
             SwingUtilities.convertPointFromScreen(clickPoint, this);
         }
         
+        // only act if we had an element 
         if(selected!=null)
         {
-            
             // repostion element
             selected.setOffset(new Point(clickPoint.x-selectedDelta.width,
                                          clickPoint.y-selectedDelta.height));
@@ -731,7 +749,12 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
         {
             Element e = elements.get(i);
             //System.out.println("Checking: "+e.getClassname()+" with return type: "+e.getReturnType());
-            if(e.getClassname().equals("AttributeDefinition") &&  Library.getInstance().getProject().getEntityNames().contains(e.getReturnType()))
+            if(e.getClassname().equals("AttributeDefinition") &&  
+                    (
+                        Library.getInstance().getProject().getEntityNames().contains(e.getReturnType())
+                        ||
+                        Library.getInstance().getProject().getWorldNames().contains(e.getReturnType())
+                    ))
             {
                 attributes.add(e.getVariableDefinition());
             }
@@ -838,6 +861,14 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
 
     public ArrayList<Element> getDrawLast() {
         return drawLast;
+    }
+
+    public Element getList() {
+        return list;
+    }
+
+    public void setList(Element list) {
+        this.list = list;
     }
     
 

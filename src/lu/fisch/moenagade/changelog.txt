@@ -1,10 +1,11 @@
 Todo
 - add recent opened files 
 - contextuelle menu am blox-editor
-- overlapping select boxes do not behave the way they should
-    (a select box in the "open" state should have higher priority!)
+- "save as" is not yet implemented
+- FR: by Mil Gaspar: Pin blocks categorie
+- FR: copy & paste between same type elements (entity <--> entity), (world <--> world)
 
-Current version: 0.21
+Current version: 0.24
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -84,3 +85,12 @@ Current version: 0.21
 - 19: added new, more user friendly, library browser
 - 20: added undo & redo actions to main menu
 - 21: fixed a bug where selecting expressions from the library was not possible
+- 22: fixed a bug while renaming an entity (FABFR)
+- 22: disabled scrolling in the category chooser (FABFR)
+- 22: re-arranged some control elements (FABFR)
+- 22: corrected some typos (FABFR)  
+- 22: fixed a bug when selecting a list item (FABFR)  
+- 23: added bloc with HEX color (Mil Gaspar)
+- 24: made it possible to use worlds as attribute types too [Mil Gaspar]
+- 24: get access to the current world
+- 24: use attributes and methods of the world

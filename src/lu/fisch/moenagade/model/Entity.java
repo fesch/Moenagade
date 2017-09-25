@@ -72,11 +72,13 @@ public class Entity extends BloxsClass {
         code+="    public "+getName()+"(World world)\n";
         code+="    {\n";
         code+="        super(world);\n";
+        code+="        onCreate();\n";
         code+="    }\n";
         code+="\n";
         code+="    public "+getName()+"(World world, int x, int y)\n";
         code+="    {\n";
         code+="        super(world,x,y);\n";
+        code+="        onCreate();\n";
         code+="    }\n";
         code+="\n";
         code+=getEditor().getJavaCode(1)+"\n";

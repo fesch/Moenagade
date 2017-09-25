@@ -233,9 +233,13 @@ public class List extends Element {
     public void toggle() {
         open=!open;
         
+        if (open) getTopMostElement().getEditor().setList(this);
+        else getTopMostElement().getEditor().setList(null);
+        
         /*
         System.out.println("Toggle IN for: "+getClassname());
-        System.out.println("Parent       : "+getParent());
+        System.out.println("Open?        : "+open);
+        //System.out.println("Parent       : "+getParent());
         /**/
         //System.out.println("Toggle IN for: "+getClassname()+" with return type: "+getReturnType());
         
@@ -253,6 +257,7 @@ public class List extends Element {
             entries.add("long");
             entries.add("float");
             entries.addAll(Library.getInstance().getProject().getEntityNames());
+            entries.addAll(Library.getInstance().getProject().getWorldNames());
             update(entries);
         }
         if(open && getReturnType()!=null && getReturnType().equals("Types"))
@@ -379,6 +384,13 @@ public class List extends Element {
             item.setReturnType(getReturnType());
             addToBody(item);
         } 
+        
+        // if the list is empty, auto-close
+        if(items.size()==0)
+        {
+            open=false;
+            getTopMostElement().getEditor().setList(null);
+        }
     }
 
     @Override
