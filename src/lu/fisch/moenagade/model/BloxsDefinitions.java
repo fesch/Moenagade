@@ -115,6 +115,9 @@ public class BloxsDefinitions {
         bd.setList(1, new List("==", new String[] {"==","!=","<","<=",">",">="}));
         bd.setTransformation("compare");
         definitions.add(bd);
+                
+        bd = new BloxsDefinition("Logical", "InstanceOf", "$ instance of €", "Entity,Entity",BloxsColors.$BOOLEAN, Type.CONDITION, "boolean", false, false, false, "($0 instanceof $1)","");
+        definitions.add(bd);
         
         
         
@@ -180,8 +183,12 @@ public class BloxsDefinitions {
             sbd = new BloxsDefinition("Mouse", "GetMouseY", "get mouse y", "int", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "getMouseY()","entity,world");
             bd.addSub(0, sbd);
         
-        bd = new BloxsDefinition("Events", "OnTouched", "when touched by someone else", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouched(Entity other)\n{\n$$\n}\n\n","entity");
+        bd = new BloxsDefinition("Events", "OnTouchedEntity", "when touched by `", "", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouched(Entity other)\n{\n$$\n}\n\n","entity");
         definitions.add(bd);
+        
+            sbd = new BloxsDefinition("Mouse", "getEntity", "entity", "Entity", BloxsColors.$MOUSE, Type.EXPRESSION, "", false, false, false, "other","entity,world");
+            sbd.setNeedsParent("OnTouchedEntity");
+            bd.addSub(0, sbd);
         
         bd = new BloxsDefinition("Events", "OnTouchedEntity", "when touched by €", "Entity", BloxsColors.$EVENT, Type.INSTRUCTION, "", false, true, false, "@Override\npublic void onTouched(Entity other)\n{\n    if(other.getClass().getSimpleName().equals(\"$0\"))\n    {\n$$$\n    }\n}\n\n","entity");
         bd.setTransformation(0,"stringify");
@@ -321,15 +328,15 @@ public class BloxsDefinitions {
         bd.setTransformation("attribute");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Attributes", "Attribute", "value of attribute €", "Attribute", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "this.$0","");
+        bd = new BloxsDefinition("Attributes", "Attribute", "value of attribute €", "Attribute", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "get$0()","");
         //bd.setList(0, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Attributes", "Attribute", "value of attribute €", "Attribute", BloxsColors.$OBJECT, Type.CONDITION, "", false, false, false, "this.$0","");
+        bd = new BloxsDefinition("Attributes", "Attribute", "value of attribute €", "Attribute", BloxsColors.$OBJECT, Type.CONDITION, "", false, false, false, "get$0()","");
         //bd.setList(0, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Attributes", "SetAttribute", "set attribute € to value $", "Attribute,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "this.$0 = $1;","");
+        bd = new BloxsDefinition("Attributes", "SetAttribute", "set attribute € to value $", "Attribute,", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "set$0($1);","");
         definitions.add(bd);
       
         bd = new BloxsDefinition("Attributes", "AttributeIncrement", "increment attribute € by $", "Attribute,double", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0+=$1;","");
@@ -438,7 +445,10 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.EXPRESSION, "", false, false, false, "getWorld().addEntity(new $0(getWorld()))","entity");
         definitions.add(bd);
        
-        bd = new BloxsDefinition("Entity", "DeleteEntity", "delete entity", "", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "delete();","entity");
+        bd = new BloxsDefinition("Entity", "DeleteEntity", "delete myself", "", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "delete();","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "DeleteEntity", "delete entity $", "Entity", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "$0.delete();","entity");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Entity", "TouchEntity", "touching €", "Entity", BloxsColors.$GAME, Type.CONDITION, "", false, false, false, "getWorld().isTouching($this,\"$0\")!=null","entity");
@@ -456,7 +466,7 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("World", "SetWorld", "set initial world €", "World", BloxsColors.$MAIN, Type.INSTRUCTION, "", true, false, true, "setWorld(new $0());","main");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("World", "SetWorld", "set world €", "World", BloxsColors.$MAIN, Type.INSTRUCTION, "", true, false, true, "getMain().setWorld(new $0());","world");
+        bd = new BloxsDefinition("World", "SetWorld", "set world €", "World", BloxsColors.$MAIN, Type.INSTRUCTION, "", true, false, true, "getWorld().getMain().setWorld(new $0());","world,entity");
         definitions.add(bd);
         
         bd = new BloxsDefinition("World", "GetWorld", "get actual world", "World", BloxsColors.$WORLD, Type.EXPRESSION, "", false, false, false, "getWorld()","entity");
@@ -585,10 +595,14 @@ public class BloxsDefinitions {
         
         catColors.put("Timer", BloxsColors.$OTHER);
         
-        bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milli    seconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n$$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
+        bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milliseconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n$$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Timer", "StopTimer", "stop timer", "", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, false, true, "((Timer)ae.getSource()).stop();","entity,world");
+        bd.setNeedsParent("StartTimer");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Timer", "SetTimerDelay", "set delay $", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, false, true, "((Timer)ae.getSource()).setDelay($0);","entity,world");
         bd.setNeedsParent("StartTimer");
         definitions.add(bd);
         

@@ -40,6 +40,7 @@ import java.nio.channels.FileChannel;
 import java.util.Enumeration;
 import java.util.TreeSet;
 import java.util.jar.JarFile;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -78,6 +79,12 @@ public class Main
         // start Unibloxs
         Moenagade.messages.add("Starting Moenagade ...");
         
+        // enable hardware acceleration
+        Moenagade.messages.add("Enable hardware acceleration ...");
+        //System.setProperty("sun.java2d.opengl", "true");
+        //System.setProperty("sun.java2d.d3d", "true");
+        System.setProperty("sun.java2d.accthreshold", "0");
+        
         Moenagade.messages.add("Removing the security manager ...");
         try
         {
@@ -114,6 +121,9 @@ public class Main
         Moenagade.messages.add("Vendor = "+System.getProperty("java.vendor"));
         Moenagade.messages.add("Home = "+System.getProperty("java.home"));
         Moenagade.messages.add("User = "+System.getProperty("user.name"));
+        
+        if(System.getProperty("java.version").trim().startsWith("9"))
+            JOptionPane.showMessageDialog(null, "Moenagade is not yet comptiable with Java 9.\nPlease uninstall Java 9 and use Java 8 instead.", "Error", JOptionPane.ERROR_MESSAGE);
 
         Moenagade.messages.add("--- JWS");
         // we need to find the file "swing-layout...jar"
@@ -890,28 +900,36 @@ public class Main
             Moenagade.javaCompilerDetected=false;
         }
 
-        final MainFrame mainform = new MainFrame();
-        mainform.setIconImage(new javax.swing.ImageIcon(mainform.getClass().getResource("/lu/fisch/moenagade/images/moenagade32.png")).getImage());
-
-        try
-        {
-                String s = new String();
-                int start = 0;
-                if(args.length>0)
-                    if (args[0].equals("-open"))
-                        start=1;
-                for(int i=start;i<args.length;i++)
-                {
-                        s+=args[i];
-                }
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                MainFrame mainform = new MainFrame();
                 mainform.setVisible(true);
-                Moenagade.messages.add("Opening from shell: "+s);
-                throw new Exception("Not yet implements!!");
-        }
-        catch (Exception e)
-        {
-            // ignore
-        }
+                mainform.setIconImage(new javax.swing.ImageIcon(mainform.getClass().getResource("/lu/fisch/moenagade/images/moenagade32.png")).getImage());
+                
+                try
+                {
+                        String s = new String();
+                        int start = 0;
+                        if(args.length>0)
+                            if (args[0].equals("-open"))
+                                start=1;
+                        for(int i=start;i<args.length;i++)
+                        {
+                                s+=args[i];
+                        }
+                        mainform.setVisible(true);
+                        Moenagade.messages.add("Opening from shell: "+s);
+                        throw new Exception("Not yet implements!!");
+                }
+                catch (Exception e)
+                {
+                    // ignore
+                }
+            }
+        });
+
+        
         
         Moenagade.messages.add("---");
         
@@ -947,7 +965,7 @@ public class Main
             // ignore
         }/**/
         
-        //System.out.println(Unibloxs.messages.getText());
+        //System.out.println(Moenagade.messages.getText());
 
         //System.out.println(System.getProperty("os.name").toLowerCase());
         /*

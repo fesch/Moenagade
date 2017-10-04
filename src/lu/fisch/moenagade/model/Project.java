@@ -67,6 +67,7 @@ import javax.swing.filechooser.FileFilter;
 import lu.fisch.moenagade.bloxs.Element;
 import lu.fisch.moenagade.compilation.Runtime6;
 import lu.fisch.moenagade.About;
+import lu.fisch.moenagade.console.Console;
 import lu.fisch.moenagade.gui.Change;
 import lu.fisch.moenagade.gui.ImageFile;
 import lu.fisch.moenagade.gui.SoundFile;
@@ -781,6 +782,7 @@ public class Project {
     private void open(String dirname)
     {
         clear();
+        System.gc();
         
         setDirectoryName(dirname);
         // load package
@@ -789,13 +791,15 @@ public class Project {
         File file = new File(filename);
         if(file.exists())
         {
-            StringList content = new StringList();
-            content.loadFromFile(filename);
+            //StringList content = new StringList();
+            //content.loadFromFile(filename);
             // load files
+            /*
             for(int i = 0;i<content.count();i++)
             {
                 // do something with the package file
             }
+            */
             
             // load project
             try {
@@ -1603,7 +1607,9 @@ public class Project {
         {
             JOptionPane.showMessageDialog(frame, "Error while compiling!\n"+
                 ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+            Console.disconnectAll();
             ex.printStackTrace();
+            Console.connectAll();
             return false;
         } 
         

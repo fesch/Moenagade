@@ -48,6 +48,11 @@ public abstract class MainFrame extends javax.swing.JFrame implements KeyEventDi
      * Creates new form MainFrame
      */
     public MainFrame() {
+        // enable hardware acceleration
+        System.setProperty("sun.java2d.opengl", "true");
+        System.setProperty("sun.java2d.d3d", "true");
+        System.setProperty("sun.java2d.accthreshold", "0");
+
         initComponents();
 
         setResizable(false);
@@ -108,6 +113,7 @@ public abstract class MainFrame extends javax.swing.JFrame implements KeyEventDi
         getContentPane().removeAll();
         getContentPane().add(world);
         this.entities=world.getEntities();
+        world.repaint();
     }
 
     public World getWorld() {

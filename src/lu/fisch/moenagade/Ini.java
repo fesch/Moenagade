@@ -52,7 +52,7 @@ import java.util.*;
 public class Ini {
 
 	private static String dirname = "";
-	private static String ininame = "unibloxs.ini";
+	private static String ininame = "moenagade.ini";
 	private static String filename = "";
 	private static File dir = new File(dirname);
 	private static File file = new File(filename);
@@ -65,7 +65,7 @@ public class Ini {
             // mac
             if(System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0)
             {
-                return System.getProperty("user.home")+"/Library/Application Support/Unimozer";
+                return System.getProperty("user.home")+"/Library/Application Support/Moenagade";
             }
             // windows
             else if (System.getProperty("os.name").toLowerCase().indexOf( "win" ) >= 0)
@@ -74,12 +74,12 @@ public class Ini {
                 if(appData!=null)
                     if (!appData.equals(""))
                     {
-                        return appData+"\\Unimozer";
+                        return appData+"\\Moenagade";
                     }
-                return System.getProperty("user.home") + "\\Application Data\\Unimozer";
+                return System.getProperty("user.home") + "\\Application Data\\Moenagade";
             }
             else
-                return System.getProperty("user.home")+System.getProperty("file.separator")+".unimozer";
+                return System.getProperty("user.home")+System.getProperty("file.separator")+".moenagade";
         }
 
         public static void set(String key, String value)

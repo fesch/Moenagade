@@ -241,7 +241,12 @@ public class List extends Element {
         System.out.println("Open?        : "+open);
         //System.out.println("Parent       : "+getParent());
         /**/
-        //System.out.println("Toggle IN for: "+getClassname()+" with return type: "+getReturnType());
+        //System.out.println("Toggle IN ("+open+") for: "+getClassname()+" with return type: "+getReturnType());
+        /*System.out.println(open+" - "+getReturnType());
+        System.out.println(open);
+        System.out.println(getReturnType()!=null);
+        System.out.println(getReturnType().equals("Entity"));
+        System.out.println(open && getReturnType()!=null && getReturnType().equals("Entity"));*/
         
         /*if(open && getParent()!=null && (
                 getParent().getClassname().equals("VariableDefinition") ||
@@ -316,6 +321,7 @@ public class List extends Element {
                                               getParent().getClassname().equals("CountEntitiesClass") ||
                                               getParent().getClassname().equals("TouchEntity")))*/
         {
+            //System.out.println("Here");
             Project project = Library.getInstance().getProject();
             if(project!=null)
             {

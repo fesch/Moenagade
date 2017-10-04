@@ -64,6 +64,7 @@ import lu.fisch.moenagade.gui.ImageFile;
 import lu.fisch.moenagade.gui.LibraryPanel;
 import lu.fisch.moenagade.gui.SoundFile;
 import lu.fisch.moenagade.gui.TreeRenderer;
+import lu.fisch.moenagade.gui.dialogs.BootLogReport;
 import lu.fisch.moenagade.model.BloxsClass;
 import lu.fisch.moenagade.model.BloxsColors;
 import lu.fisch.moenagade.model.BloxsDefinitions;
@@ -179,7 +180,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         
         // connect the console
-        Console.disconnectAll();
+        //Console.disconnectAll();
+        Console.connectAll();
 
         // load the library
         loadLibrary("");
@@ -526,6 +528,7 @@ public class MainFrame extends javax.swing.JFrame {
         miJar = new javax.swing.JMenuItem();
         miHelp = new javax.swing.JMenu();
         miAbout = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         popWorld.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/moenagade/images/world16.png"))); // NOI18N
         popWorld.setText("Add World ...");
@@ -896,6 +899,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         miSaveAs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/icons/gen_save.png"))); // NOI18N
         miSaveAs.setText("Save Project As ...");
+        miSaveAs.setEnabled(false);
         miSaveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miSaveAsActionPerformed(evt);
@@ -1024,6 +1028,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         miHelp.add(miAbout);
+
+        jMenuItem1.setText("Boot log report ...");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        miHelp.add(jMenuItem1);
 
         miMenu.add(miHelp);
 
@@ -1506,6 +1518,11 @@ public class MainFrame extends javax.swing.JFrame {
         bloxsClass.getEditor().redo();
     }//GEN-LAST:event_miRedoActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        BootLogReport blr = new BootLogReport(this);
+        blr.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1546,6 +1563,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JList<String> catList;
     private lu.fisch.moenagade.console.Console console;
     private javax.swing.JScrollPane editorScroller;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

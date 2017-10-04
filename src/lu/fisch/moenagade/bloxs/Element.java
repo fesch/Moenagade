@@ -285,13 +285,24 @@ public class Element {
     */
 
     public void parseTitle(String title) {
+        //if(getType()==Type.PARAMETERS) System.out.println("---[ parseTitle(String) ]-----------");
         parseTitle(title,true);
+        /*if(getType()==Type.PARAMETERS)
+        {
+            if(getParent()==null) System.out.println("P: -");
+            else System.out.println("P: "+getParent().getClassname());
+            System.out.println("T: "+title);
+            System.out.println("H: "+this.title);
+            System.out.println("D: "+getTitle());
+        }/**/ 
     }
     
     public void parseTitle(String title, boolean setParameters) {
         this.title = title;
         
         if(title==null) return;
+        
+        //if(getType()==Type.PARAMETERS) System.out.println("parseTitle: "+title);
         
         titlePieces = new ArrayList<>();
         if(setParameters)
@@ -320,6 +331,8 @@ public class Element {
             for(int i=0; i<title.length(); i++)
             {
                 char sym = title.charAt(i);
+                //if(getType()==Type.PARAMETERS) System.out.println("Sym "+i+" = "+sym);
+                
                 if(sym=='$' || sym=='£' || sym=='§' || sym=='€' || sym=='^' || sym=='`' )
                 {
                     if(buffer.isEmpty()) buffer=" ";
@@ -341,7 +354,7 @@ public class Element {
                         else if(sym=='€') addParameter(new List(returnType));
                         else if(sym=='`') 
                         {
-                            Parameters parameters = new Parameters();
+                            Parameters parameters = new Parameters();                           
                             parameters.setAllowConfig(false);
                             addParameter(parameters);
                         }
@@ -354,20 +367,6 @@ public class Element {
             }
             if(buffer.isEmpty()) buffer=" ";
             titlePieces.add(buffer);
-            
-            /*
-            // split it up & generate parameters
-            titlePieces = new ArrayList<>();
-            parameters = new ArrayList<>();
-            title=" "+title+" ";
-            String[] pieces = title.split("\\$");
-            for (int i = 0; i < pieces.length; i++) {
-                titlePieces.add(pieces[i].trim());
-                if(parameters.size()<paramCount)
-                    parameters.add(new Empty());
-            }
-            //System.out.println("Found "+pieces.length+" for element: "+title);
-            */
         }
     }
     
@@ -4420,7 +4419,6 @@ public class Element {
             else
                 transforms.add("");
         }
-
         result+= getIndent(indent)  +"<element class=\""+this.getClassname()
                 +"\" return=\""+this.getReturnType()
                 +"\" title=\""+xmlEscapeText(this.getTitle())

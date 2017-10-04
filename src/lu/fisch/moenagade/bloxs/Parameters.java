@@ -34,8 +34,7 @@ public class Parameters extends Element {
     public Parameters(String returnType) {
         init();
         setReturnType(returnType);
-        setTitle(CONFIG_SYMBOL);
-        
+        setTitle(CONFIG_SYMBOL);       
     }
 
     public Parameters(BloxsDefinition bd) {
@@ -65,7 +64,7 @@ public class Parameters extends Element {
     }
 
     public boolean allowConfig() {
-        return allowConfig;
+        return title.startsWith(CONFIG_SYMBOL); //allowConfig;
     }
 
     public void setAllowConfig(boolean allowConfig) {
@@ -84,12 +83,12 @@ public class Parameters extends Element {
 
     @Override
     public Element addParameter(Element parameterHolder) {
-        if(parameterHolder.getType()==Type.EXPRESSION)
+        /*if(parameterHolder.getType()==Type.EXPRESSION)
             title+=" $";
         else if(parameterHolder.getType()==Type.CONDITION)
             title+=" £";
         else if(parameterHolder.getType()==Type.VALUE)
-            title+=" °";
+            title+=" °";*/
         parseTitle(title.trim(),false);
         return super.addParameter(parameterHolder); 
     }

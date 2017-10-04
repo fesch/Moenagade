@@ -75,6 +75,7 @@ public class Parser extends DefaultHandler {
                 
                 // get attributes
                 
+            
                 
                 Type type = null;
                 String readtype = attributes.getValue("type");
@@ -100,6 +101,7 @@ public class Parser extends DefaultHandler {
                         attributes.getValue("code"),
                         attributes.getValue("destinations")
                 );
+
                 
                 //System.out.println("Title = "+attributes.getValue("title"));
                 
@@ -120,11 +122,11 @@ public class Parser extends DefaultHandler {
                     bd.setTransformation("");
   
                 Element e;
-                if(type==Type.VALUE) e  = new Value(bd);
-                else if(type==Type.LIST) e  = new List(bd);
-                else if(type==Type.ITEM) e  = new Item(bd);
-                else if(type==Type.PARAMETERS) e  = new Parameters(bd);
-                else e  = new Element(bd);
+                if(type==Type.VALUE)            e = new Value(bd);
+                else if(type==Type.LIST)        e = new List(bd);
+                else if(type==Type.ITEM)        e = new Item(bd);
+                else if(type==Type.PARAMETERS)  e = new Parameters(bd);
+                else                            e = new Element(bd);
                 
                 String transform = attributes.getValue("paramTransformations");
                 String[] transformations = transform.split(",");
