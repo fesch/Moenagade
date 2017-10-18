@@ -30,6 +30,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -54,6 +55,8 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     private int mouseX = 0;
     private int mouseY = 0;
 
+    private String filename;
+
     private MainFrame main;
 
     /**
@@ -77,11 +80,17 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         {
             backgroundImage = ImageIO.read(this.getClass().getResource(background));
             setDimension(backgroundImage.getWidth(null), backgroundImage.getHeight(null));
+            this.filename=filename;
         } 
         catch (IOException ex) 
         {
             ex.printStackTrace();
         }
+    }
+
+    public String getFilename()
+    {
+        return filename;
     }
 
     public void setDimension(int width, int height)
@@ -111,6 +120,32 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     public MainFrame getMain()
     {
         return main;
+    }
+
+    public void deleteAll(Class c)
+    {
+        if(entities!=null)
+            for (int i = entities.size()-1; i>=0; i--) {
+                Entity e = entities.get(i);
+                try
+                {
+                    c.cast(e);
+                    entities.remove(e);
+                }
+                catch(Exception ex)
+                {
+                    // ignore
+                }
+            }
+    }
+
+    public void bringToFront(Entity e)
+    {
+        if(entities.indexOf(e)>0)
+        {
+            entities.remove(e);
+            entities.add(e);
+        }
     }
 
     /**
@@ -467,6 +502,23 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         {
             ex.printStackTrace();
         }
+    }
+
+    public void hideCursor()
+    {
+        // Transparent 16 x 16 pixel cursor image.
+        BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+
+        // Create a new blank cursor.
+        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
+
+        // Set the blank cursor to the JFrame.
+        setCursor(blankCursor);
+    }
+
+    public void showCursor()
+    {
+        setCursor(Cursor.getDefaultCursor());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -48,6 +48,8 @@ public abstract class Entity implements KeyListener {
     
     private int width;
     private int height;
+
+    private String filename;
     
     public Entity(World world) {
         setWorld(world);
@@ -74,11 +76,17 @@ public abstract class Entity implements KeyListener {
             image = ImageIO.read(this.getClass().getResource(imageFile));
             width= image.getWidth(null);
             height=image.getHeight(null);
+            this.filename=filename;
         } 
         catch (IOException ex) 
         {
             ex.printStackTrace();
         }
+    }
+
+    public String getFilename()
+    {
+        return filename;
     }
 
     public void draw(Graphics g)
@@ -88,6 +96,11 @@ public abstract class Entity implements KeyListener {
             g.drawImage(image, 0, 0, width, height, null);
         }
         onDraw(g);
+    }
+
+    public void bringToFront()
+    {
+        getWorld().bringToFront(this);
     }
 
     @Override

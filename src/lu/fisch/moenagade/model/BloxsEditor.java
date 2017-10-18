@@ -340,6 +340,21 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
         //somethingChanged();
     }
     
+    public static boolean isValidJavaIdentifier(String s) {
+        if (s.isEmpty()) {
+            return false;
+        }
+        if (!Character.isJavaIdentifierStart(s.charAt(0))) {
+            return false;
+        }
+        for (int i = 1; i < s.length(); i++) {
+            if (!Character.isJavaIdentifierPart(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     private boolean mouseOnElement(Element element,MouseEvent me)
     {
         
@@ -390,48 +405,95 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                 {
                     if(me.getClickCount()==1)
                     {
-                        String old = selected.getTitle();
-                        String value = (String) JOptionPane.showInputDialog(mainFrame, "Value", "Edit", JOptionPane.PLAIN_MESSAGE,null,null,old);
-                        if(value!=null)
-                        {
-                            boolean OK = true;
-                            // in case this is a variable definition
-                            if(selected.getParent()!=null && selected.getParent().getClassname().equals("VariableDefinition"))
-                            {
-                                // try to see if there is a variable with the same name in this block
-                                if(selected.hasVariableWithName(value))
-                                {
-                                    JOptionPane.showMessageDialog(mainFrame, "Sorry, but the actual block already contains\na variable with the given name!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
-                                    value="";
-                                    OK=false;
-                                }
-                            }
-                            else if(selected.getParent().getClassname().equals("AttributeDefinition") && selected.getTopMostElement()!=null)
-                            {
-                                if(selected.getTopMostElement().getEditor().hasAttributeWithName(value))
-                                {
-                                    JOptionPane.showMessageDialog(mainFrame, "Sorry, but the actual class already contains\nan attribute with the given name!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
-                                    value="";
-                                    OK=false;
-                                }
-                            }
+                        boolean OK = false;
                             
-                            if(OK)
+                        String old = selected.getTitle();
+                        String value = "";
+                        
+                        while(OK==false && value!=null)
+                        {
+                            value = (String) JOptionPane.showInputDialog(mainFrame, "Value", "Edit", JOptionPane.PLAIN_MESSAGE,null,null,old);
+                           
+                            if(value!=null)
                             {
-                                pushUndo();
-                                selected.setTitle(value);
+                                OK = true;
+                                 
+                                // in case this is a variable definition
+                                if(selected.getParent()!=null && selected.getParent().getClassname().equals("VariableDefinition"))
+                                {
+                                    // try to see if there is a variable with the same name in this block
+                                    if(selected.hasVariableWithName(value) && !selected.getTitle().equals(value))
+                                    {
+                                        JOptionPane.showMessageDialog(mainFrame, "Sorry, but the actual block already contains\na variable with the given name!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
+                                        value="";
+                                        OK=false;
+                                    }
+                                    else if (!isValidJavaIdentifier(value) || !value.substring(0,1).toLowerCase().equals(value.substring(0,1)))
+                                    {
+                                        JOptionPane.showMessageDialog(mainFrame, "Sorry, but variable names must conform the naming conventions!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
+                                        value="";
+                                        OK=false;
+                                    }
+                                }
+                                else if(selected.getParent().getClassname().equals("AttributeDefinition") && selected.getTopMostElement()!=null)
+                                {
+                                    if(selected.getTopMostElement().getEditor().hasAttributeWithName(value) && !selected.getTitle().equals(value))
+                                    {
+                                        JOptionPane.showMessageDialog(mainFrame, "Sorry, but the actual class already contains\nan attribute with the given name!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
+                                        value="";
+                                        OK=false;
+                                    }
+                                    else if (!isValidJavaIdentifier(value) || !value.substring(0,1).toLowerCase().equals(value.substring(0,1)))
+                                    {
+                                        JOptionPane.showMessageDialog(mainFrame, "Sorry, but attribute names must conform the naming conventions!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
+                                        value="";
+                                        OK=false;
+                                    }
+                                }
+                                else if(selected.getParent().getClassname().equals("UserInteger"))
+                                {
+                                    try 
+                                    {
+                                        int i = Integer.valueOf(value);
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        JOptionPane.showMessageDialog(mainFrame, "Sorry, but '"+value+"' is not a valid integer value!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
+                                        value="";
+                                        OK=false;
+                                    }
+                                }
+                                else if(selected.getParent().getClassname().equals("UserFloat"))
+                                {
+                                    try 
+                                    {
+                                        float i = Float.valueOf(value);
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        JOptionPane.showMessageDialog(mainFrame, "Sorry, but '"+value+"' is not a valid decimal value!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
+                                        value="";
+                                        OK=false;
+                                    }
+                                }
 
-                                // notify blockmost element
-                                if(selected.getParent().getClassname().equals("AttributeDefinition"))
-                                    refresh(new Change(selected.getParent(), selected.getPosition(),"rename.attribute", old, value)); 
-                                // Variable & Co
-                                else if((selected.getParent().getClassname().equals("VariableDefinition") ||
-                                         selected.getParent().getClassname().equals("For")) && 
-                                        selected.getBlockMostElement()!=null)
-                                    selected.getBlockMostElement().refresh(new Change(selected.getParent(), selected.getPosition(),"rename.variable", old, value));      
-                                // method definition
-                                else if(selected.getParent().getClassname().equals("MethodDefinition"))
-                                    refresh(new Change(selected.getParent(), selected.getPosition(),"rename.method", old, value));      
+                                if(OK)
+                                {
+                                    pushUndo();
+                                    selected.setTitle(value);
+
+                                    // notify blockmost element
+                                    if(selected.getParent().getClassname().equals("AttributeDefinition"))
+                                        refresh(new Change(selected.getParent(), selected.getPosition(),"rename.attribute", old, value)); 
+                                    // Variable & Co
+                                    else if((selected.getParent().getClassname().equals("VariableDefinition") ||
+                                             selected.getParent().getClassname().equals("For")) && 
+                                            selected.getBlockMostElement()!=null)
+                                        selected.getBlockMostElement().refresh(new Change(selected.getParent(), selected.getPosition(),"rename.variable", old, value));      
+                                    // method definition
+                                    else if(selected.getParent().getClassname().equals("MethodDefinition"))
+                                        refresh(new Change(selected.getParent(), selected.getPosition(),"rename.method", old, value));      
+                                }
                             }
                         }
                         selected=null;

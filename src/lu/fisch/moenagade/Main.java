@@ -83,7 +83,7 @@ public class Main
         Moenagade.messages.add("Enable hardware acceleration ...");
         //System.setProperty("sun.java2d.opengl", "true");
         //System.setProperty("sun.java2d.d3d", "true");
-        System.setProperty("sun.java2d.accthreshold", "0");
+        //System.setProperty("sun.java2d.accthreshold", "0");
         
         Moenagade.messages.add("Removing the security manager ...");
         try

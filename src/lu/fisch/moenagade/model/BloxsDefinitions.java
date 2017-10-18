@@ -111,6 +111,9 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Logical", "Or", "£ or £", "",BloxsColors.$BOOLEAN, Type.CONDITION, "boolean", false, false, false, "($0 || $1)","");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("Logical", "Not", "not £", "", BloxsColors.$BOOLEAN, Type.CONDITION, "boolean", false, false, false, "!($0)","");
+        definitions.add(bd);
+        
         bd = new BloxsDefinition("Logical", "Compare", "$ € $", "", BloxsColors.$BOOLEAN, Type.CONDITION, "boolean", false, false, false, "($0 $1 $2)","");
         bd.setList(1, new List("==", new String[] {"==","!=","<","<=",">",">="}));
         bd.setTransformation("compare");
@@ -366,6 +369,9 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Object", "ObjectGetAttribute", "get value of € . €", "EntityList,EntityAttributes", BloxsColors.$OBJECT, Type.EXPRESSION, "", false, false, false, "$0.get$1()","");
         definitions.add(bd);
         
+         bd = new BloxsDefinition("Object", "ObjectGetAttribute", "get value of € . €", "EntityList,EntityAttributes", BloxsColors.$OBJECT, Type.CONDITION, "", false, false, false, "$0.get$1()","");
+        definitions.add(bd);
+        
         bd = new BloxsDefinition("Object", "ObjectSetX", "set X position of € to $", "EntityList,int", BloxsColors.$OBJECT, Type.INSTRUCTION, "", true, false, true, "$0.setX($1);","");
         definitions.add(bd);
         
@@ -384,10 +390,16 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Object", "ObjectMethodCall", "on object € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.EXPRESSION, "", true, false, true, "$0.$1()","");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("Object", "ObjectMethodCall", "on object € call method €", "EntityList,ObjectMethods", BloxsColors.$OBJECT, Type.CONDITION, "", true, false, true, "$0.$1()","");
+        definitions.add(bd);
+        
         
         
         catColors.put("Entity", BloxsColors.$ENTITY);
         
+        bd = new BloxsDefinition("Entity", "BringToFront", "bring to front", "", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "bringToFront();","entity");
+        definitions.add(bd);
+
         bd = new BloxsDefinition("Entity", "MoveLeft", "move left by $ pixels", "int", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "moveLeft($0);","entity");
         definitions.add(bd);
 
@@ -416,6 +428,24 @@ public class BloxsDefinitions {
         definitions.add(bd);
         
         bd = new BloxsDefinition("Entity", "GetHeight", "height of entity", "", BloxsColors.$ENTITY, Type.EXPRESSION, "int", false, false, false, "getHeight()","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetX", "set X position of entity $ to $", ",int", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "$0.setX($1);","entity,world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetY", "set Y position of entity $ to $", ",int", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "$0.setY($1);","entity,world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "GetX", "X position of entity $", "", BloxsColors.$ENTITY, Type.EXPRESSION, "int", false, false, false, "$0.getX()","entity,world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "GetY", "Y position of entity $", "", BloxsColors.$ENTITY, Type.EXPRESSION, "int", false, false, false, "$0.getY()","entity,world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "GetWidth", "width of entity $", "", BloxsColors.$ENTITY, Type.EXPRESSION, "int", false, false, false, "$0.getWidth()","entity,world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "GetHeight", "height of entity $", "", BloxsColors.$ENTITY, Type.EXPRESSION, "int", false, false, false, "$0.getHeight()","entity,world");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Entity", "SetWidth", "set width of entity $", "int", BloxsColors.$ENTITY, Type.INSTRUCTION, "int", true, false, true, "setWidth($0);","entity");
@@ -449,6 +479,9 @@ public class BloxsDefinitions {
         definitions.add(bd);
         
         bd = new BloxsDefinition("Entity", "DeleteEntity", "delete entity $", "Entity", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "$0.delete();","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "DeleteEntities", "delete all entities of class €", "Entity", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "getWorld().deleteAll($0.class);","entity,world");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Entity", "TouchEntity", "touching €", "Entity", BloxsColors.$GAME, Type.CONDITION, "", false, false, false, "getWorld().isTouching($this,\"$0\")!=null","entity");
@@ -530,7 +563,10 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Graphical", "LoadImage", "load image €", "Image", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "loadImage(\"$0\");","world,entity");
         //bd.setList(0, new List("int", new String[] {"int","double","boolean","String","long","float"}));
         definitions.add(bd);
-
+        
+        bd = new BloxsDefinition("Graphical", "GetImageName", "name of loaded image", "", BloxsColors.$GRAPHICAL, Type.EXPRESSION, "String", false, false, false, "getFilename()","world,entity");
+        definitions.add(bd);
+        
         bd = new BloxsDefinition("Graphical", "Repaint", "repaint", "", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "getWorld().repaint();","world,entity");
         definitions.add(bd);
         
@@ -550,7 +586,7 @@ public class BloxsDefinitions {
         definitions.add(bd);
 
         bd = new BloxsDefinition("Graphical", "DrawString", "draw the text $ at position x=$ y=$", "String,int,int", BloxsColors.$GRAPHICAL, Type.INSTRUCTION, "", true, false, true, "g.drawString($0,$1,$2);","world,entity");
-        bd.setTransformation(0,"stringify");
+        //bd.setTransformation(0,"stringify");
         bd.setNeedsParent("OnDraw");
         definitions.add(bd);
 
@@ -595,6 +631,10 @@ public class BloxsDefinitions {
         
         catColors.put("Timer", BloxsColors.$OTHER);
         
+        bd = new BloxsDefinition("Timer", "StartTask", "execute once after $ milliseconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new java.util.Timer().schedule(\n        new java.util.TimerTask() {\n            @Override\n            public void run() {\n        $$$\n            }\n        },\n        $0\n);\n","entity,world");
+        definitions.add(bd);
+        
+        
         bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milliseconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n$$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
         definitions.add(bd);
         
@@ -617,6 +657,12 @@ public class BloxsDefinitions {
         definitions.add(bd);
        
         bd = new BloxsDefinition("Mouse", "IsMouseInside", "mouse inside?", "", BloxsColors.$MOUSE, Type.CONDITION, "", false, false, false, "mouseInside()","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Mouse", "HidePointer", "hide pointer", "", BloxsColors.$MOUSE, Type.INSTRUCTION, "", true, false, true, "hideCursor();","world");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Mouse", "ShowPointer", "show pointer", "", BloxsColors.$MOUSE, Type.INSTRUCTION, "", true, false, true, "hideCursor();","world");
         definitions.add(bd);
         
         

@@ -92,6 +92,17 @@ public class Parameters extends Element {
         parseTitle(title.trim(),false);
         return super.addParameter(parameterHolder); 
     }
+    
+    public Element addParameterAndTitle(Element parameterHolder) {
+        if(parameterHolder.getType()==Type.EXPRESSION)
+            title+=" $";
+        else if(parameterHolder.getType()==Type.CONDITION)
+            title+=" £";
+        else if(parameterHolder.getType()==Type.VALUE)
+            title+=" °";
+        parseTitle(title.trim(),false);
+        return super.addParameter(parameterHolder); 
+    }
 
     private void init()
     {

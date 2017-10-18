@@ -184,7 +184,10 @@ public class Element {
                 BloxsDefinition sbd = bd.getSubs(i).get(j);
                 Element expressionHolder = new Element(Type.EXPRESSION, "ExpressionHolder", "");
                 expressionHolder.addToBody(new Element(sbd));
-                getParameter(i).addParameter(expressionHolder);
+                if(getParameter(i) instanceof Parameters)
+                    ((Parameters)getParameter(i)).addParameterAndTitle(expressionHolder);
+                else 
+                    getParameter(i).addParameter(expressionHolder);
             }
         }
         
@@ -2185,10 +2188,16 @@ public class Element {
         Element tmp = this;
         while(tmp!=null)
         {
+            //System.out.println(". "+tmp.getClassname()+" RT: "+tmp.getReturnType());
             if(tmp.getClassname().equals("StartTimer")) break;
             //System.out.println("Look vor var inside: "+this.getClass().getSimpleName());
-            if((tmp.getClassname().equals("VariableDefinition") ||
-               tmp.getClassname().equals("For")) && Library.getInstance().getProject().getEntityNames().contains(tmp.getReturnType()))
+            if(tmp.getClassname().equals("For") && 
+                    Library.getInstance().getProject().getEntityNames().contains(tmp.getReturnType()))
+            {
+                result.add(tmp.getVariableDefinition());
+            }
+            else if(tmp.getClassname().equals("VariableDefinition") && 
+                    Library.getInstance().getProject().getEntityNames().contains(tmp.getParameter(1).getTitle()))
             {
                 result.add(tmp.getVariableDefinition());
             }

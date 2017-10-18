@@ -941,7 +941,7 @@ public class Project {
 
             @Override
             public String getDescription() {
-                return "Supported image types.";
+                return "Supported image files (*.jpg, *.png)";
             }
         });
         int returnVal = fc.showDialog(frame, "Add image"); 
@@ -1000,7 +1000,7 @@ public class Project {
 
             @Override
             public String getDescription() {
-                return "Supported sound types.";
+                return "Supported sound files (*.wav)";
             }
         });
         int returnVal = fc.showDialog(frame, "Add sound"); 

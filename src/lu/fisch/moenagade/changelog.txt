@@ -6,7 +6,7 @@ Todo
 - FR: copy & paste between same type elements (entity <--> entity), (world <--> world)
 - find a way to restrict dynamic parameters to the defining method
 
-Current version: 0.33
+Current version: 0.42
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -92,7 +92,7 @@ Current version: 0.33
 - 22: corrected some typos (FABFR)  
 - 22: fixed a bug when selecting a list item (FABFR)  
 - 23: added bloc with HEX color (Mil Gaspar)
-- 24: made it possible to use worlds as attribute types too [Mil Gaspar]
+- 24: made it possible to use worlds as attribute types too (Mil Gaspar)
 - 24: get access to the current world
 - 24: use attributes and methods of the world
 - 25: fixed a bug for event "OnTouchedEntity" (FABFR)
@@ -109,3 +109,15 @@ Current version: 0.33
 - 31: non-config parameters became editable after save/load
 - 32: enable hardware acceleration (David Kochergin / Alex Rego)
 - 33: added boot log report
+- 34: added bloc for delayed task (Nicolas Hérard)
+- 35: added bloc to show/hide mouse pointer (Shawn Teusch)
+- 36: check user integer/float before accepting it (Mark Schommarz)
+- 37: added block to delete all entites of a given class
+- 38: added block to extract boolean from object (Mil Gaspar)
+- 38: added naming convention check fir variables and attributes (Marguy Poissonnier)
+- 39: bugfix for blocks with more than one parameter
+- 40: added block to bring entity to the front
+- 40: added blocks to move another entity
+- 40: fixed some bugs
+- 41: added to block to the the loaded filename of an entity (Tony Wang)
+- 42: display what image & sound files can be loaded (Fred Faber)
