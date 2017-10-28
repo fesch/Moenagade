@@ -29,13 +29,20 @@ package moenagade.base;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineEvent.Type;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
+import java.util.ArrayList;
 
 
 /**
@@ -58,6 +65,10 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     private String filename;
 
     private MainFrame main;
+
+    private ArrayList<Clip> clips = new ArrayList<Clip>();
+    private ArrayList<Timer> timers = new ArrayList<Timer>();
+    private ArrayList<java.util.Timer> scheduled = new ArrayList<java.util.Timer>();
 
     /**
      * Creates new form World
@@ -115,6 +126,40 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     public void setMain(MainFrame main)
     {
         this.main=main;
+
+        // we need to know when the window closes in order to stop sounds
+        main.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                stopClips();
+                stopTimers();
+                for (int i = 0; i < entities.size(); i++) {
+                    entities.get(i).delete();
+                }
+            }
+        });
+    }
+
+    public void stopClips()
+    {
+        for(int i=0; i<clips.size(); i++)
+        {
+            Clip clip = clips.get(i);
+            if(clip.isActive())
+                clip.stop();
+        }
+    }
+
+    public void stopTimers()
+    {
+        for(int i=0; i<timers.size(); i++)
+            if(timers.get(i).isRunning())
+                timers.get(i).stop();
+        
+        for(int i=0; i<scheduled.size(); i++)
+        {
+            scheduled.get(i).cancel();
+            scheduled.get(i).purge();
+        }
     }
 
     public MainFrame getMain()
@@ -205,7 +250,10 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     {
         e.setWorld(this);
         if (entities.add(e))
+        {
+            repaint();
             return (T)e;
+        }
         else
             return null;
     }    
@@ -215,6 +263,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     {
         //e.setWorld(null);
         entities.remove(e);
+        repaint();
         return (T)e;
     }
     
@@ -489,19 +538,31 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     {        
     }
 
-    public void playSound(String filename)
+    public Clip playSound(String filename)
     {
         try {
             filename = "/moenagade/sounds/"+filename;
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(MainFrame.class.getResource(filename));
-            Clip clip = AudioSystem.getClip();
+            final Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             clip.start();
+            clips.add(clip);
+            clip.addLineListener(new LineListener() {
+                @Override
+                public void update(LineEvent le) {
+                    if(le.getType()==LineEvent.Type.CLOSE)
+                    {
+                        clips.remove(clip);
+                    }
+                }
+            });
+            return clip;
         }
         catch(Exception ex)         
         {
             ex.printStackTrace();
         }
+        return null;
     }
 
     public void hideCursor()
@@ -519,6 +580,16 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     public void showCursor()
     {
         setCursor(Cursor.getDefaultCursor());
+    }
+
+    public void addTimer(Timer timer)
+    {
+        timers.add(timer);
+    }
+
+    public void addSchedule(java.util.Timer timer)
+    {
+        scheduled.add(timer);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

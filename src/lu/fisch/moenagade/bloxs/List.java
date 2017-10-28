@@ -261,6 +261,7 @@ public class List extends Element {
             entries.add("String");
             entries.add("long");
             entries.add("float");
+            entries.add("Clip");
             entries.addAll(Library.getInstance().getProject().getEntityNames());
             entries.addAll(Library.getInstance().getProject().getWorldNames());
             update(entries);

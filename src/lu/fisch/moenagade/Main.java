@@ -31,6 +31,7 @@ import com.apple.eawt.ApplicationEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
@@ -43,6 +44,7 @@ import java.util.jar.JarFile;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
 
 /**
  *
@@ -72,7 +74,6 @@ public class Main
     private static boolean isRunningJavaWebStart() {
         return System.getProperty("javawebstart.version", null) != null;
     }
-
 
     public static void main(String[] args) 
     {
@@ -123,8 +124,147 @@ public class Main
         Moenagade.messages.add("User = "+System.getProperty("user.name"));
         
         if(System.getProperty("java.version").trim().startsWith("9"))
-            JOptionPane.showMessageDialog(null, "Moenagade is not yet comptiable with Java 9.\nPlease uninstall Java 9 and use Java 8 instead.", "Error", JOptionPane.ERROR_MESSAGE);
+        {
+            Moenagade.messages.add("---");
+                                        
+            // first of all, let's check if we got launched by a JDK
+            String jmods = System.getProperty("file.separator")+"jmods";
+            String bin = System.getProperty("file.separator")+"bin";
+            
+            File compiler = new File(System.getProperty("java.home")+jmods+System.getProperty("file.separator")+"java.compiler.jmod");
+            
+            // only continue if we have not been launched by a JDK
+            if(!compiler.exists())
+            {
+                // get boot folder
+                String bootFolder = System.getProperty("sun.boot.library.path");
+                // go back two directories
+                bootFolder=bootFolder.substring(0,bootFolder.lastIndexOf(System.getProperty("file.separator")));
+                bootFolder=bootFolder.substring(0,bootFolder.lastIndexOf(System.getProperty("file.separator")));
 
+                Moenagade.messages.add("Searching in the bootfolder: "+bootFolder);
+
+                // get all files from the boot folder
+                File bootFolderfile = new File(bootFolder);
+                File[] files = bootFolderfile.listFiles();
+                TreeSet<String> directories = new TreeSet<String>();
+                for(int i=0;i<files.length;i++)
+                {
+                    if(files[i].isDirectory()) directories.add(files[i].getAbsolutePath());
+                }
+                boolean found=false;
+                String JDK_directory = "";
+
+                while(directories.size()>0 && found==false)
+                {
+                    JDK_directory = directories.last();
+                    directories.remove(JDK_directory);    
+
+                    // for Java 9
+                    File compi = new File(JDK_directory+jmods+System.getProperty("file.separator")+"java.compiler.jmod");
+                    //Unibloxs.messages.add(tools.getAbsolutePath());
+                    if(compi.exists())
+                    {
+                        // we got it!
+                        found=true;
+                        Moenagade.messages.add("<java.compiler.jmod> found here: "+compi.getAbsolutePath());
+                        // let's make shure the executable is there too
+                        File javaw = new File(JDK_directory+bin+System.getProperty("file.separator")+"javaw");
+                        if(!javaw.exists())
+                            javaw = new File(JDK_directory+bin+System.getProperty("file.separator")+"javaw.exe");
+                        if(!javaw.exists())
+                            Moenagade.messages.add("Sorry, but <javaw> cannot be found ... aborting here!");
+                        else
+                        {
+                            try 
+                            {
+                                Moenagade.messages.add("Relaunching now with JDK ...");
+                             
+                                if(isRunningJavaWebStart())
+                                {
+                                    Moenagade.messages.add("We are running JWS ...");
+                                    //Moenagade.messages.add(System.getProperty("jnlpx.origFilenameArg"));
+                                    try 
+                                    {
+                                        /*
+                                         * Task #0 >> Find <tools.jar>
+                                         */
+                                        Moenagade.messages.add("Searching <Moenagade.jar> ...");
+                                        // All jars have an manifest
+                                        Enumeration<URL> e2 = Thread.currentThread().getContextClassLoader().getResources("META-INF/MANIFEST.MF");
+                                        while(e2.hasMoreElements()) 
+                                        {
+                                            URL u = e2.nextElement();
+                                            String urlString = u.toExternalForm(); 
+                                            
+                                            Moenagade.messages.add("Found: "+urlString);
+
+                                            // skip unused libs
+                                            if (!(urlString.indexOf("Moenagade")>0)) 
+                                            {
+                                                continue;
+                                            }  
+                                            // index of .jar because the resource is behind it; “foo.jar!META-INF/MANIFEST.MF”
+                                            int jarIndex = urlString.lastIndexOf(".jar");
+                                            // skip non jar code
+                                            if (jarIndex<1) 
+                                            {
+                                                continue;
+                                            }                     
+                                            
+                                            JarFile cachedFile = ((JarURLConnection)u.openConnection()).getJarFile();
+                                            final File tempFile = File.createTempFile("cached-",".jar");
+                                            tempFile.deleteOnExit();
+                                            copyFile(new File(cachedFile.getName()),tempFile);
+                                            
+                                            Moenagade.messages.add("Downloaded: "+tempFile.getAbsolutePath());
+                                            Moenagade.messages.add("Trying to start ...");
+                                            
+                                            final File javawFile = javaw;
+                                            (new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        Process process = new ProcessBuilder(javawFile.getAbsolutePath(),"-jar",tempFile.getAbsolutePath()).start();
+                                                    } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                    }
+                                                }
+                                            })).start();
+                                            // terminated this process but wait a bit
+                                            Thread.sleep(10*1000);
+                                            System.exit(0);
+                                        }
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                else    // we can use the local file
+                                {
+                                    Process process = new ProcessBuilder(javaw.getAbsolutePath(),"-jar","Moenagade.jar").start();
+                                    // terminated this process
+                                    System.exit(0);
+                                }
+                            } 
+                            catch (IOException ex) 
+                            {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                
+                if(found==false)
+                {
+                    JOptionPane.showMessageDialog(null, "Moenagade is not yet comptiable with JRE 9.\nPlease install JDK 9 or use Java 8 instead.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        
+        
+        
         Moenagade.messages.add("--- JWS");
         // we need to find the file "swing-layout...jar"
         if(isRunningJavaWebStart())
@@ -900,13 +1040,15 @@ public class Main
             Moenagade.javaCompilerDetected=false;
         }
 
+        ;
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 MainFrame mainform = new MainFrame();
                 mainform.setVisible(true);
                 mainform.setIconImage(new javax.swing.ImageIcon(mainform.getClass().getResource("/lu/fisch/moenagade/images/moenagade32.png")).getImage());
-                
+
                 try
                 {
                         String s = new String();
@@ -925,6 +1067,75 @@ public class Main
                 catch (Exception e)
                 {
                     // ignore
+                }
+                
+                //System.out.println(System.getProperty("os.name").toLowerCase());
+                /*
+                 * These are MAC specific things
+                 */
+                if(System.getProperty("os.name").toLowerCase().startsWith("mac os x"))
+                {
+
+                    System.setProperty("apple.laf.useScreenMenuBar", "true");
+                    System.setProperty("apple.awt.graphics.UseQuartz", "true");
+                    System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Moenagade");
+
+                    Application application = Application.getApplication();
+                    //application.setDockIconImage(mainform.getIconImage());
+
+                    try
+                    {
+                        application.setEnabledPreferencesMenu(false);
+                        application.addApplicationListener(new com.apple.eawt.ApplicationAdapter()
+                        {
+                            @Override
+                            public void handleAbout(ApplicationEvent e)
+                            {
+                                //throw new Exception("Not yet implements!!");
+                                mainform.about();
+                                //e.setHandled(true);
+                            }
+
+                            @Override
+                            public void handleOpenApplication(ApplicationEvent e)
+                            {
+                            }
+
+                            @Override
+                            public void handleOpenFile(ApplicationEvent e)
+                            {
+                                if(e.getFilename()!=null)
+                                {
+                                    //System.out.println("Opening file: "+e.getFilename());
+                                    //System.out.println("Opening package: "+(new File(e.getFilename()).getParent()));
+                                    //mainform.diagram.openUnibloxs(e.getFilename());
+                                    //mainform.diagram.openNSD(e.getFilename());
+                                }
+                            }
+
+                            @Override
+                            public void handlePreferences(ApplicationEvent e)
+                            {
+                                //mainform.diagram.preferencesNSD();
+                            }
+
+                            @Override
+                            public void handlePrintFile(ApplicationEvent e)
+                            {
+                               mainform.print();
+                            }
+
+                            @Override
+                            public void handleQuit(ApplicationEvent e)
+                            {
+                                mainform.closeWindow();
+                            }
+                       });
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -964,81 +1175,6 @@ public class Main
         {
             // ignore
         }/**/
-        
-        //System.out.println(Moenagade.messages.getText());
-
-        //System.out.println(System.getProperty("os.name").toLowerCase());
-        /*
-         * These are MAC specific things
-         */
-        if(System.getProperty("os.name").toLowerCase().startsWith("mac os x"))
-        {
-         
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("apple.awt.graphics.UseQuartz", "true");
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Unibloxs");
-
-            Application application = Application.getApplication();
-            //application.setDockIconImage(mainform.getIconImage());
-
-            try
-            {
-                application.setEnabledPreferencesMenu(true);
-                application.addApplicationListener(new com.apple.eawt.ApplicationAdapter()
-                {
-                    @Override
-                    public void handleAbout(ApplicationEvent e)
-                    {
-                        //throw new Exception("Not yet implements!!");
-                        //mainform.getDiagram().about();
-                        //e.setHandled(true);
-                    }
-
-                    @Override
-                    public void handleOpenApplication(ApplicationEvent e)
-                    {
-                    }
-
-                    @Override
-                    public void handleOpenFile(ApplicationEvent e)
-                    {
-                        if(e.getFilename()!=null)
-                        {
-                            //System.out.println("Opening file: "+e.getFilename());
-                            //System.out.println("Opening package: "+(new File(e.getFilename()).getParent()));
-                            //mainform.diagram.openUnibloxs(e.getFilename());
-                            //mainform.diagram.openNSD(e.getFilename());
-                        }
-                    }
-
-                    @Override
-                    public void handlePreferences(ApplicationEvent e)
-                    {
-                        //mainform.diagram.preferencesNSD();
-                    }
-
-                    @Override
-                    public void handlePrintFile(ApplicationEvent e)
-                    {
-                       // mainform.getDiagram().printDiagram();
-                    }
-
-                    @Override
-                    public void handleQuit(ApplicationEvent e)
-                    {
-                        //mainform.saveToINI();
-                        //mainform.closeWindow();
-                    }
-               });
-            }
-            catch (Exception e)
-            {
-                //e.printStackTrace();
-            }
-        }
-        /**/
-        
-
     }
 
 

@@ -106,14 +106,26 @@ public abstract class MainFrame extends javax.swing.JFrame implements KeyEventDi
     
     public void setWorld(World world)
     {
-        setWindowSize(insets.left + insets.right+world.getWidth(), 
-                      insets.top + insets.bottom+ world.getHeight());
+        // stop sounds that are still active
+        if(this.world!=null)
+            this.world.stopClips();
+
         this.world=world;
-        world.setMain(this);
+
+        if(world!=null)
+        {
+            setWindowSize(insets.left + insets.right+world.getWidth(), 
+                          insets.top + insets.bottom+ world.getHeight());
+            world.setMain(this);
+        }
         getContentPane().removeAll();
-        getContentPane().add(world);
-        this.entities=world.getEntities();
-        world.repaint();
+        
+        if(world!=null)
+        {
+            getContentPane().add(world);
+            this.entities=world.getEntities();
+            world.repaint();
+        }
     }
 
     public World getWorld() {
@@ -142,7 +154,8 @@ public abstract class MainFrame extends javax.swing.JFrame implements KeyEventDi
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {                                   
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {  
+        setWorld(null);
         System.gc();
     } 
 

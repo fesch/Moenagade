@@ -62,6 +62,7 @@ public class World extends BloxsClass {
         code+="import javax.swing.Timer;\n";
         code+="import java.awt.event.ActionListener;\n";
         code+="import java.awt.event.ActionEvent;\n";
+        code+="import javax.sound.sampled.Clip;\n";
         code+="import moenagade.*;\n";
         code+="import moenagade.base.*;\n";
         code+="import moenagade.worlds.*;\n";

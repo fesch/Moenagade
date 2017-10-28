@@ -26,7 +26,9 @@
 
 package lu.fisch.moenagade.model;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -36,6 +38,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,7 +62,6 @@ import lu.fisch.moenagade.bloxs.VariableDefinition;
 import lu.fisch.moenagade.gui.Change;
 import lu.fisch.moenagade.gui.LibraryPanel;
 import lu.fisch.moenagade.gui.dialogs.ConfigureParameters;
-import oracle.jrockit.jfr.tools.ConCatRepository;
 import org.xml.sax.SAXException;
 
 /**
@@ -129,11 +132,110 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
         
         //System.out.println("Size: "+drawLast.size());
         for (int i = 0; i < drawLast.size(); i++) {
-            drawLast.get(i).draw((Graphics2D) g);                
+            result=drawLast.get(i).draw((Graphics2D) g).union(result);    
         }
         
+        /*
+        g.setColor(Color.RED);
+        g.drawRect(result.x, result.y, result.width, result.height);
+        */
         setPreferredSize(new Dimension(result.x+result.width, result.y+result.height));
         revalidate();
+    }
+    
+    private void printHeaderFooter(Graphics g, PageFormat pageFormat, int page, String className)
+    {
+        int origPage = page+1;
+
+        // Add header
+        g.setColor(Color.BLACK);
+        int xOffset = (int)pageFormat.getImageableX();
+        int topOffset = (int)pageFormat.getImageableY()+20;
+        int bottom = (int)(pageFormat.getImageableY()+pageFormat.getImageableHeight());
+        // header line
+        g.drawLine(xOffset, topOffset-8, xOffset+(int)pageFormat.getImageableWidth(), topOffset-8);
+        // footer line
+        g.drawLine(xOffset,                                    bottom-11,
+                  xOffset+(int)pageFormat.getImageableWidth(), bottom-11);
+        g.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,10));
+
+        Graphics2D gg = (Graphics2D) g;
+        String pageString = "Page "+origPage;
+        int tw = (int) gg.getFont().getStringBounds(pageString,gg.getFontRenderContext()).getWidth();
+        
+        // header text
+        if(className!=null)
+            g.drawString(className, xOffset, topOffset-10);
+        // footer text
+        g.drawString(pageString, xOffset+(int)pageFormat.getImageableWidth()-tw,bottom-2);
+    }
+    
+    public void print(Graphics g, PageFormat pageFormat, int page)
+    {
+        BufferedImage bi = new BufferedImage(1,1, BufferedImage.TYPE_INT_RGB);
+        Graphics gg = bi.getGraphics();
+        
+        // make a first draw (to get the dimensions)
+        Rectangle result = new Rectangle();
+        for (int i = 0; i < elements.size(); i++) {
+            Element get = elements.get(i);
+            result=get.draw((Graphics2D) gg).union(result);
+        }
+        for (int i = 0; i < drawLast.size(); i++) {
+            result=drawLast.get(i).draw((Graphics2D) gg).union(result);                
+        }
+        
+        // draw printing area
+        //g.setColor(Color.RED);
+        //g.drawRect((int)pageFormat.getImageableX(),(int)pageFormat.getImageableY(),
+        //           (int)pageFormat.getImageableWidth(),(int)pageFormat.getImageableHeight());
+
+        printHeaderFooter(g, pageFormat, page, bloxsClass.getName());
+        
+        // now translate and scale
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+        double sX = (pageFormat.getImageableWidth()-1)/(result.width);
+        double sY = (pageFormat.getImageableHeight()-1-40)/(result.height); // 40=header + footer
+        //System.out.println("W: "+pageFormat.getImageableWidth()+" / "+result.width+" = "+sX);
+        //System.out.println("H: "+pageFormat.getImageableHeight()+" / "+result.height+" = "+sY);
+        double sca = Math.min(sX,sY);
+        if (sca>1) {sca=1;}
+        g2d.translate(0, 20); // header
+        g2d.scale(sca,sca);
+        ////-----------------------
+
+        // draw printing area
+        //g.setColor(Color.BLUE);
+        //g.drawRect(result.x,result.y,result.width,result.height);
+        
+        if(result.x+result.width!=0 && result.y+result.height!=0)
+        {
+            bi = new BufferedImage(result.x+result.width, result.y+result.height, BufferedImage.TYPE_INT_RGB);
+            gg = bi.getGraphics();
+
+            // clear
+            gg.setColor(Color.WHITE);
+            gg.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+
+            // make a second draw (to get the dimensions)
+            drawLast.clear();
+            result = new Rectangle();
+            for (int i = 0; i < elements.size(); i++) {
+                Element get = elements.get(i);
+                get.draw((Graphics2D) gg);
+            }
+            for (int i = 0; i < drawLast.size(); i++) {
+                drawLast.get(i).draw((Graphics2D) gg);                
+            }
+
+            g2d.drawImage(bi, 0, 0, null);
+        }
+        
+        ////-----------------------
+        g2d.scale(1/sca,1/sca);
+        g2d.translate(0, -(20)); // header
+        g2d.translate(-pageFormat.getImageableX(), -pageFormat.getImageableY());
     }
     
     public void somethingChanged()
@@ -299,10 +401,18 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
         //System.out.println("me.source: "+me.getSource());
         if(me.getSource() instanceof LibraryPanel)
         {
+            // close any list if open
+            if(list!=null && ((List)list).isOpen())
+            {
+                ((List)list).toggle();
+            }
+            // null out the reference
+            list=null;
+            
             clickPoint = new java.awt.Point(me.getLocationOnScreen());
             SwingUtilities.convertPointFromScreen(clickPoint, this);
             // get the selected item if there is any
-            if(selected==null)
+            //if(selected==null)
             {
                 if(Library.getInstance().getSelected()!=null &&
                    ((Library.getInstance().getSelected().isElementary() &&
@@ -319,6 +429,9 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                     selected.setParent(null);
                     return;
                 }
+                
+                // no item selected in library --> stop here
+                return;
             }
         }
         

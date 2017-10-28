@@ -26,9 +26,16 @@
 
 package lu.fisch.moenagade.model;
 
+import java.awt.Color;
 import lu.fisch.moenagade.*;
 import lu.fisch.moenagade.gui.dialogs.OpenProject;
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -80,7 +87,7 @@ import org.xml.sax.SAXException;
  *
  * @author robert.fisch
  */
-public class Project {
+public class Project implements Printable {
     
     private boolean changed = false;
     private Frame frame;
@@ -1926,5 +1933,56 @@ public class Project {
                 }
             }
         }
+    }
+
+    @Override
+    public int print(Graphics g, PageFormat pageFormat, int page) throws PrinterException {
+        // 0        = Project
+        // 1 ... x  = Worlds
+        // x ... y  = Entities
+        
+        // resize the picture
+        /*
+        PageFormat pf = (PageFormat) pageFormat.clone();
+        Paper pa = pf.getPaper();
+        pa.setImageableArea(
+                pa.getImageableX(),
+                pa.getImageableY()+30,
+                pa.getImageableWidth(),
+                pa.getImageableHeight()-60
+        );
+        pf.setPaper(pa);
+        */
+        
+        if(page==0)
+        {
+            main.getEditor().print(g,pageFormat,page);
+            return PAGE_EXISTS;
+        }
+        else if(1<=page && page<worlds.size()+1)
+        {
+            int i=1;
+            for(World world : getWorlds().values())
+            {
+                if(i==page) 
+                {
+                    world.getEditor().print(g,pageFormat,page);
+                }
+                i++;
+            }
+            return PAGE_EXISTS;
+        }
+        else if(worlds.size()+1<=page && page<worlds.size()+entities.size()+1)
+        {
+            int i=1+worlds.size();
+            for(Entity entity : getEntities().values())
+            {
+                if(i==page) entity.getEditor().print(g,pageFormat,page);
+                i++;
+            }
+            return PAGE_EXISTS;
+        }
+        
+        return NO_SUCH_PAGE;
     }
 }

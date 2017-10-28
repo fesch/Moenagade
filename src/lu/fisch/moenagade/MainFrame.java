@@ -52,7 +52,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -65,10 +64,10 @@ import lu.fisch.moenagade.gui.LibraryPanel;
 import lu.fisch.moenagade.gui.SoundFile;
 import lu.fisch.moenagade.gui.TreeRenderer;
 import lu.fisch.moenagade.gui.dialogs.BootLogReport;
+import lu.fisch.moenagade.gui.dialogs.PrintPreview;
 import lu.fisch.moenagade.model.BloxsClass;
 import lu.fisch.moenagade.model.BloxsColors;
 import lu.fisch.moenagade.model.BloxsDefinitions;
-import lu.fisch.moenagade.model.BloxsEditor;
 import lu.fisch.moenagade.model.Entity;
 import lu.fisch.moenagade.model.Library;
 import lu.fisch.moenagade.model.Project;
@@ -85,7 +84,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 public class MainFrame extends javax.swing.JFrame {
 
     private Project project;
-    
+
     private DefaultMutableTreeNode mainNode;
     private DefaultMutableTreeNode worldNode;
     private DefaultMutableTreeNode entityNode;
@@ -511,6 +510,8 @@ public class MainFrame extends javax.swing.JFrame {
         miSave = new javax.swing.JMenuItem();
         miSaveAs = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        miPrint = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         miQuit = new javax.swing.JMenuItem();
         miEdit = new javax.swing.JMenu();
         miUndo = new javax.swing.JMenuItem();
@@ -907,6 +908,17 @@ public class MainFrame extends javax.swing.JFrame {
         });
         miFile.add(miSaveAs);
         miFile.add(jSeparator1);
+
+        miPrint.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        miPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/moenagade/images/print.png"))); // NOI18N
+        miPrint.setText("Print ...");
+        miPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPrintActionPerformed(evt);
+            }
+        });
+        miFile.add(miPrint);
+        miFile.add(jSeparator5);
 
         miQuit.setText("Quit");
         miQuit.addActionListener(new java.awt.event.ActionListener() {
@@ -1312,7 +1324,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_miRunActionPerformed
 
     private void miAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAboutActionPerformed
-        project.about();
+        about();
     }//GEN-LAST:event_miAboutActionPerformed
 
     private void speUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speUndoActionPerformed
@@ -1523,6 +1535,23 @@ public class MainFrame extends javax.swing.JFrame {
         blr.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void miPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPrintActionPerformed
+        print();
+    }//GEN-LAST:event_miPrintActionPerformed
+
+    public void print()
+    {
+        PrintPreview pp = new PrintPreview(this,project);
+        pp.setLocation(Math.round((this.getWidth()-pp.getWidth())/2+this.getLocation().x),
+                                   (this.getHeight()-pp.getHeight())/2+this.getLocation().y);
+        pp.setVisible(true);
+    }
+    
+    public void about()
+    {
+        project.about();
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -1572,6 +1601,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JMenuItem miAbout;
     private javax.swing.JMenuItem miDelete;
     private javax.swing.JMenu miEdit;
@@ -1583,6 +1613,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar miMenu;
     private javax.swing.JMenuItem miNew;
     private javax.swing.JMenuItem miOpen;
+    private javax.swing.JMenuItem miPrint;
     private javax.swing.JMenu miProject;
     private javax.swing.JMenuItem miQuit;
     private javax.swing.JMenuItem miRedo;

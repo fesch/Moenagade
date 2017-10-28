@@ -51,6 +51,10 @@ Used third party components licenses
         Public Domain
         http://iharder.sourceforge.net/current/java/filedrop/
 
+    * BasicPlayer API V3.0 for MP3, OGG VORBIS, FLAC, MONKEY's AUDIO, AU, AIFF, WAV, SPEEX
+        LGPL
+        http://www.javazoom.net/jlgui/api.html
+
 
 
     Single files

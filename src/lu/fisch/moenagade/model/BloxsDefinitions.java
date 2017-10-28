@@ -356,6 +356,13 @@ public class BloxsDefinitions {
         bd.setTransformation(0,"stringify");
         definitions.add(bd);
         
+        bd = new BloxsDefinition("Sound", "PlaySound", "play sound €", "Sound", BloxsColors.$SOUND, Type.EXPRESSION, "Clip", true, false, true, "getWorld().playSound(\"$0\")","");
+        bd.setTransformation(0,"stringify");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Sound", "StopSound", "stop sound $", "Clip", BloxsColors.$SOUND, Type.INSTRUCTION, "Clip", true, false, true, "$0.stop();","");
+        definitions.add(bd);
+        
         
         
         catColors.put("Object", BloxsColors.$OBJECT);
@@ -469,7 +476,7 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "getWorld().addEntity(new $0(getWorld()));","entity");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Entity", "AddEntity", "add entity € at positoin x=$ y=$", "Entity,int,int", BloxsColors.$GAME, Type.INSTRUCTION, "Entity", true, false, true, "getWorld().addEntity(new $0(getWorld())).setX($1).setY($2);","entity");
+        bd = new BloxsDefinition("Entity", "AddEntity", "add entity € at position x=$ y=$", "Entity,int,int", BloxsColors.$GAME, Type.INSTRUCTION, "Entity", true, false, true, "getWorld().addEntity(new $0(getWorld())).setX($1).setY($2);","entity");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Entity", "AddEntity", "add entity €", "Entity", BloxsColors.$GAME, Type.EXPRESSION, "", false, false, false, "getWorld().addEntity(new $0(getWorld()))","entity");
@@ -631,11 +638,11 @@ public class BloxsDefinitions {
         
         catColors.put("Timer", BloxsColors.$OTHER);
         
-        bd = new BloxsDefinition("Timer", "StartTask", "execute once after $ milliseconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new java.util.Timer().schedule(\n        new java.util.TimerTask() {\n            @Override\n            public void run() {\n        $$$\n            }\n        },\n        $0\n);\n","entity,world");
+        bd = new BloxsDefinition("Timer", "StartTask", "execute once after $ milliseconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "{\n    java.util.Timer t = new java.util.Timer();\n    addSchedule(t);\n    t.schedule(\n        new java.util.TimerTask() {\n            @Override\n            public void run() {\n        $$$\n            }\n        },\n        $0\n    );\n}\n","entity,world");
         definitions.add(bd);
         
         
-        bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milliseconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "new Timer($0, new ActionListener() {\n    @Override public void actionPerformed(ActionEvent ae)\n    {\n$$$\n        if(getWorld()!=null) getWorld().repaint();\n        if(!$this.getWorld().isDisplayable())\n        {\n            ((Timer)ae.getSource()).stop();\n        }\n    }\n}).start();				\n","entity,world");
+        bd = new BloxsDefinition("Timer", "StartTimer", "repeat each $ milliseconds", "int", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, true, true, "{\n	Timer t = new Timer($0, new ActionListener() {\n		@Override public void actionPerformed(ActionEvent ae)\n		{\n$$$\n			if(getWorld()!=null) getWorld().repaint();\n			if(!$this.getWorld().isDisplayable())\n			{\n				((Timer)ae.getSource()).stop();\n			}\n		}\n	});\n	t.start();\n	addTimer(t);\n}\n","entity,world");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Timer", "StopTimer", "stop timer", "", BloxsColors.$OTHER, Type.INSTRUCTION, "", true, false, true, "((Timer)ae.getSource()).stop();","entity,world");

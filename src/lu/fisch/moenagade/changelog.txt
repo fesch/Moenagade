@@ -6,7 +6,7 @@ Todo
 - FR: copy & paste between same type elements (entity <--> entity), (world <--> world)
 - find a way to restrict dynamic parameters to the defining method
 
-Current version: 0.42
+Current version: 0.49
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -121,3 +121,16 @@ Current version: 0.42
 - 40: fixed some bugs
 - 41: added to block to the the loaded filename of an entity (Tony Wang)
 - 42: display what image & sound files can be loaded (Fred Faber)
+- 43: added type "Clip" (sound clip) for attribute & variables
+- 43: added block to retrieve reference to a sound clip
+- 43: added block to stop a sound (Ben Neuens)
+- 43: sounds are being stopped when application closes or world changes
+- 44: modified the bootstrap to make Monagade run on Java 9 too
+- 45: fixed a timer issue (Fred Faber)
+- 46: fixed a timer bug
+- 46: added printing support
+- 47: bugfix in element dragging (Fred Faber)
+- 47: bugfix in cleanup when game windows closes (Fred Faber)
+- 47: missing repaint if entity is added / removed (Fred Faber) 
+- 48: more cleaning on application shutdown (Fred Faber)
+- 49: fixed some OSX integration settings (Fred Faber)
