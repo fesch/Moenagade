@@ -2344,7 +2344,9 @@ public class Element {
                    change.sender.getClassname().equals("AttributeDefinition") &&
                    change.position==0 &&
                    change.cmd.equals("rename.attribute") &&
-                   parameter.getTitle().equals(change.from.toString()))
+                   parameter.getTitle().equals(change.from.toString()) &&
+                   change.sender.getTopMostElement().getEditor().equals(getTopMostElement().getEditor()) // same class
+                  )
                 {
                     parameter.setTitle(change.to.toString());
                 }
@@ -2353,7 +2355,9 @@ public class Element {
                    change.sender.getClassname().equals("AttributeDefinition") &&
                    change.position==1 &&
                    //change.cmd.equals("rename.variable") &&
-                   parameter.getTitle().equals(change.sender.getVariableDefinition().name))
+                   parameter.getTitle().equals(change.sender.getVariableDefinition().name) &&
+                   change.sender.getTopMostElement().getEditor().equals(getTopMostElement().getEditor()) // same class
+                  ) 
                 {
                     // erase the title
                     if(parameter.getReturnType().equals("EntityList"))
@@ -3671,7 +3675,8 @@ public class Element {
                 change.cmd.equals("list") &&
                 change.sender!=null &&
                 change.position==0 &&   // object name
-                change.sender==this
+                change.sender==this &&
+                change.sender.getTopMostElement().getEditor().equals(getTopMostElement().getEditor()) // same class
            )
         {
             if(parameters.get(0).getTitle().isEmpty())

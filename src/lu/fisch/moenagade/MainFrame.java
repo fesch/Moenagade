@@ -329,29 +329,43 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void filesDropped(java.io.File[] files)
             {
-                if(!project.isSaved())
+                String moe = "";
+                if(files.length>0)
+                    moe = files[0].getAbsolutePath()+System.getProperty("file.separator")+"moenagade.pro";
+                if(files.length==1 && files[0].isDirectory() && (new File(moe)).exists())
                 {
-                    JOptionPane.showMessageDialog(MainFrame.this, "The project needs to be saved before you drop any files.\n\nAction aborted!","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
-                    return;
+                    project.openProject(files[0].getAbsolutePath()+System.getProperty("file.separator"));
+                    setTitleNew();
+                    updateProjectTree();
+                    openBloxsEditor(project.getMain());
                 }
-            
-                boolean found = false;
-                for (int i = 0; i < files.length; i++)
+                else
                 {
-                    String filename = files[i].toString();
-                    File f = new File(filename);
-                    
-                    if (Project.getExtension(f).toLowerCase().equals("jpg") ||
-                        Project.getExtension(f).toLowerCase().equals("png") ||
-                        Project.getExtension(f).toLowerCase().equals("jpeg"))
+                
+                    if(!project.isSaved())
                     {
-                        project.loadImage(f);
-                        updateProjectTree();
+                        JOptionPane.showMessageDialog(MainFrame.this, "The project needs to be saved before you drop any files.\n\nAction aborted!","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+                        return;
                     }
-                    else if (Project.getExtension(f).toLowerCase().equals("wav"))
+
+                    boolean found = false;
+                    for (int i = 0; i < files.length; i++)
                     {
-                        project.loadSound(f);
-                        updateProjectTree();
+                        String filename = files[i].toString();
+                        File f = new File(filename);
+
+                        if (Project.getExtension(f).toLowerCase().equals("jpg") ||
+                            Project.getExtension(f).toLowerCase().equals("png") ||
+                            Project.getExtension(f).toLowerCase().equals("jpeg"))
+                        {
+                            project.loadImage(f);
+                            updateProjectTree();
+                        }
+                        else if (Project.getExtension(f).toLowerCase().equals("wav"))
+                        {
+                            project.loadSound(f);
+                            updateProjectTree();
+                        }
                     }
                 }
             }

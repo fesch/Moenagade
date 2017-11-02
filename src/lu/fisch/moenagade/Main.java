@@ -75,7 +75,7 @@ public class Main
         return System.getProperty("javawebstart.version", null) != null;
     }
 
-    public static void main(String[] args) 
+    public static void main(final String[] args) 
     {
         // start Unibloxs
         Moenagade.messages.add("Starting Moenagade ...");
@@ -1045,7 +1045,7 @@ public class Main
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                MainFrame mainform = new MainFrame();
+                final MainFrame mainform = new MainFrame();
                 mainform.setVisible(true);
                 mainform.setIconImage(new javax.swing.ImageIcon(mainform.getClass().getResource("/lu/fisch/moenagade/images/moenagade32.png")).getImage());
 

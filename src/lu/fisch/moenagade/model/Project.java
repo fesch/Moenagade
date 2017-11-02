@@ -597,17 +597,22 @@ public class Project implements Printable {
         }
     }
     
-    
     public boolean openProject()
     {
         if(askToSave()==true)
         {
-            OpenProject op = new OpenProject(new File(getContainingDirectoryName()),false);
+            String openDir = getContainingDirectoryName();
+            String lastOpenDir = Ini.get("lastOpenDir", "");
+            if(lastOpenDir.trim().length()!=0)
+                openDir = lastOpenDir;
+            
+            OpenProject op = new OpenProject(new File(openDir),false);
             op.setSelectedFile(new File(lastOpenedProject));
             int result = op.showOpenDialog(frame);
             if(result==OpenProject.APPROVE_OPTION)
             {
                 String dirName = op.getSelectedFile().getAbsolutePath().toString();
+                Ini.set("lastOpenDir", dirName);
                 lastOpenedProject=dirName;
                 this.open(dirName);
                 setChanged(false);
@@ -616,9 +621,26 @@ public class Project implements Printable {
         } else return false;
     }
     
+    public boolean openProject(String dirName)
+    {
+        if(askToSave()==true)
+        {
+            Ini.set("lastOpenDir", dirName);
+            lastOpenedProject=dirName;
+            this.open(dirName);
+            setChanged(false);
+            return true;
+        } else return false;
+    }
+    
     private boolean saveWithAskingLocation()
     {
-       OpenProject op = new OpenProject(new File(getContainingDirectoryName()),false);
+       String openDir = getContainingDirectoryName();
+       String lastOpenDir = Ini.get("lastOpenDir","");
+       if(lastOpenDir.trim().length()!=0)
+           openDir=lastOpenDir;
+        
+       OpenProject op = new OpenProject(new File(openDir),false);
        op.setSelectedFile(new File(lastOpenedProject));
        //op.setSelectedFile(new File(new File(getDirectoryName()).getName()));
        //op.set
