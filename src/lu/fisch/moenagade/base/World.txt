@@ -184,9 +184,28 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
             }
     }
 
+    public int countAll(Class c)
+    {
+        int count = 0;
+        if(entities!=null)
+            for (int i = entities.size()-1; i>=0; i--) {
+                Entity e = entities.get(i);
+                try
+                {
+                    c.cast(e);
+                    count++;
+                }
+                catch(Exception ex)
+                {
+                    // ignore
+                }
+            }
+        return count;
+    }
+
     public void bringToFront(Entity e)
     {
-        if(entities.indexOf(e)>0)
+        if(entities.indexOf(e)>=0)
         {
             entities.remove(e);
             entities.add(e);

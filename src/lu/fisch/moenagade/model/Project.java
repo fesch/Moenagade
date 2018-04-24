@@ -26,14 +26,11 @@
 
 package lu.fisch.moenagade.model;
 
-import java.awt.Color;
 import lu.fisch.moenagade.*;
 import lu.fisch.moenagade.gui.dialogs.OpenProject;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
-import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.io.BufferedReader;
@@ -44,14 +41,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,10 +55,8 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -104,6 +97,8 @@ public class Project implements Printable {
     private String lastOpenedImage = "";
     private String lastOpenedSound = "";
     private String lastOpenedProject = "";
+    
+    private Object running = null;
 
     public Project(Frame frame) {
         this.frame = frame;
@@ -306,7 +301,7 @@ public class Project implements Printable {
                 JOptionPane.showMessageDialog(frame, "Please chose a valid name.", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
             }
             // check if name is unique
-            else if(entities.containsKey(name))
+            else if(entities.containsKey(name) || worlds.containsKey(name))
             {
                 result=false;
                 JOptionPane.showMessageDialog(frame, "This name is not unique.", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
@@ -423,7 +418,7 @@ public class Project implements Printable {
                 JOptionPane.showMessageDialog(frame, "Please chose a valid name.", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
             }
             // check if name is unique
-            else if(worlds.containsKey(name))
+            else if(worlds.containsKey(name) || entities.containsKey(name))
             {
                 result=false;
                 JOptionPane.showMessageDialog(frame, "This name is not unique.", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
@@ -1371,11 +1366,11 @@ public class Project implements Printable {
         else return saveWithAskingLocation();
     }
 
-    public void generateSource() {
-        generateSource(false);
+    public boolean generateSource() {
+        return generateSource(false);
     }
     
-    public void generateSource(boolean closeOnExit) {
+    public boolean generateSource(boolean closeOnExit) {
         
         // save project
         try 
@@ -1390,6 +1385,7 @@ public class Project implements Printable {
             JOptionPane.showMessageDialog(frame, "Error while saving project source '"+main.getName()+"'!\n"+
                 ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
             ex.printStackTrace();
+            return false;
         }
         
         // save source for entities
@@ -1408,6 +1404,7 @@ public class Project implements Printable {
                 JOptionPane.showMessageDialog(frame, "Error while saving entitiy source '"+entity.getName()+"'!\n"+
                     ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
                 ex.printStackTrace();
+                return false;
             }
         }
         // save source for worlds
@@ -1426,6 +1423,7 @@ public class Project implements Printable {
                 JOptionPane.showMessageDialog(frame, "Error while saving world source '"+world.getName()+"'!\n"+
                     ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
                 ex.printStackTrace();
+                return false;
             }
         }    
         // copy files
@@ -1450,6 +1448,7 @@ public class Project implements Printable {
             JOptionPane.showMessageDialog(frame, "Error while saving mainframe (base) source!\n"+
                 ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
             ex.printStackTrace();
+            return false;
         }
         
         /*
@@ -1497,6 +1496,7 @@ public class Project implements Printable {
             JOptionPane.showMessageDialog(frame, "Error while saving entity (base) source!\n"+
                 ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
             ex.printStackTrace();
+            return false;
         }
         
         /*file = new File(this.getClass().getResource("/lu/fisch/moenagade/base/World.txt").getFile());
@@ -1521,7 +1521,10 @@ public class Project implements Printable {
             JOptionPane.showMessageDialog(frame, "Error while saving world (base) source!\n"+
                 ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
             ex.printStackTrace();
+            return false;
         }
+        
+        return true;
     }
     
     public ArrayList<String> getImageNames()
@@ -1621,6 +1624,7 @@ public class Project implements Printable {
                 JOptionPane.showMessageDialog(frame, "Error while saving world (base) source!\n"+
                     ex2.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
                 ex2.printStackTrace();
+                return false;
             }
         }
         
@@ -1644,6 +1648,24 @@ public class Project implements Printable {
         
         return true;
     }
+    
+    public void stop()
+    {
+        if(running!=null)
+        {
+            try {
+                Class c = Runtime6.getInstance().load("moenagade.Project");
+                Method m = c.getMethod("stop", Object.class);
+                m.invoke(null,running);
+                running=null;
+                System.gc();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void run() {
         // do some garbage collection ...
@@ -1654,22 +1676,30 @@ public class Project implements Printable {
         
         saveFiles();
         
-        compile();
-        
-        try
+        if (compile())
         {
-            Class c = Runtime6.getInstance().load("moenagade.Project");
-            //System.out.println("Loaded: "+c.getCanonicalName());
-            
-            Method m = c.getDeclaredMethod("main", String[].class);
-            String[] params = null;
-            m.invoke(null, (Object) params);
-        } 
-        catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) 
-        {
-            JOptionPane.showMessageDialog(frame, "Error while loading!\n"+
-                ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
-            ex.printStackTrace();
+            try
+            {
+                Class c = Runtime6.getInstance().load("moenagade.Project");
+                //System.out.println("Loaded: "+c.getCanonicalName());
+
+                /*
+                Method m = c.getDeclaredMethod("main", String[].class);
+                String[] params = null;
+                running = m.invoke(null, (Object) params);
+                */
+                
+                Method m = c.getDeclaredMethod("start");
+                running = m.invoke(null);
+                
+                //System.out.println(running);
+            } 
+            catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) 
+            {
+                JOptionPane.showMessageDialog(frame, "Error while loading!\n"+
+                    ex.getMessage()+"\n","Error", JOptionPane.ERROR_MESSAGE,Moenagade.IMG_ERROR);
+                ex.printStackTrace();
+            }
         }
     }
     

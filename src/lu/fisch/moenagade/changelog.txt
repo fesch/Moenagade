@@ -6,7 +6,7 @@ Todo
 - FR: copy & paste between same type elements (entity <--> entity), (world <--> world)
 - find a way to restrict dynamic parameters to the defining method
 
-Current version: 0.52
+Current version: 0.60
 - 01: initial version
 - 02: implemented undo/redo
 - 02: project images can be visualized 
@@ -137,3 +137,17 @@ Current version: 0.52
 - 50: fixed a element intra-messaging issue (Fred Faber)
 - 51: remember last opened directory
 - 52: allow drag & drop of a project onto the tree to open
+- 53: added "clear console" (Fred Faber)
+- 53: default entity size of 1x1 (Fred Faber)
+- 53: name must be unique in {entities,worlds} (Fred Faber)
+- 53: only run project if no compilation errors occurred (Fred Faber)
+- 53: allow to stop a project (Fred Faber)
+- 54: display size in image preview (Fred Faber)
+- 54: added image delimiters in preview (Fred Faber)
+- 55: showCursor made the cursor disapear as well (Fred Faber)
+- 56: added filename to printout (Fred Faber)
+- 57: split comments if too long (Fred Faber)
+- 58: added block to count all entities of a given class
+- 58: bugfix in block "bring to front"
+- 59: added check for method names (Fred Faber)
+- 60: entities can be rotated

@@ -30,6 +30,7 @@ import java.awt.Insets;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 
@@ -108,7 +109,10 @@ public abstract class MainFrame extends javax.swing.JFrame implements KeyEventDi
     {
         // stop sounds that are still active
         if(this.world!=null)
+        {
             this.world.stopClips();
+            this.world.stopTimers();
+        }
 
         this.world=world;
 
@@ -156,6 +160,13 @@ public abstract class MainFrame extends javax.swing.JFrame implements KeyEventDi
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {  
         setWorld(null);
+        System.gc();
+    } 
+
+    public static void stop(Object mainframe) {  
+        MainFrame frame = (MainFrame) mainframe;
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        frame.dispose();
         System.gc();
     } 
 

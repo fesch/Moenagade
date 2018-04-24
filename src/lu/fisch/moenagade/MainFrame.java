@@ -26,20 +26,28 @@
 
 package lu.fisch.moenagade;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -485,6 +493,8 @@ public class MainFrame extends javax.swing.JFrame {
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         popDelete = new javax.swing.JMenuItem();
         popRename = new javax.swing.JMenuItem();
+        outPopup = new javax.swing.JPopupMenu();
+        popClear = new javax.swing.JMenuItem();
         tbStandard = new javax.swing.JToolBar();
         speOpen = new javax.swing.JButton();
         speNew = new javax.swing.JButton();
@@ -513,6 +523,7 @@ public class MainFrame extends javax.swing.JFrame {
         catList = new javax.swing.JList<>();
         tbRun = new javax.swing.JToolBar();
         speRun = new javax.swing.JButton();
+        speStop = new javax.swing.JButton();
         speJar = new javax.swing.JButton();
         tbEditor = new javax.swing.JToolBar();
         speUndo = new javax.swing.JButton();
@@ -599,6 +610,15 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         treePopper.add(popRename);
+
+        popClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/moenagade/images/gen_clear.png"))); // NOI18N
+        popClear.setText("Clear");
+        popClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popClearActionPerformed(evt);
+            }
+        });
+        outPopup.add(popClear);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -837,6 +857,18 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         tbRun.add(speRun);
+
+        speStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/moenagade/images/stop.png"))); // NOI18N
+        speStop.setToolTipText("Run the project ...");
+        speStop.setFocusable(false);
+        speStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        speStop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        speStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                speStopActionPerformed(evt);
+            }
+        });
+        tbRun.add(speStop);
 
         speJar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lu/fisch/icons/java_jar.png"))); // NOI18N
         speJar.setToolTipText("Create executable JAR ...");
@@ -1120,14 +1152,97 @@ public class MainFrame extends javax.swing.JFrame {
         editorScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         editorScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         
+        JPanel panel = new JPanel(new BorderLayout());
+        
+        // load the image
+        ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
+        int borderWidth = 0;
+        int spaceAroundIcon = 10;
+        Color borderColor = Color.BLUE;
+        // create a new larger image
+        BufferedImage bi = new BufferedImage(icon.getIconWidth() + (2 * borderWidth + 2 * spaceAroundIcon),icon.getIconHeight() + (2 * borderWidth + 2 * spaceAroundIcon), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = bi.createGraphics();
+        // copy the imag onto it
+        g.drawImage(icon.getImage(), borderWidth + spaceAroundIcon, borderWidth + spaceAroundIcon, null);
+        // draw triabled on sides
+        Polygon poly;
+        g.setColor(Color.WHITE);
+        poly = new Polygon();
+        poly.addPoint(0, bi.getHeight()/2-10);
+        poly.addPoint(0, bi.getHeight()/2+10);
+        poly.addPoint(10, bi.getHeight()/2);
+        g.fillPolygon(poly);
+        poly = new Polygon();
+        poly.addPoint(bi.getWidth(), bi.getHeight()/2-10);
+        poly.addPoint(bi.getWidth(), bi.getHeight()/2+10);
+        poly.addPoint(bi.getWidth()-10, bi.getHeight()/2);
+        g.fillPolygon(poly);
+        poly = new Polygon();
+        poly.addPoint(bi.getWidth()/2-10,0);
+        poly.addPoint(bi.getWidth()/2+10,0);
+        poly.addPoint(bi.getWidth()/2,10);
+        g.fillPolygon(poly);
+        poly = new Polygon();
+        poly.addPoint(bi.getWidth()/2-10,bi.getHeight());
+        poly.addPoint(bi.getWidth()/2+10,bi.getHeight());
+        poly.addPoint(bi.getWidth()/2,bi.getHeight()-10);
+        g.fillPolygon(poly);
+        
+        if(icon.getIconWidth()>30 && icon.getIconHeight()>30)
+        {
+            // draw triabled on corners
+            poly = new Polygon();
+            poly.addPoint(10,0);
+            poly.addPoint(10,10);
+            poly.addPoint(0,10);
+            g.fillPolygon(poly);
+            poly = new Polygon();
+            poly.addPoint(bi.getWidth()-10,0);
+            poly.addPoint(bi.getWidth()-10,10);
+            poly.addPoint(bi.getWidth(),10);
+            g.fillPolygon(poly);
+            poly = new Polygon();
+            poly.addPoint(bi.getWidth()-10,0);
+            poly.addPoint(bi.getWidth()-10,10);
+            poly.addPoint(bi.getWidth(),10);
+            g.fillPolygon(poly);
+            poly = new Polygon();
+            poly.addPoint(bi.getWidth()-10,bi.getHeight());
+            poly.addPoint(bi.getWidth()-10,bi.getHeight()-10);
+            poly.addPoint(bi.getWidth(),bi.getHeight()-10);
+            g.fillPolygon(poly);
+            poly = new Polygon();
+            poly.addPoint(10,bi.getHeight());
+            poly.addPoint(10,bi.getHeight()-10);
+            poly.addPoint(0,bi.getHeight()-10);
+            g.fillPolygon(poly);
+        }
+        g.dispose();
+
+        
         JLabel label = new JLabel();
-        label.setIcon(new ImageIcon(imageFile.getAbsolutePath()));
+        //label.setIcon(new ImageIcon(imageFile.getAbsolutePath()));
+        label.setIcon(new ImageIcon(bi));
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
         label.setBackground(BloxsColors.$BACKGROUND);
         label.setOpaque(true);
+        panel.add(label,BorderLayout.CENTER);
         
-        editorScroller.getViewport().add(label);
+        label = new JLabel();
+        try {
+            BufferedImage bi2 = ImageIO.read(new File(imageFile.getAbsolutePath()));
+            label.setText(bi2.getWidth()+" x "+bi2.getHeight()+" pixels");
+        } catch (IOException ex) {
+            label.setText("ERROR: can ready image file to get it's dimensions!");
+        }
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        label.setBackground(Color.WHITE);
+        label.setOpaque(true);
+        panel.add(label,BorderLayout.NORTH);
+        
+        editorScroller.getViewport().add(panel);
         editorScroller.getViewport().validate();
         editorScroller.repaint();
     }
@@ -1286,8 +1401,8 @@ public class MainFrame extends javax.swing.JFrame {
         {
             if(project.askToSave(true))
             {
-                project.generateSource();
-                project.run();
+                if(project.generateSource())
+                    project.run();
             }
             else
             {
@@ -1296,8 +1411,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
         else
         {
-            project.generateSource();
-            project.run();
+            if(project.generateSource()) 
+                project.run();
         }
     }//GEN-LAST:event_speRunActionPerformed
 
@@ -1350,6 +1465,8 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_speRedoActionPerformed
 
     private void consoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_consoleMouseClicked
+        if(evt.getButton()==MouseEvent.BUTTON3) 
+            outPopup.show(console, evt.getX(), evt.getY());
         if(evt.getClickCount()==2)
             splitter4.setDividerLocation(5000);
     }//GEN-LAST:event_consoleMouseClicked
@@ -1553,6 +1670,14 @@ public class MainFrame extends javax.swing.JFrame {
         print();
     }//GEN-LAST:event_miPrintActionPerformed
 
+    private void popClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popClearActionPerformed
+        console.clear();
+    }//GEN-LAST:event_popClearActionPerformed
+
+    private void speStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speStopActionPerformed
+        project.stop();
+    }//GEN-LAST:event_speStopActionPerformed
+
     public void print()
     {
         PrintPreview pp = new PrintPreview(this,project);
@@ -1638,6 +1763,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem miSound;
     private javax.swing.JMenuItem miUndo;
     private javax.swing.JMenuItem miWorld;
+    private javax.swing.JPopupMenu outPopup;
+    private javax.swing.JMenuItem popClear;
     private javax.swing.JMenuItem popDelete;
     private javax.swing.JMenuItem popEntity;
     private javax.swing.JMenuItem popImage;
@@ -1657,6 +1784,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton speRename;
     private javax.swing.JButton speRun;
     private javax.swing.JButton speSave;
+    private javax.swing.JButton speStop;
     private javax.swing.JButton speUndo;
     private javax.swing.JSplitPane splitter1;
     private javax.swing.JSplitPane splitter2;

@@ -40,12 +40,15 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Stack;
 import javax.swing.JOptionPane;
@@ -168,6 +171,28 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
             g.drawString(className, xOffset, topOffset-10);
         // footer text
         g.drawString(pageString, xOffset+(int)pageFormat.getImageableWidth()-tw,bottom-2);
+        
+        
+        if(getBloxsClass().getProject().getDirectoryName()!=null)
+        {
+            g.setFont(new Font(g.getFont().getFontName(),Font.ITALIC,10));
+            String filename = getBloxsClass().getProject().getDirectoryName();
+            if(!className.equals("")) filename+=System.getProperty("file.separator")+className+".bloxs";
+            // header text
+            g.drawString(filename, xOffset, bottom-2);
+            File f = new File(filename);
+            //System.err.println("Printing: "+filename);
+            if(f.exists())
+            {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                java.util.Date date = new java.util.Date();
+                date.setTime(f.lastModified());
+                String myDate = dateFormat.format(date);
+                int w = (int) gg.getFont().getStringBounds(myDate,gg.getFontRenderContext()).getWidth();
+                // header text
+                g.drawString("File last modified on "+myDate, xOffset, topOffset-10);
+            }
+        }
     }
     
     public void print(Graphics g, PageFormat pageFormat, int page)
@@ -563,6 +588,21 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                                         OK=false;
                                     }
                                 }
+                                else if(selected.getParent().getClassname().equals("MethodDefinition") && selected.getTopMostElement()!=null)
+                                {
+                                    if(selected.getTopMostElement().getEditor().hasMethodWithName(value) && !selected.getTitle().equals(value))
+                                    {
+                                        JOptionPane.showMessageDialog(mainFrame, "Sorry, but the actual class already contains\na method with the given name!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
+                                        value="";
+                                        OK=false;
+                                    }
+                                    else if (!isValidJavaIdentifier(value) || !value.substring(0,1).toLowerCase().equals(value.substring(0,1)))
+                                    {
+                                        JOptionPane.showMessageDialog(mainFrame, "Sorry, but method names must conform the naming conventions!", "Error", JOptionPane.ERROR_MESSAGE, Moenagade.IMG_ERROR);
+                                        value="";
+                                        OK=false;
+                                    }
+                                }
                                 else if(selected.getParent().getClassname().equals("UserInteger"))
                                 {
                                     try 
@@ -589,23 +629,75 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
                                         OK=false;
                                     }
                                 }
-
+                                
                                 if(OK)
                                 {
                                     pushUndo();
-                                    selected.setTitle(value);
+                                    
+                                    if(selected.getParent().getClassname().equals("Comment"))
+                                    {
+                                        int treshold = 80;
+                                            
+                                        if(value.length()<treshold)
+                                        {
+                                            selected.setTitle(value);
+                                        }
+                                        else
+                                        {
+                                            int s = Math.min(value.length()-1, treshold);
+                                            while(s>0 && value.charAt(s)!=' ')
+                                            {
+                                                s--;
+                                            }
+                                            String here = value.substring(0,s+1);
+                                            String next = value.substring(s+1);
+                                            selected.setTitle(here.trim());
+                                            
+                                            Element sel = selected.getParent();
+                                            do
+                                            {
+                                                // clone element and append beneath
+                                                Element holder = sel;
+                                                Element e = holder.clone();
+                                                e.setNext(holder.getNext());
+                                                holder.setNext(e);
+                                                e.setPrev(holder);
+                                                if(e.getNext()!=null)
+                                                    e.getNext().setPrev(e);
+                                                
+                                                s = Math.min(next.length()-1,treshold);
+                                                if(s>treshold)
+                                                    while(s>0 && next.charAt(s)!=' ')
+                                                    {
+                                                        s--;
+                                                    }
+                                                here = next.substring(0,s+1);
+                                                next = next.substring(s+1).trim();
+                                                e.getParameter(0).setTitle(here.trim());
+                                                
+                                                sel=e;
+                                                
+                                            } while(next.trim().length()>0);
+                                            
+                                            // repeat this step until the new element is not longer than the THRESHOLD 
+                                        }
+                                    }
+                                    else
+                                    {
+                                        selected.setTitle(value);
 
-                                    // notify blockmost element
-                                    if(selected.getParent().getClassname().equals("AttributeDefinition"))
-                                        refresh(new Change(selected.getParent(), selected.getPosition(),"rename.attribute", old, value)); 
-                                    // Variable & Co
-                                    else if((selected.getParent().getClassname().equals("VariableDefinition") ||
-                                             selected.getParent().getClassname().equals("For")) && 
-                                            selected.getBlockMostElement()!=null)
-                                        selected.getBlockMostElement().refresh(new Change(selected.getParent(), selected.getPosition(),"rename.variable", old, value));      
-                                    // method definition
-                                    else if(selected.getParent().getClassname().equals("MethodDefinition"))
-                                        refresh(new Change(selected.getParent(), selected.getPosition(),"rename.method", old, value));      
+                                        // notify blockmost element
+                                        if(selected.getParent().getClassname().equals("AttributeDefinition"))
+                                            refresh(new Change(selected.getParent(), selected.getPosition(),"rename.attribute", old, value)); 
+                                        // Variable & Co
+                                        else if((selected.getParent().getClassname().equals("VariableDefinition") ||
+                                                 selected.getParent().getClassname().equals("For")) && 
+                                                selected.getBlockMostElement()!=null)
+                                            selected.getBlockMostElement().refresh(new Change(selected.getParent(), selected.getPosition(),"rename.variable", old, value));      
+                                        // method definition
+                                        else if(selected.getParent().getClassname().equals("MethodDefinition"))
+                                            refresh(new Change(selected.getParent(), selected.getPosition(),"rename.method", old, value));  
+                                    }
                                 }
                             }
                         }
@@ -1012,6 +1104,18 @@ public class BloxsEditor extends javax.swing.JPanel implements MouseMotionListen
             VariableDefinition get = vd.get(j);
             //System.out.println(get.name);
             if(get.name.equals(value))
+                return true;
+        }
+        return false;
+    }
+    public boolean hasMethodWithName(String value)
+    {
+        ArrayList<String> vd = getMethodNames();
+        //System.out.println(vd.size());
+        for (int j = 0; j < vd.size(); j++) {
+            String get = vd.get(j);
+            //System.out.println(get.name);
+            if(get.equals(value))
                 return true;
         }
         return false;

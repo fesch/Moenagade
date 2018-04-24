@@ -49,7 +49,6 @@ import lu.fisch.moenagade.model.Entity;
 import lu.fisch.moenagade.model.Library;
 import lu.fisch.moenagade.model.Project;
 import lu.fisch.moenagade.model.World;
-import sun.swing.SwingUtilities2;
 
 
 /**
@@ -440,6 +439,8 @@ public class Element {
         if(getNext()==null) 
         {
             setNext(element);
+            element.setParent(this.getParent());
+            element.setPrev(this);
         }
         else 
         {
@@ -447,6 +448,8 @@ public class Element {
             Element tmp = getNext();
             while(tmp.getNext()!=null) tmp=tmp.getNext();
             tmp.setNext(element);
+            element.setParent(tmp.getParent());
+            element.setPrev(tmp);
             
         }
         return this;

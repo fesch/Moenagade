@@ -48,8 +48,10 @@ public abstract class Entity implements KeyListener {
 
     private World world;
     
-    private int width;
-    private int height;
+    private int width = 1;
+    private int height = 1;
+
+    private double rotation = 0;
 
     private String filename;
     
@@ -96,12 +98,17 @@ public abstract class Entity implements KeyListener {
 
     public void draw(Graphics g)
     {
+        Graphics2D g2 = (Graphics2D)g;
+        g2.rotate(Math.toRadians(rotation), getWidth()/2, getHeight()/2);
+
         if(image!=null && location.x+getWidth()>0 && location.y+getHeight()>0)
         {
             g.drawImage(image, 0, 0, width, height, null);
         }
         onDraw(g);
-    }
+
+        g2.rotate(-Math.toRadians(rotation), getWidth()/2, getHeight()/2);
+   }
 
     public void bringToFront()
     {
@@ -155,6 +162,22 @@ public abstract class Entity implements KeyListener {
         getWorld().checkCollisions();
     }
 
+    public void moveForward(int pixels)
+    {
+        location.setLocation(location.getX()-Math.cos(Math.toRadians(rotation))*pixels,location.getY()-Math.sin(Math.toRadians(rotation))*pixels);
+        onPositionChanged();
+        if(getWorld()!=null) getWorld().repaint();
+        getWorld().checkCollisions();
+    }
+    
+    public void moveBackward(int pixels)
+    {
+        location.setLocation(location.getX()+Math.cos(Math.toRadians(rotation))*pixels,location.getY()+Math.sin(Math.toRadians(rotation))*pixels);
+        onPositionChanged();
+        if(getWorld()!=null) getWorld().repaint();
+        getWorld().checkCollisions();
+    }
+    
     public Entity setX(int x)
     {
         location.x=x;
@@ -181,6 +204,35 @@ public abstract class Entity implements KeyListener {
     public int getY()
     {
         return location.y;
+    }
+
+    public Entity rotate(float rotation)
+    {
+        this.rotation+=rotation;
+        onPositionChanged();
+        if(getWorld()!=null) getWorld().repaint();
+        getWorld().checkCollisions();
+        return this;
+    }
+
+    public Entity setRotation(double rotation)
+    {
+        this.rotation=rotation;
+        onPositionChanged();
+        if(getWorld()!=null) getWorld().repaint();
+        getWorld().checkCollisions();
+        return this;
+    }
+
+    public Entity setRotation(float rotation)
+    {
+        setRotation((double) rotation);
+        return this;
+    }
+
+    public double getRotation()
+    {
+        return rotation;
     }
 
     public Point getLocation() {

@@ -89,6 +89,18 @@ public class MainFrame extends BloxsClass {
         code+="            }\n";
         code+="        });\n";
         code+="    }\n";
+
+        code+="\n";
+        
+        code+="    public static Project start()\n";
+        code+="    {\n";
+        code+="        Project project = new Project();\n";
+        if(closeOnExit)
+        code+="        project.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);\n";    
+        code+="        project.setVisible(true);\n";
+        code+="        return project;\n";
+        code+="    }\n";
+
         code+="}";
         return code;
     }
