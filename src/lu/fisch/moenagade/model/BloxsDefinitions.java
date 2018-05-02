@@ -281,7 +281,7 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Math", "MathModulo", "$ % $", "double,double", BloxsColors.$MATH, Type.EXPRESSION, "", false, false, false, "($0 % $1)","");
         definitions.add(bd);
         
-        bd = new BloxsDefinition("Math", "MathRandom", "random number between $ and $", "int,int", BloxsColors.$MATH, Type.EXPRESSION, "", false, false, false, "(int)(Math.random() * ($1-($0)+1)) + ($0)","");
+        bd = new BloxsDefinition("Math", "MathRandom", "random number between $ and $", "int,int", BloxsColors.$MATH, Type.EXPRESSION, "", false, false, false, "((int)(Math.random() * ($1-($0)+1)) + ($0))","");
         definitions.add(bd);
         
         bd = new BloxsDefinition("Math", "MathCos", "cosinus of $ °", "double", BloxsColors.$MATH, Type.EXPRESSION, "double", false, false, false, "Math.cos($0)","");
@@ -535,7 +535,33 @@ public class BloxsDefinitions {
         bd = new BloxsDefinition("Entity", "OnTouchedEntity", "touched by €", "Entity", BloxsColors.$EVENT, Type.CONDITION, "", false, false, false, "other.getClass().getSimpleName().equals(\"$0\")","entity");
         bd.setNeedsParent("OnTouchedEntity");
         definitions.add(bd);
+
+        bd = new BloxsDefinition("Entity", "SetUsesGravity", "set uses gravity to £", ",boolean", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "setUsesGravity($0);","entity");
+        definitions.add(bd);
         
+        bd = new BloxsDefinition("Entity", "Jump", "jump up with speed $", "double", BloxsColors.$GAME, Type.INSTRUCTION, "", true, false, true, "jump($0);","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetVerticalSpeed", "set vertical speed to $", ",double", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "setVSpeed($0);","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetHorizontalSpeed", "set horizontal speed to $", ",double", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "setHSpeed($0);","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetVerticalBounce", "set vertical bounce factor to $", ",double", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "setVBounceFactor($0);","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetHorizontalBounce", "set horizontal bounce factor to $", ",double", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "setHBounceFactor($0);","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "SetFrictionFactor", "set horizontal friction factor to $", ",double", BloxsColors.$ENTITY, Type.INSTRUCTION, "", true, false, true, "setFrictionFactor($0);","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "GetVerticalSpeed", "get vertical speed", "", BloxsColors.$ENTITY, Type.EXPRESSION, "double", false, false, false, "getVSpeed()","entity");
+        definitions.add(bd);
+        
+        bd = new BloxsDefinition("Entity", "GetHorizontalSpeed", "get horizontal speed", "", BloxsColors.$ENTITY, Type.EXPRESSION, "double", false, false, false, "getHSpeed()","entity");
+        definitions.add(bd);
         
         
         catColors.put("World", BloxsColors.$WORLD);

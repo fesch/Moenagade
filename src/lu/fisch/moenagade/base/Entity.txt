@@ -29,6 +29,7 @@ package moenagade.base;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.Clip;
@@ -44,7 +45,16 @@ public abstract class Entity implements KeyListener {
     private String imageFile = "";
     private Image image = null;
     
-    private Point location = new Point(0,0);
+    //private Point location = new Point(0,0);
+    private double x = 0;
+    private double y = 0;
+
+    private double vSpeed = 0;
+    private double hSpeed = 0;
+    private double vBounceFactor = 0;
+    private double hBounceFactor = 0;
+    private boolean usesGravity = false;
+    private double frictionFactor = 0;
 
     private World world;
     
@@ -65,8 +75,8 @@ public abstract class Entity implements KeyListener {
     
     public Entity(World world, int x, int y) {
         setWorld(world);
-        location.x=x;
-        location.y=y;
+        this.x=x;
+        this.y=y;
         //onCreate();
     }
     
@@ -101,7 +111,7 @@ public abstract class Entity implements KeyListener {
         Graphics2D g2 = (Graphics2D)g;
         g2.rotate(Math.toRadians(rotation), getWidth()/2, getHeight()/2);
 
-        if(image!=null && location.x+getWidth()>0 && location.y+getHeight()>0)
+        if(image!=null && x+getWidth()>0 && y+getHeight()>0)
         {
             g.drawImage(image, 0, 0, width, height, null);
         }
@@ -132,7 +142,7 @@ public abstract class Entity implements KeyListener {
     
     public void moveLeft(int pixels)
     {
-        location.x-=pixels;
+        x-=pixels;
         onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
@@ -140,7 +150,7 @@ public abstract class Entity implements KeyListener {
     
     public void moveRight(int pixels)
     {
-        location.x+=pixels;
+        x+=pixels;
         onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
@@ -148,7 +158,7 @@ public abstract class Entity implements KeyListener {
 
     public void moveUp(int pixels)
     {
-        location.y-=pixels;
+        y-=pixels;
         onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
@@ -156,7 +166,7 @@ public abstract class Entity implements KeyListener {
     
     public void moveDown(int pixels)
     {
-        location.y+=pixels;
+        y+=pixels;
         onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
@@ -164,7 +174,8 @@ public abstract class Entity implements KeyListener {
 
     public void moveForward(int pixels)
     {
-        location.setLocation(location.getX()-Math.cos(Math.toRadians(rotation))*pixels,location.getY()-Math.sin(Math.toRadians(rotation))*pixels);
+        x=x-Math.cos(Math.toRadians(rotation))*pixels;
+        y=y-Math.sin(Math.toRadians(rotation))*pixels;
         onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
@@ -172,38 +183,39 @@ public abstract class Entity implements KeyListener {
     
     public void moveBackward(int pixels)
     {
-        location.setLocation(location.getX()+Math.cos(Math.toRadians(rotation))*pixels,location.getY()+Math.sin(Math.toRadians(rotation))*pixels);
+        x=x+Math.cos(Math.toRadians(rotation))*pixels;
+        y=y+Math.sin(Math.toRadians(rotation))*pixels;
         onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
     }
     
-    public Entity setX(int x)
+    public Entity setX(double x)
     {
-        location.x=x;
+        this.x=x;
         onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
         return this;
     }
     
-    public Entity setY(int y)
+    public Entity setY(double y)
     {
-        location.y=y;
+        this.y=y;
         onPositionChanged();
         if(getWorld()!=null) getWorld().repaint();
         getWorld().checkCollisions();
         return this;
     }
 
-    public int getX()
+    public double getX()
     {
-        return location.x;
+        return x;
     }
     
-    public int getY()
+    public double getY()
     {
-        return location.y;
+        return y;
     }
 
     public Entity rotate(float rotation)
@@ -235,9 +247,7 @@ public abstract class Entity implements KeyListener {
         return rotation;
     }
 
-    public Point getLocation() {
-        return location;
-    }
+    
 
     public void setWorld(World world) {
         this.world = world;
@@ -330,9 +340,9 @@ public abstract class Entity implements KeyListener {
         scheduled.add(timer);
     }
     
-    public Rectangle getRectangle()
+    public Rectangle.Double getRectangle()
     {
-        return new Rectangle(location, new Dimension(getWidth(), getHeight()));
+        return new Rectangle.Double(x, y, getWidth(), getHeight());
     }
     
     public boolean isTouching(Entity other)
@@ -359,4 +369,145 @@ public abstract class Entity implements KeyListener {
     public void onDraw(Graphics g)
     {        
     }
+
+    public boolean isTouchingSomeone()
+    {
+        for (int i = 0; i < getWorld().getEntities().size(); i++) {
+            Entity other = getWorld().getEntities().get(i);
+
+            if(other!=this && this.isTouching(other))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean processTimer()
+    {
+        boolean goOn = false;
+
+        // vertical (gravity)
+        if(usesGravity && (!isTouchingSomeone() || (vSpeed!=0 && isTouchingSomeone())))
+        {
+            if(vSpeed + getWorld().getGravity() > getWorld().getMaxVelocity()) 
+                vSpeed=getWorld().getMaxVelocity();
+            else 
+                vSpeed = vSpeed + getWorld().getGravity();
+            y+=vSpeed;
+
+            for (int i = 0; i < getWorld().getEntities().size(); i++) {
+                Entity other = getWorld().getEntities().get(i);
+                
+                if(other!=this && this.isTouching(other))
+                {
+                    y-=vSpeed;
+                    vSpeed = (-vSpeed*vBounceFactor)+getWorld().getGravity();
+                    if(vSpeed<0.5 && vSpeed>-0.5) vSpeed=0;
+
+                    if(getWorld()!=null && getWorld().getMain()!=null)
+                    {
+                        this.onTouched(other);
+                        other.onTouched(this);
+                    }
+                }
+            }
+
+            goOn=true;
+        }
+
+        if(hSpeed!=0)
+        {
+            x=x+hSpeed;
+            
+            for (int i = 0; i < getWorld().getEntities().size(); i++) {
+                Entity other = getWorld().getEntities().get(i);
+                
+                if(other!=this && this.isTouching(other))
+                {
+                    x-=hSpeed;
+                    hSpeed = (-hSpeed*hBounceFactor);
+
+                    if(getWorld()!=null && getWorld().getMain()!=null)
+                    {
+                        this.onTouched(other);
+                        other.onTouched(this);
+                    }
+                }
+            }
+            
+            hSpeed*=frictionFactor;
+            if(hSpeed<0.5 && hSpeed>-0.5) hSpeed=0;
+            
+            goOn=true;
+        }
+
+        if(goOn)
+        {
+            getWorld().repaint();
+        }
+
+        return goOn;
+    }
+
+    public void setUsesGravity(boolean value)
+    {
+        usesGravity=value;
+    }
+
+    public void jump(double speed)
+    {
+        if(vSpeed==0)
+            vSpeed=-speed;
+    }
+
+    public void setVSpeed(double speed)
+    {
+        vSpeed=speed;
+    }
+
+    public void setHSpeed(double speed)
+    {
+        hSpeed=speed;
+    }
+
+    public double getVSpeed()
+    {
+        return vSpeed;
+    }
+
+    public double getHSpeed()
+    {
+        return hSpeed;
+    }
+
+    public void setVBounceFactor(double bounce)
+    {
+        vBounceFactor=bounce;
+    }
+
+    public void setHBounceFactor(double bounce)
+    {
+        hBounceFactor=bounce;
+    }
+
+    public double getVBounceFactor()
+    {
+        return vBounceFactor;
+    }
+
+    public double getHBounceFactor()
+    {
+        return hBounceFactor;
+    }
+
+    public double getFrictionFactor() {
+        return frictionFactor;
+    }
+
+    public void setFrictionFactor(double frictionFactor) {
+        this.frictionFactor = frictionFactor;
+    }
+    
+    
 }

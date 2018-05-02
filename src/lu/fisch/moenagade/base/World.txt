@@ -31,8 +31,9 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineEvent.Type;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -42,7 +43,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
-import java.util.ArrayList;
 
 
 /**
@@ -62,6 +62,10 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     private int mouseX = 0;
     private int mouseY = 0;
 
+    private int gravity = 1;
+    private int maxVelocity = 10;
+    javax.swing.Timer gravityTimer;
+
     private String filename;
 
     private MainFrame main;
@@ -76,6 +80,20 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     public World() {
         initComponents();
 
+        gravityTimer = new javax.swing.Timer(20,new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                boolean goOn = false;
+                for (int i = 0; i < entities.size(); i++) {
+                    Entity check  = entities.get(i);
+                    goOn = check.processTimer() || goOn;
+                }
+                if(goOn)
+                    checkCollisions();
+            }
+        });
+        gravityTimer.start();
+        
         //onCreate();
     }
     
@@ -151,6 +169,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
 
     public void stopTimers()
     {
+        gravityTimer.stop();
         for(int i=0; i<timers.size(); i++)
             if(timers.get(i).isRunning())
                 timers.get(i).stop();
@@ -248,11 +267,11 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         if(entities!=null)
             for (int i = 0; i < entities.size(); i++) {
                 Entity e = entities.get(i);
-                int x = e.getX();
-                int y = e.getY();
-                g.translate(x,y);
+                double x = e.getX();
+                double y = e.getY();
+                g.translate((int)x,(int)y);
                 e.draw(g);
-                g.translate(-x,-y);
+                g.translate((int)-x,(int)-y);
             }
     }
 
@@ -465,7 +484,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
                     for (int j = i-1; j >= 0; j--) {
                         Entity other = entities.get(j);
 
-                        if(check.isTouching(other))
+                        if(check.isTouching(other) && getMain()!=null)
                         {
                             check.onTouched(other);
                             other.onTouched(check);
@@ -480,7 +499,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         location.x-=pixels;
         location.x = location.x % backgroundImage.getWidth(null);
         for (int i = 0; i < entities.size(); i++) 
-            entities.get(i).getLocation().x-=pixels;
+            entities.get(i).moveLeft(pixels);
         repaint();  
     }
     
@@ -489,7 +508,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         location.x+=pixels;
         location.x = location.x % backgroundImage.getWidth(null);
         for (int i = 0; i < entities.size(); i++) 
-            entities.get(i).getLocation().x+=pixels;
+            entities.get(i).moveRight(pixels);
         repaint();  
     }
 
@@ -498,7 +517,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         location.y-=pixels;
         location.y = location.y % backgroundImage.getHeight(null);
         for (int i = 0; i < entities.size(); i++) 
-            entities.get(i).getLocation().y-=pixels;
+            entities.get(i).moveUp(pixels);
         repaint();  
     }
     
@@ -507,7 +526,7 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
         location.y+=pixels;
         location.y = location.y % backgroundImage.getHeight(null);
         for (int i = 0; i < entities.size(); i++) 
-            entities.get(i).getLocation().y+=pixels;
+            entities.get(i).moveDown(pixels);
         repaint();  
     }
 
@@ -609,6 +628,16 @@ public abstract class World extends javax.swing.JPanel implements KeyListener {
     public void addSchedule(java.util.Timer timer)
     {
         scheduled.add(timer);
+    }
+
+    public int getGravity()
+    {
+        return gravity;
+    }
+
+    public int getMaxVelocity()
+    {
+        return maxVelocity;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
