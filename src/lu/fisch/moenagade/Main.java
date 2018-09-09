@@ -40,6 +40,7 @@ import java.net.URLClassLoader;
 import java.nio.channels.FileChannel;
 import java.util.Enumeration;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.JarFile;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -77,6 +78,11 @@ public class Main
 
     public static void main(final String[] args) 
     {
+        Launcher launcher = new Launcher();
+        launcher.setVisible(true);
+        launcher.setLocationRelativeTo(null);
+        launcher.setStatus("Loading ...");
+        
         // start Unibloxs
         Moenagade.messages.add("Starting Moenagade ...");
         
@@ -115,15 +121,16 @@ public class Main
         }
         
         Moenagade.messages.add("--- OS");
-        Moenagade.messages.add("Name  = "+System.getProperty("os.name"));
-        Moenagade.messages.add("Version  = "+System.getProperty("os.version"));
+        Moenagade.messages.add("Name = "+System.getProperty("os.name"));
+        Moenagade.messages.add("Version = "+System.getProperty("os.version"));
         Moenagade.messages.add("--- Java");
-        Moenagade.messages.add("Version  = "+System.getProperty("java.version"));
+        Moenagade.messages.add("Version = "+System.getProperty("java.version"));
         Moenagade.messages.add("Vendor = "+System.getProperty("java.vendor"));
         Moenagade.messages.add("Home = "+System.getProperty("java.home"));
         Moenagade.messages.add("User = "+System.getProperty("user.name"));
         
-        if(System.getProperty("java.version").trim().startsWith("9"))
+        if(System.getProperty("java.version").trim().startsWith("9") ||
+           System.getProperty("java.version").trim().startsWith("10"))
         {
             Moenagade.messages.add("---");
                                         
@@ -245,6 +252,12 @@ public class Main
                                 {
                                     Process process = new ProcessBuilder(javaw.getAbsolutePath(),"-jar","Moenagade.jar").start();
                                     // terminated this process
+                                    try {
+                                        // terminated this process
+                                        TimeUnit.SECONDS.sleep(2);
+                                    } catch (InterruptedException ex) {
+                                        //java.util.logging.Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                     System.exit(0);
                                 }
                             } 
@@ -258,7 +271,7 @@ public class Main
                 
                 if(found==false)
                 {
-                    JOptionPane.showMessageDialog(null, "Moenagade is not yet comptiable with JRE 9.\nPlease install JDK 9 or use Java 8 instead.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Moenagade is not yet comptiable with JRE 9/10.\nPlease install JDK 9/10 or use Java 8 instead.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -269,6 +282,7 @@ public class Main
         // we need to find the file "swing-layout...jar"
         if(isRunningJavaWebStart())
         {
+            launcher.setStatus("JWS detected, analysing ...");
             Moenagade.messages.add("We are running JWS ...");
             try 
             {
@@ -380,6 +394,7 @@ public class Main
         /*
          * Task #1 >> Find <tools.jar>
          */
+        launcher.setStatus("Searching for tools.jar ...");
         Moenagade.messages.add("---");
         Moenagade.messages.add("Searching <tools.jar> ...");
 
@@ -707,6 +722,7 @@ public class Main
         /*
          * Task #2 >> find <src.zip>
          */
+        launcher.setStatus("Searching Java sources ...");
         Moenagade.messages.add("---");
         Moenagade.messages.add("Search for <src.zip> / <src.jar> ...");
         boolean foundSrc = false;
@@ -1140,7 +1156,7 @@ public class Main
             }
         });
 
-        
+        launcher.setVisible(false);
         
         Moenagade.messages.add("---");
         
